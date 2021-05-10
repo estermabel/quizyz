@@ -15,9 +15,9 @@ $ flutter run
 
 ## Authors
 
-* **Ester Mabel** - *GitHub* - [GitHub](https://github.com/estermabel)
-* **Alécio Barreto** - *GitHub* - [GitHub](https://github.com/barretoalecio)
-* **Ary Sault** - *GitHub* - [GitHub](https://github.com/arysault)
-* **Michel Silveira** - *GitHub* - [GitHub](https://github.com/Emberdot)
-* **Yllo Luís** - *GitHub* - [GitHub](https://github.com/NETfellow)
+* **Ester Mabel** - [GitHub](https://github.com/estermabel)
+* **Alécio Barreto** - [GitHub](https://github.com/barretoalecio)
+* **Ary Sault** - [GitHub](https://github.com/arysault)
+* **Michel Silveira** - [GitHub](https://github.com/Emberdot)
+* **Yllo Luís** - [GitHub](https://github.com/NETfellow)
 
