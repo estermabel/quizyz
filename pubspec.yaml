@@ -1,0 +1,55 @@
+name: quizyz
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+  # Used to handler http requests
+  dio: ^3.0.9
+  # Used to aply the shimme effect
+  shimmer: ^1.1.2
+  # Used to get more fonts
+  google_fonts: ^1.1.2
+  # Used to build simple animations
+  simple_animations: ^2.2.1
+  # Used to get informations about the user's device
+  device_info: ^1.0.0
+  # Used to custom the louncher icon
+  flutter_launcher_icons: ^0.8.1
+  # Used to store basic data in the app
+  shared_preferences: ^2.0.5
+  # Used to create databases in the app
+  sqflite: ^2.0.0+3
+  # Used to refresh the pages
+  liquid_pull_to_refresh: ^3.0.0
+  # Used to create a navigation bottom bar
+  bubble_bottom_bar: ^1.2.0
+  # Used to share content outside the app
+  share: ^2.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "images/icons/icon_app.png"
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - images/
+    - images/icons/
+
