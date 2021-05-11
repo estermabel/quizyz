@@ -16,44 +16,44 @@ ThemeData baseTheme = ThemeData(
 );
 
 TextTheme _textTheme = TextTheme(
-  headline1: GoogleFonts.raleway(
+  headline1: GoogleFonts.poppins(
     color: primaryTextColor,
     fontWeight: FontWeight.w400,
   ),
-  headline2: GoogleFonts.raleway(
+  headline2: GoogleFonts.poppins(
     color: primaryTextColor,
     fontWeight: FontWeight.w400,
   ),
-  headline3: GoogleFonts.raleway(
+  headline3: GoogleFonts.poppins(
     color: primaryTextColor,
     fontWeight: FontWeight.w400,
   ),
-  headline4: GoogleFonts.raleway(
+  headline4: GoogleFonts.poppins(
     color: primaryTextColor,
     fontWeight: FontWeight.w400,
   ),
-  headline5: GoogleFonts.raleway(
+  headline5: GoogleFonts.poppins(
     color: primaryTextColor,
     fontWeight: FontWeight.w400,
   ),
-  headline6: GoogleFonts.raleway(
+  headline6: GoogleFonts.poppins(
     color: primaryTextColor,
     fontWeight: FontWeight.w400,
   ),
-  bodyText1: GoogleFonts.raleway(
+  bodyText1: GoogleFonts.poppins(
     color: primaryTextColor,
     fontWeight: FontWeight.w200,
   ),
-  bodyText2: GoogleFonts.raleway(
+  bodyText2: GoogleFonts.poppins(
     color: primaryTextColor,
     fontWeight: FontWeight.w200,
   ),
-  subtitle1: GoogleFonts.raleway(
+  subtitle1: GoogleFonts.poppins(
     color: primaryTextColor,
     fontWeight: FontWeight.w400,
   ),
-  button: GoogleFonts.raleway(
-    color: primaryColor,
+  button: GoogleFonts.poppins(
+    color: primaryTextColor,
     fontWeight: FontWeight.bold,
   ),
 );

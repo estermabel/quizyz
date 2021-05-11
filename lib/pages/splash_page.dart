@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quizyz/pages/controller_page.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -20,11 +21,11 @@ class _SplashPageState extends State<SplashPage> {
 
   _loadData() async {
     await Future.delayed(new Duration(seconds: 4));
-    // Navigator.of(context).pushReplacement(
-    //   CupertinoPageRoute(
-    //     builder: (context) => HomePage(),
-    //   ),
-    // );
+    Navigator.of(context).pushReplacement(
+      CupertinoPageRoute(
+        builder: (context) => ControllerPage(),
+      ),
+    );
   }
 
   @override
@@ -34,6 +35,7 @@ class _SplashPageState extends State<SplashPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text("teste")
           // FadeAnimation(0.7, _icon()),
           // FadeAnimation(1.4, _textTitle()),
         ],
