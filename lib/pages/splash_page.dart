@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quizyz/pages/controller_page.dart';
+import 'package:quizyz/pages/login_page.dart';
 import 'package:quizyz/utils/style/animations/fade_animation.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
@@ -13,7 +14,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    //_loadData();
+    _loadData();
   }
 
   @override
@@ -25,7 +26,7 @@ class _SplashPageState extends State<SplashPage> {
     await Future.delayed(new Duration(seconds: 4));
     Navigator.of(context).pushReplacement(
       CupertinoPageRoute(
-        builder: (context) => ControllerPage(),
+        builder: (context) => LoginPage(),
       ),
     );
   }
