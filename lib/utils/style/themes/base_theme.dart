@@ -68,12 +68,22 @@ InputDecorationTheme _inputDecoration = InputDecorationTheme(
     color: primaryTextColor,
     fontWeight: FontWeight.w500,
   ),
+  disabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: accentColor,
+    ),
+  ),
   border: OutlineInputBorder(
     borderSide: BorderSide(
-      color: whiteColor,
+      color: accentColor,
     ),
   ),
   enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: greyColor,
+    ),
+  ),
+  focusedBorder: OutlineInputBorder(
     borderSide: BorderSide(
       color: accentColor,
     ),
