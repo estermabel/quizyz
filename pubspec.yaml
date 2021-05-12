@@ -35,6 +35,8 @@ dependencies:
   bubble_bottom_bar: ^1.2.0
   # Used to share content outside the app
   share: ^2.0.1
+  # User to render svg files
+  flutter_svg: 
 
 dev_dependencies:
   flutter_test:

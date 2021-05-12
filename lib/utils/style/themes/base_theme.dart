@@ -8,6 +8,7 @@ ThemeData baseTheme = ThemeData(
   accentColor: accentColor,
   backgroundColor: backgroundColor,
   scaffoldBackgroundColor: backgroundColor,
+  errorColor: purpleColor,
 
   /// Sub themes
   textTheme: _textTheme,
@@ -53,14 +54,14 @@ TextTheme _textTheme = TextTheme(
     fontWeight: FontWeight.w400,
   ),
   button: GoogleFonts.poppins(
-    color: primaryColor,
+    color: primaryTextColor,
     fontWeight: FontWeight.bold,
   ),
 );
 
 IconThemeData _iconTheme = IconThemeData(
   color: purpleColor,
-  size: 20,
+  size: 25,
 );
 
 InputDecorationTheme _inputDecoration = InputDecorationTheme(
@@ -81,6 +82,11 @@ InputDecorationTheme _inputDecoration = InputDecorationTheme(
   enabledBorder: OutlineInputBorder(
     borderSide: BorderSide(
       color: greyColor,
+    ),
+  ),
+  errorBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: purpleColor,
     ),
   ),
   focusedBorder: OutlineInputBorder(
