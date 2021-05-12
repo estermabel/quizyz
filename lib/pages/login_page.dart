@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizyz/components/purple_button.dart';
 import 'package:quizyz/components/quizzy_app_button.dart';
 import 'package:quizyz/utils/style/colors.dart';
 import 'package:quizyz/utils/style/text_size.dart';
@@ -100,27 +101,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 24),
-                          child: GestureDetector(
+                          child: PurpleButton(
+                            titulo: "Cadastro",
                             onTap: () {},
-                            child: Container(
-                              height: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(color: purpleColor),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Cadastro",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1
-                                      .copyWith(
-                                        color: purpleColor,
-                                        fontSize: TextSize.large,
-                                      ),
-                                ),
-                              ),
-                            ),
                           ),
                         )
                       ],
