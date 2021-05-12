@@ -53,7 +53,7 @@ TextTheme _textTheme = TextTheme(
     fontWeight: FontWeight.w400,
   ),
   button: GoogleFonts.poppins(
-    color: primaryColor,
+    color: primaryTextColor,
     fontWeight: FontWeight.bold,
   ),
 );
