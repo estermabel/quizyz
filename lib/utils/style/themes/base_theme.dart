@@ -8,6 +8,7 @@ ThemeData baseTheme = ThemeData(
   accentColor: accentColor,
   backgroundColor: backgroundColor,
   scaffoldBackgroundColor: backgroundColor,
+  errorColor: purpleColor,
 
   /// Sub themes
   textTheme: _textTheme,
@@ -81,6 +82,11 @@ InputDecorationTheme _inputDecoration = InputDecorationTheme(
   enabledBorder: OutlineInputBorder(
     borderSide: BorderSide(
       color: greyColor,
+    ),
+  ),
+  errorBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: purpleColor,
     ),
   ),
   focusedBorder: OutlineInputBorder(

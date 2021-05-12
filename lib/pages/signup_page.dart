@@ -29,7 +29,10 @@ class _SignUpPageState extends State<SignUpPage> {
         centerTitle: true,
         title: Text(
           "Cadastro",
-          style: baseTheme.textTheme.headline1.copyWith(color: accentColor),
+          style: Theme.of(context)
+              .textTheme
+              .headline5
+              .copyWith(color: accentColor),
         ),
       ),
       body: SingleChildScrollView(

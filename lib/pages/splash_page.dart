@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quizyz/bloc/splash_bloc.dart';
 import 'package:quizyz/pages/controller_page.dart';
 import 'package:quizyz/pages/login_page.dart';
 import 'package:quizyz/utils/style/animations/fade_animation.dart';
@@ -11,10 +12,22 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  SplashBloc _bloc = SplashBloc();
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _bloc.getUsuarioLogin();
+    _bloc.splashStream.listen((event) {
+      if (event) {
+        Navigator.of(context).pushReplacement(
+          CupertinoPageRoute(
+            builder: (context) => ControllerPage(),
+          ),
+        );
+      } else {
+        _loadData();
+      }
+    });
   }
 
   @override
