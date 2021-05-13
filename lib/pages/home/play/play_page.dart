@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/play_bloc.dart';
-import 'package:quizyz/components/quizzy_app_button.dart';
+import 'package:quizyz/components/quizyz_app_button.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 class PlayPage extends StatefulWidget {

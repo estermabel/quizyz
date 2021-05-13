@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/sign_up_bloc.dart';
 
-import 'package:quizyz/components/quizzy_app_button.dart';
+import 'package:quizyz/components/quizyz_app_button.dart';
 import 'package:quizyz/pages/login_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/helpers/helpers.dart';
@@ -206,7 +206,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   padding: const EdgeInsets.only(top: 80, left: 24, right: 24),
                   child: QuizyzAppButton(
                       title: "Cadastro",
-
                       onTap: () async {
                         if (_bloc.formKey.currentState.validate()) {
                           await _bloc.doSignUp();
