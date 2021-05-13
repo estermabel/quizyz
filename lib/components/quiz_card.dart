@@ -52,7 +52,7 @@ class QuizCard extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 16),
-                          child: Text(
+                          child: SelectableText(
                             "Cód: $codigo",
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
