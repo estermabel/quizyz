@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:quizyz/model/LoginAuth.dart';
 import 'package:quizyz/service/config/api_service.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/service/login_service.dart';
@@ -14,10 +15,11 @@ class LoginBloc {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
-  StreamController<BaseResponse> _doLoginController = StreamController();
+  StreamController<BaseResponse<LoginAuth>> _doLoginController =
+      StreamController();
 
-  Stream get loginStream => _doLoginController.stream;
-  Sink get loginSink => _doLoginController.sink;
+  Stream<BaseResponse<LoginAuth>> get loginStream => _doLoginController.stream;
+  Sink<BaseResponse<LoginAuth>> get loginSink => _doLoginController.sink;
 
   LoginBloc() {
     _service = LoginService(APIService());
