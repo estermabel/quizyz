@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:quizyz/components/quizyz_app_button.dart';
+import 'package:quizyz/utils/helpers/helpers.dart';
 import 'package:quizyz/utils/style/colors.dart';
 import 'package:quizyz/utils/style/themes/base_theme.dart';
 
@@ -21,6 +22,11 @@ class _SignUpPageState extends State<SignUpPage> {
 
   //Controle de exibicao de senha
   bool _exibirSenha = true;
+
+  //Controler de erros
+  bool _isNameErrorDisplayed = false;
+  bool _isEmailErrorDisplayed = false;
+  bool _isPasswordErrorDisplayed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +55,15 @@ class _SignUpPageState extends State<SignUpPage> {
                       Padding(
                         padding: EdgeInsets.only(bottom: 24.0),
                         child: TextFormField(
+                          controller: _nameController,
+                          validator: (value) {
+                            if (!Helpers.validateName(_nameController.text)) {
+                              _isNameErrorDisplayed = true;
+                              return "Campo de nome vazio";
+                            }
+
+                            return null;
+                          },
                           cursorColor: whiteColor,
                           style: Theme.of(context).textTheme.bodyText1,
                           decoration: InputDecoration(
@@ -60,6 +75,20 @@ class _SignUpPageState extends State<SignUpPage> {
                       Padding(
                         padding: EdgeInsets.only(bottom: 24.0),
                         child: TextFormField(
+                          controller: _emailController,
+                          validator: (value) {
+                            if (_emailController.text.isEmpty) {
+                              _isEmailErrorDisplayed = true;
+                              return "Campo de e-mail vazio";
+                            }
+
+                            if (!Helpers.validateEmail(_emailController.text)) {
+                              _isEmailErrorDisplayed = true;
+                              return "E-mail invalido!";
+                            }
+
+                            return null;
+                          },
                           cursorColor: whiteColor,
                           style: Theme.of(context).textTheme.bodyText1,
                           decoration: InputDecoration(
@@ -71,7 +100,17 @@ class _SignUpPageState extends State<SignUpPage> {
                       Padding(
                         padding: EdgeInsets.only(bottom: 24.0),
                         child: TextFormField(
+                          controller: _senhaController,
                           cursorColor: whiteColor,
+                          validator: (value) {
+                            if (!Helpers.validatePassword(
+                                _senhaController.text)) {
+                              _isPasswordErrorDisplayed = true;
+                              return "Senha invalida";
+                            }
+
+                            return null;
+                          },
                           style: Theme.of(context).textTheme.bodyText1,
                           obscureText: _exibirSenha,
                           decoration: InputDecoration(
@@ -94,7 +133,18 @@ class _SignUpPageState extends State<SignUpPage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 24.0),
                         child: TextFormField(
+                          controller: _confirmSenhaController,
                           cursorColor: whiteColor,
+                          validator: (value) {
+                            if (_senhaController.text !=
+                                _confirmSenhaController.text) {
+                              return "Senhas diferentes";
+                            } else if (_confirmSenhaController.text.isEmpty) {
+                              return "Campo confirmar senha vazio";
+                            }
+
+                            return null;
+                          },
                           style: Theme.of(context).textTheme.bodyText1,
                           obscureText: _exibirSenha,
                           decoration: InputDecoration(
@@ -122,7 +172,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 80, left: 24, right: 24),
-                  child: QuizyzAppButton(onTap: () => null),
+                  child: QuizyzAppButton(onTap: () {
+                    if (formKey.currentState.validate()) {}
+                  }),
                 ),
               )
             ],
