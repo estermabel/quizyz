@@ -31,6 +31,7 @@ dependencies:
   sqflite: ^2.0.0+3
   # Used to refresh the pages
   liquid_pull_to_refresh: ^3.0.0
+  pull_to_refresh: ^2.0.0
   # Used to create a navigation bottom bar
   bubble_bottom_bar: ^1.2.0
   # Used to share content outside the app
