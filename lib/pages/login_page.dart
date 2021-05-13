@@ -7,7 +7,6 @@ import 'package:quizyz/pages/controller_page.dart';
 import 'package:quizyz/pages/home/quizzes/quizzes_page.dart';
 import 'package:quizyz/pages/signup_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
-import 'package:quizyz/utils/helpers/custom_shared_preferences.dart';
 import 'package:quizyz/utils/helpers/helpers.dart';
 import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';

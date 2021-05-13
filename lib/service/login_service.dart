@@ -6,7 +6,7 @@ class LoginService {
 
   LoginService(this._service);
 
-  Future<LoginAuth> doLogin({Map<String, dynamic> body}) async {
+  Future<dynamic> doLogin({Map<String, dynamic> body}) async {
     final response = await _service.doRequest(
         RequestConfig('usuarios/login', HttpMethod.post, body: body));
     var _results = LoginAuth.fromJson(response);
