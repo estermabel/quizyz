@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 class Constants {
-  static String kBaseUrl = "";
+  static String kBaseUrl = "https://quizyz.herokuapp.com/";
 
   static String kApiKey = "";
 
