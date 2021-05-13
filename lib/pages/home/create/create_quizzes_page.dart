@@ -43,25 +43,23 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                 padding:
                     const EdgeInsets.only(bottom: 32.0, right: 16, left: 16),
                 child: PurpleButton(
-                  titulo: quizesList.length < 10
-                      ? "Adicionar quiz"
-                      : "Cadastrar Quiz",
-                  onTap: () => setState(
-                    () {
+                    titulo: quizesList.length < 10
+                        ? "Adicionar quiz"
+                        : "Cadastrar Quiz",
+                    onTap: () {
                       if (quizesList.length < 10) {
-                        int size = quizesList.length + 1;
-                        quizesList.add(
-                          CreateQuizCard(
-                            pergunta: "Pergunta " + size.toString(),
-                          ),
+                        setState(
+                          () {
+                            int size = quizesList.length + 1;
+                            quizesList.add(CreateQuizCard(
+                              pergunta: "Pergunta " + size.toString(),
+                            ));
+                          },
                         );
                       } else {
-                        // Cadastrar quiz aqui?
-
+                        // TODO: Cadastrar quiz aqui?
                       }
-                    },
-                  ),
-                ),
+                    }),
               ),
             )
           ],
