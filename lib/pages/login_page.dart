@@ -57,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
           ManagerDialogs.showLoadingDialog(context);
           break;
         case Status.ERROR:
+          Navigator.pop(context);
           ManagerDialogs.showErrorDialog(context, event.message);
           break;
         default:
