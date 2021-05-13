@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
-class QuizCard extends StatelessWidget {
+class ScoreQuizCard extends StatelessWidget {
   final String titulo;
   final int qtdPerguntas;
-  final String codigo;
+  final String criador;
   final Function onTap;
-  const QuizCard({
+  const ScoreQuizCard({
     Key key,
     this.titulo,
     this.qtdPerguntas,
-    this.codigo,
+    this.criador,
     this.onTap,
   }) : super(key: key);
 
@@ -53,7 +53,7 @@ class QuizCard extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 16),
                           child: SelectableText(
-                            "Cód: $codigo",
+                            "De: $criador",
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                         ),

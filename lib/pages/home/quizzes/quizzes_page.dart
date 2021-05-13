@@ -6,7 +6,8 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:quizyz/bloc/quizzes_bloc.dart';
 import 'package:quizyz/components/native_loading.dart';
-import 'package:quizyz/components/quiz_card.dart';
+import 'package:quizyz/components/my_quiz_card.dart';
+import 'package:quizyz/components/score_quiz_card.dart';
 import 'package:quizyz/model/User.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
@@ -93,10 +94,19 @@ class _QuizzesPageState extends State<QuizzesPage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 32),
-                            child: QuizCard(
+                            child: MyQuizCard(
                               titulo: "O quanto você me conhece?",
                               qtdPerguntas: 10,
                               codigo: "123456",
+                              onTap: () {},
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 32),
+                            child: ScoreQuizCard(
+                              titulo: "O quanto você me conhece?",
+                              qtdPerguntas: 10,
+                              criador: "Ana Júlia",
                               onTap: () {},
                             ),
                           ),
