@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:quizyz/components/quizzy_app_button.dart';
+import 'package:quizyz/bloc/sign_up_bloc.dart';
 
+import 'package:quizyz/components/quizzy_app_button.dart';
+import 'package:quizyz/pages/login_page.dart';
+import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/helpers/helpers.dart';
+import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
-import 'package:quizyz/utils/style/themes/base_theme.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -11,22 +15,47 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  //FormKey para validação
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  //Controllers de edição de texto
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _senhaController = TextEditingController();
-  TextEditingController _confirmSenhaController = TextEditingController();
-
-  //Controle de exibicao de senha
+  SignUpBloc _bloc = SignUpBloc();
   bool _exibirSenha = true;
 
-  //Controler de erros
   bool _isNameErrorDisplayed = false;
   bool _isEmailErrorDisplayed = false;
   bool _isPasswordErrorDisplayed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _signUpStream();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
+  }
+
+  _signUpStream() {
+    _bloc.signUpStream.listen((event) async {
+      switch (event.status) {
+        case Status.COMPLETED:
+          Navigator.pop(context);
+          Navigator.of(context).pushAndRemoveUntil(
+              CupertinoPageRoute(builder: (context) => LoginPage()),
+              (r) => false);
+
+          break;
+        case Status.LOADING:
+          ManagerDialogs.showLoadingDialog(context);
+          break;
+        case Status.ERROR:
+          Navigator.pop(context);
+          ManagerDialogs.showErrorDialog(context, event.message);
+          break;
+        default:
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,15 +78,16 @@ class _SignUpPageState extends State<SignUpPage> {
                 padding:
                     const EdgeInsets.only(top: 60, right: 24.0, left: 24.0),
                 child: Form(
-                  key: formKey,
+                  key: _bloc.formKey,
                   child: Column(
                     children: [
                       Padding(
                         padding: EdgeInsets.only(bottom: 24.0),
                         child: TextFormField(
-                          controller: _nameController,
+                          controller: _bloc.nameController,
                           validator: (value) {
-                            if (!Helpers.validateName(_nameController.text)) {
+                            if (!Helpers.validateName(
+                                _bloc.nameController.text)) {
                               _isNameErrorDisplayed = true;
                               return "Campo de nome vazio";
                             }
@@ -75,14 +105,15 @@ class _SignUpPageState extends State<SignUpPage> {
                       Padding(
                         padding: EdgeInsets.only(bottom: 24.0),
                         child: TextFormField(
-                          controller: _emailController,
+                          controller: _bloc.emailController,
                           validator: (value) {
-                            if (_emailController.text.isEmpty) {
+                            if (_bloc.emailController.text.isEmpty) {
                               _isEmailErrorDisplayed = true;
                               return "Campo de e-mail vazio";
                             }
 
-                            if (!Helpers.validateEmail(_emailController.text)) {
+                            if (!Helpers.validateEmail(
+                                _bloc.emailController.text)) {
                               _isEmailErrorDisplayed = true;
                               return "E-mail invalido!";
                             }
@@ -100,11 +131,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       Padding(
                         padding: EdgeInsets.only(bottom: 24.0),
                         child: TextFormField(
-                          controller: _senhaController,
+                          controller: _bloc.senhaController,
                           cursorColor: whiteColor,
                           validator: (value) {
                             if (!Helpers.validatePassword(
-                                _senhaController.text)) {
+                                _bloc.senhaController.text)) {
                               _isPasswordErrorDisplayed = true;
                               return "Senha invalida";
                             }
@@ -133,13 +164,14 @@ class _SignUpPageState extends State<SignUpPage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 24.0),
                         child: TextFormField(
-                          controller: _confirmSenhaController,
+                          controller: _bloc.confirmSenhaController,
                           cursorColor: whiteColor,
                           validator: (value) {
-                            if (_senhaController.text !=
-                                _confirmSenhaController.text) {
+                            if (_bloc.senhaController.text !=
+                                _bloc.confirmSenhaController.text) {
                               return "Senhas diferentes";
-                            } else if (_confirmSenhaController.text.isEmpty) {
+                            } else if (_bloc
+                                .confirmSenhaController.text.isEmpty) {
                               return "Campo confirmar senha vazio";
                             }
 
@@ -174,8 +206,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   padding: const EdgeInsets.only(top: 80, left: 24, right: 24),
                   child: QuizyzAppButton(
                       title: "Cadastro",
-                      onTap: () {
-                        if (formKey.currentState.validate()) {}
+
+                      onTap: () async {
+                        if (_bloc.formKey.currentState.validate()) {
+                          await _bloc.doSignUp();
+                        }
                       }),
                 ),
               )

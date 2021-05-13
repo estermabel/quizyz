@@ -26,6 +26,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
           GestureDetector(
             onTap: () {
               CustomSharedPreferences.saveUsuario(false);
+              CustomSharedPreferences.saveId(null);
               Navigator.of(context).pushAndRemoveUntil(
                 CupertinoPageRoute(
                   builder: (context) => LoginPage(),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quizyz/pages/signup_page.dart';
 import 'package:quizyz/pages/splash_page.dart';
 import 'package:quizyz/utils/style/themes/base_theme.dart';
 
