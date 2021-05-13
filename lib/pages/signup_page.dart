@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quizyz/components/quizzy_app_button.dart';
 
-import 'package:quizyz/components/quizyz_app_button.dart';
 import 'package:quizyz/utils/helpers/helpers.dart';
 import 'package:quizyz/utils/style/colors.dart';
 import 'package:quizyz/utils/style/themes/base_theme.dart';
@@ -172,9 +172,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 80, left: 24, right: 24),
-                  child: QuizyzAppButton(onTap: () {
-                    if (formKey.currentState.validate()) {}
-                  }),
+                  child: QuizyzAppButton(
+                      title: "Cadastro",
+                      onTap: () {
+                        if (formKey.currentState.validate()) {}
+                      }),
                 ),
               )
             ],
