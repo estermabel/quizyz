@@ -206,6 +206,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   padding: const EdgeInsets.only(top: 80, left: 24, right: 24),
                   child: QuizyzAppButton(
                       title: "Cadastro",
+
                       onTap: () async {
                         if (_bloc.formKey.currentState.validate()) {
                           await _bloc.doSignUp();
