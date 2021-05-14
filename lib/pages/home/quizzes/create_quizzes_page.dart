@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizyz/bloc/create_quiz_bloc.dart';
 import 'package:quizyz/components/create_quiz_card.dart';
 import 'package:quizyz/components/purple_button.dart';
 import 'package:quizyz/utils/style/themes/base_theme.dart';
@@ -9,6 +10,7 @@ class CreateQuizzesPage extends StatefulWidget {
 }
 
 class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
+  CreateQuizBloc _bloc = CreateQuizBloc();
   List<Widget> quizesList = [];
 
   @override
@@ -18,8 +20,10 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
         centerTitle: true,
         title: Text(
           "Criar quiz",
-          style: baseTheme.textTheme.headline1
-              .copyWith(color: baseTheme.accentColor),
+          style: Theme.of(context)
+              .textTheme
+              .headline6
+              .copyWith(color: Theme.of(context).accentColor),
         ),
         actions: [
           IconButton(
@@ -28,7 +32,7 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                 if (quizesList.length > 0) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text("Cadastrado"),
+                      content: Text("Quiz criado."),
                     ),
                   );
                 }
@@ -42,6 +46,7 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
               padding:
                   const EdgeInsets.only(top: 16.0, left: 32.0, right: 16.0),
               child: TextField(
+                controller: _bloc.tituloController,
                 decoration: InputDecoration(
                   labelText: "Titulo",
                   labelStyle: Theme.of(context).textTheme.bodyText1,
@@ -65,15 +70,17 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                 padding:
                     const EdgeInsets.only(bottom: 32.0, right: 16, left: 16),
                 child: PurpleButton(
-                  titulo: "Adicionar quiz",
+                  titulo: "Adicionar pergunta",
                   onTap: () {
                     if (quizesList.length < 10) {
                       setState(
                         () {
                           int size = quizesList.length + 1;
-                          quizesList.add(CreateQuizCard(
-                            pergunta: "Pergunta " + size.toString(),
-                          ));
+                          quizesList.add(
+                            CreateQuizCard(
+                              pergunta: "Pergunta " + size.toString(),
+                            ),
+                          );
                         },
                       );
                     }

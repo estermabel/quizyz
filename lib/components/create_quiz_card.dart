@@ -15,11 +15,11 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
   int _value = 1;
 
   //TextEdittingController
-  TextEditingController _nomeController = new TextEditingController();
-  TextEditingController _pergunta1Controller = new TextEditingController();
-  TextEditingController _pergunta2Controller = new TextEditingController();
-  TextEditingController _pergunta3Controller = new TextEditingController();
-  TextEditingController _pergunta4Controller = new TextEditingController();
+  TextEditingController _perguntaController = new TextEditingController();
+  TextEditingController _resposta1Controller = new TextEditingController();
+  TextEditingController _resposta2Controller = new TextEditingController();
+  TextEditingController _resposta3Controller = new TextEditingController();
+  TextEditingController _resposta4Controller = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +32,13 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
             padding: EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0),
             child: Text(
               widget.pergunta,
-              style: baseTheme.textTheme.bodyText2,
+              style: Theme.of(context).textTheme.bodyText2,
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 16.0),
             child: TextField(
-              controller: _nomeController,
+              controller: _perguntaController,
               decoration: InputDecoration(
                 labelText: "Nome",
                 labelStyle: Theme.of(context).textTheme.bodyText1,
@@ -60,7 +60,7 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
                 ),
                 Expanded(
                   child: TextField(
-                    controller: _pergunta1Controller,
+                    controller: _resposta1Controller,
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(),
                     ),
@@ -84,7 +84,7 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
                 ),
                 Expanded(
                   child: TextField(
-                    controller: _pergunta2Controller,
+                    controller: _resposta2Controller,
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(),
                     ),
@@ -108,7 +108,7 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
                 ),
                 Expanded(
                   child: TextField(
-                    controller: _pergunta3Controller,
+                    controller: _resposta3Controller,
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(),
                     ),
@@ -132,7 +132,7 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
                 ),
                 Expanded(
                   child: TextField(
-                    controller: _pergunta4Controller,
+                    controller: _resposta4Controller,
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(),
                     ),

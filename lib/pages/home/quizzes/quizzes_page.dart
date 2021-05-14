@@ -8,7 +8,7 @@ import 'package:quizyz/bloc/quizzes_bloc.dart';
 import 'package:quizyz/components/native_loading.dart';
 import 'package:quizyz/components/quiz_card.dart';
 import 'package:quizyz/model/User.dart';
-import 'package:quizyz/pages/home/create/create_quizzes_page.dart';
+import 'package:quizyz/pages/home/quizzes/create_quizzes_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 import 'package:quizyz/utils/helpers/manage_dialogs.dart';
