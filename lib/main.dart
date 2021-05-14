@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:quizyz/db/data_base_helper.dart';
 import 'package:quizyz/pages/splash_page.dart';
 import 'package:quizyz/utils/style/themes/base_theme.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper.instance.database;
   runApp(MyApp());
 }
 
@@ -10,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Quizys',
+      title: 'Quizyz',
       debugShowCheckedModeBanner: false,
       theme: baseTheme,
       home: SplashPage(),
