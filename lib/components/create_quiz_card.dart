@@ -11,7 +11,15 @@ class CreateQuizCard extends StatefulWidget {
 }
 
 class _CreateQuizCardState extends State<CreateQuizCard> {
-  bool teste = false;
+  // Radio button value
+  int _value = 1;
+
+  //TextEdittingController
+  TextEditingController _nomeController = new TextEditingController();
+  TextEditingController _pergunta1Controller = new TextEditingController();
+  TextEditingController _pergunta2Controller = new TextEditingController();
+  TextEditingController _pergunta3Controller = new TextEditingController();
+  TextEditingController _pergunta4Controller = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +29,20 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: 8.0, top: 8.0),
+            padding: EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0),
             child: Text(
               widget.pergunta,
               style: baseTheme.textTheme.bodyText2,
             ),
           ),
-          TextField(
-            decoration: InputDecoration(
-              labelText: "Nome",
-              labelStyle: Theme.of(context).textTheme.bodyText1,
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: TextField(
+              controller: _nomeController,
+              decoration: InputDecoration(
+                labelText: "Nome",
+                labelStyle: Theme.of(context).textTheme.bodyText1,
+              ),
             ),
           ),
           Padding(
@@ -38,19 +50,19 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
             child: Row(
               children: [
                 Radio(
-                  value: teste,
-                  groupValue: teste,
+                  value: 1,
+                  groupValue: _value,
                   onChanged: (value) {
                     setState(() {
-                      teste = !teste;
+                      _value = value;
                     });
                   },
                 ),
                 Expanded(
                   child: TextField(
+                    controller: _pergunta1Controller,
                     decoration: InputDecoration(
-                      labelText: "Teste1",
-                      labelStyle: Theme.of(context).textTheme.bodyText1,
+                      border: UnderlineInputBorder(),
                     ),
                   ),
                 ),
@@ -62,19 +74,19 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
             child: Row(
               children: [
                 Radio(
-                  value: teste,
-                  groupValue: teste,
+                  value: 2,
+                  groupValue: _value,
                   onChanged: (value) {
                     setState(() {
-                      teste = !teste;
+                      _value = value;
                     });
                   },
                 ),
                 Expanded(
                   child: TextField(
+                    controller: _pergunta2Controller,
                     decoration: InputDecoration(
-                      labelText: "Teste2",
-                      labelStyle: Theme.of(context).textTheme.bodyText1,
+                      border: UnderlineInputBorder(),
                     ),
                   ),
                 ),
@@ -86,19 +98,19 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
             child: Row(
               children: [
                 Radio(
-                  value: teste,
-                  groupValue: teste,
+                  value: 3,
+                  groupValue: _value,
                   onChanged: (value) {
                     setState(() {
-                      teste = !teste;
+                      _value = value;
                     });
                   },
                 ),
                 Expanded(
                   child: TextField(
+                    controller: _pergunta3Controller,
                     decoration: InputDecoration(
-                      labelText: "Teste3",
-                      labelStyle: Theme.of(context).textTheme.bodyText1,
+                      border: UnderlineInputBorder(),
                     ),
                   ),
                 ),
@@ -110,19 +122,19 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
             child: Row(
               children: [
                 Radio(
-                  value: teste,
-                  groupValue: teste,
+                  value: 4,
+                  groupValue: _value,
                   onChanged: (value) {
                     setState(() {
-                      teste = !teste;
+                      _value = value;
                     });
                   },
                 ),
                 Expanded(
                   child: TextField(
+                    controller: _pergunta4Controller,
                     decoration: InputDecoration(
-                      labelText: "Teste4",
-                      labelStyle: Theme.of(context).textTheme.bodyText1,
+                      border: UnderlineInputBorder(),
                     ),
                   ),
                 ),
