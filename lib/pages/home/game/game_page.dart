@@ -1,42 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/components/answer_component.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
+import 'package:quizyz/model/Pergunta.dart';
+import 'package:quizyz/model/Quiz.dart';
+import 'package:quizyz/model/Resposta.dart';
 
 class GamePage extends StatefulWidget {
   final String title;
+  final Quiz quiz;
 
-  GamePage({@required this.title});
+  GamePage({@required this.title, this.quiz});
 
   @override
   _GamePageState createState() => _GamePageState();
 }
 
 class _GamePageState extends State<GamePage> {
-  List<Widget> answerList = [
-    AnswerComponent(
-      answer: "Picanha",
+  final key = new GlobalKey<AnswerComponentState>();
+  // Para teste apenas
+  List<Pergunta> perguntaList = [
+    Pergunta(
+      titulo: "Qual minha comida favorita?",
+      resposta: [
+        Resposta(titulo: "Hamburguer", resposta: false),
+        Resposta(titulo: "Pizza", resposta: false),
+        Resposta(titulo: "Curry", resposta: true),
+        Resposta(titulo: "Lasanha", resposta: false)
+      ],
     ),
-    AnswerComponent(
-      answer: "Lasanha",
+    Pergunta(
+      titulo: "Qual minha bebida favorita?",
+      resposta: [
+        Resposta(titulo: "Cerveja", resposta: false),
+        Resposta(titulo: "Energetico", resposta: false),
+        Resposta(titulo: "Suco de abacaxi", resposta: true),
+        Resposta(titulo: "Lasanha", resposta: false)
+      ],
     ),
-    AnswerComponent(
-      answer: "Bolo de laranja",
-    ),
-    AnswerComponent(
-      answer: "Macarrão",
-    )
   ];
 
-  /* 
-    Imagino que as perguntas virão em formato de lista... 
-    Se for o caso podemos fazer a barra de progressão baseada no index dela.
-    A partir dai para fazer a animação de progressão podemos fazer um calculo
-    Para obter a porcetagem do index da lista e move-lá a partir dai. 
-
-    Ainda pensando em como fazer *este* componente de resposta de uma forma
-    Satisfatoria... Pensei nele ser hardcoded para 4 respostas mas não fiquei 
-    Feliz com esta aproximação então fiz justamente ao contrario... 
-  */
+  int ponteiro = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +61,7 @@ class _GamePageState extends State<GamePage> {
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                "Qual minha comida favorita?",
+                perguntaList[ponteiro].titulo,
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1
@@ -66,17 +69,12 @@ class _GamePageState extends State<GamePage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        top: 32.0, left: 16.0, right: 16.0, bottom: 16.0),
-                    child: answerList[index],
-                  );
-                },
-                itemCount: answerList.length,
+            Padding(
+              padding: EdgeInsets.only(
+                  top: 32.0, left: 16.0, right: 16.0, bottom: 16.0),
+              child: AnswerComponent(
+                respostas: perguntaList[ponteiro].resposta,
+                key: key,
               ),
             ),
             Align(
@@ -86,7 +84,23 @@ class _GamePageState extends State<GamePage> {
                     bottom: 42.0, left: 16.0, right: 16.0),
                 child: QuizyzAppButton(
                   title: "Proximo",
-                  onTap: () => null,
+                  onTap: () => setState(
+                    () {
+                      key.currentState.showAnswer = true;
+
+                      Future.delayed(
+                        Duration(seconds: 5),
+                        () {
+                          if (ponteiro < perguntaList.length - 1) {
+                            setState(() {
+                              key.currentState.showAnswer = false;
+                              ponteiro++;
+                            });
+                          }
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
             )
