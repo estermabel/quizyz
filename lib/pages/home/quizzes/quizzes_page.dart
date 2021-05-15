@@ -143,7 +143,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
     return AppBar(
       centerTitle: true,
       title: Text(
-        "Meus Quizzes",
+        "Meus Quizyz",
         style:
             Theme.of(context).textTheme.headline5.copyWith(color: accentColor),
       ),
@@ -168,6 +168,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
           onTap: () {
             CustomSharedPreferences.saveUsuario(false);
             CustomSharedPreferences.saveId(0);
+            _bloc.deleteDB();
             Navigator.of(context).pushAndRemoveUntil(
               CupertinoPageRoute(
                 builder: (context) => LoginPage(),

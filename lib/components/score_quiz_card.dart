@@ -52,7 +52,7 @@ class ScoreQuizCard extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 16),
-                          child: SelectableText(
+                          child: Text(
                             "De: $criador",
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
