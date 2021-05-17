@@ -16,8 +16,25 @@ class GamePage extends StatefulWidget {
   _GamePageState createState() => _GamePageState();
 }
 
-class _GamePageState extends State<GamePage> {
+class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   final key = new GlobalKey<AnswerComponentState>();
+  AnimationController _controller;
+  int ponteiro = 0;
+  double appBarProgress = 0.0;
+  bool runFunction = true;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 5),
+        value: appBarProgress);
+    _controller.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
   // Para teste apenas
   List<Pergunta> perguntaList = [
     Pergunta(
@@ -39,8 +56,6 @@ class _GamePageState extends State<GamePage> {
       ],
     ),
   ];
-
-  int ponteiro = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +79,15 @@ class _GamePageState extends State<GamePage> {
           onPressed: () {
             Navigator.pop(context);
           },
+        ),
+        flexibleSpace: Align(
+          alignment: Alignment.bottomCenter,
+          child: LinearProgressIndicator(
+            backgroundColor: Colors.white,
+            value: _controller.value,
+            valueColor: AlwaysStoppedAnimation<Color>(blueColor),
+            minHeight: 2,
+          ),
         ),
       ),
       body: Container(
@@ -92,29 +116,45 @@ class _GamePageState extends State<GamePage> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.only(
-                    bottom: 42.0, left: 16.0, right: 16.0),
-                child: QuizyzAppButton(
-                  title: "Proximo",
-                  onTap: () => setState(
-                    () {
-                      key.currentState.showAnswer = true;
-
-                      Future.delayed(
-                        Duration(seconds: 2),
-                        () {
-                          if (ponteiro < perguntaList.length - 1) {
-                            setState(() {
-                              key.currentState.showAnswer = false;
-                              ponteiro++;
-                            });
-                          }
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ),
+                  padding: const EdgeInsets.only(
+                      bottom: 42.0, left: 16.0, right: 16.0),
+                  child: QuizyzAppButton(
+                    title: "Proximo",
+                    onTap: () => runFunction == true
+                        ? setState(() {
+                            if (key.currentState.radioIndex != null) {
+                              key.currentState.showAnswer = true;
+                              runFunction = !runFunction;
+                              Future.delayed(Duration(seconds: 2), () {
+                                if (ponteiro < perguntaList.length - 1) {
+                                  setState(() {
+                                    runFunction = !runFunction;
+                                    key.currentState.showAnswer = false;
+                                    key.currentState.radioIndex = null;
+                                    ponteiro++;
+                                    appBarProgress = appBarProgress + 0.1;
+                                    _controller.animateTo(appBarProgress,
+                                        duration: Duration(seconds: 5));
+                                  });
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Fim da lista :3 "),
+                                    ),
+                                  );
+                                }
+                              });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text("Por favor escolha uma alternativa"),
+                                ),
+                              );
+                            }
+                          })
+                        : null,
+                  )),
             )
           ],
         ),
