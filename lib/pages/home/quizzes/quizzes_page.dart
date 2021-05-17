@@ -6,9 +6,11 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:quizyz/bloc/quizzes_bloc.dart';
 import 'package:quizyz/components/native_loading.dart';
-import 'package:quizyz/components/quiz_card.dart';
+import 'package:quizyz/components/my_quiz_card.dart';
+import 'package:quizyz/components/score_quiz_card.dart';
 import 'package:quizyz/model/User.dart';
 import 'package:quizyz/pages/home/quizzes/create_quizzes_page.dart';
+import 'package:quizyz/pages/home/game/game_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 import 'package:quizyz/utils/helpers/manage_dialogs.dart';
@@ -98,11 +100,34 @@ class _QuizzesPageState extends State<QuizzesPage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 32),
-                            child: QuizCard(
+                            child: MyQuizCard(
                               titulo: "O quanto você me conhece?",
                               qtdPerguntas: 10,
                               codigo: "123456",
-                              onTap: () {},
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GamePage(
+                                    title: "O quanto você me conhece?",
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 32),
+                            child: ScoreQuizCard(
+                              titulo: "O quanto você me conhece?",
+                              qtdPerguntas: 10,
+                              criador: "Ana Júlia",
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GamePage(
+                                    title: "O quanto você me conhece?",
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -123,7 +148,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
     return AppBar(
       centerTitle: true,
       title: Text(
-        "Meus Quizzes",
+        "Meus Quizyz",
         style:
             Theme.of(context).textTheme.headline5.copyWith(color: accentColor),
       ),
@@ -148,6 +173,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
           onTap: () {
             CustomSharedPreferences.saveUsuario(false);
             CustomSharedPreferences.saveId(0);
+            _bloc.deleteDB();
             Navigator.of(context).pushAndRemoveUntil(
               CupertinoPageRoute(
                 builder: (context) => LoginPage(),

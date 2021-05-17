@@ -4,6 +4,7 @@ class User {
   String email;
   String senha;
   //List<dynamic> meusQuizzes;
+  //List<int> quizzesJogados;
 
   User({
     this.id,
@@ -11,6 +12,7 @@ class User {
     this.email,
     this.senha,
     //this.meusQuizzes,
+    //this.quizzesJogados,
   });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -21,9 +23,10 @@ class User {
     // if (json['meusQuizzes'] != null) {
     //   meusQuizzes = new List<Null>();
     //   json['meusQuizzes'].forEach((v) {
-    //     meusQuizzes.add(new dynmic.fromJson(v));
+    //     meusQuizzes.add(new dynamic.fromJson(v));
     //   });
     // }
+    //quizzesJogados = json['quizzesJogados'].cast<int>();
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +38,7 @@ class User {
     // if (this.meusQuizzes != null) {
     //   data['meusQuizzes'] = this.meusQuizzes.map((v) => v.toJson()).toList();
     // }
+    //data['quizzesJogados'] = this.quizzesJogados;
     return data;
   }
 }
