@@ -10,10 +10,11 @@ class ManagerDialogs {
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
+          backgroundColor: Theme.of(context).backgroundColor,
           title: Text("Atenção!"),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text("Ok"),
               onPressed: () {
                 Navigator.pop(context);
@@ -29,7 +30,7 @@ class ManagerDialogs {
           title: Text("Atenção!"),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text("Ok"),
               onPressed: () {
                 Navigator.pop(context);
@@ -66,7 +67,8 @@ class ManagerDialogs {
     return Align(
       alignment: Alignment.center,
       child: CircularProgressIndicator(
-          backgroundColor: Theme.of(context).primaryColor),
+        backgroundColor: Theme.of(context).accentColor,
+      ),
     );
   }
 }
