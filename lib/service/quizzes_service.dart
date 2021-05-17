@@ -35,20 +35,35 @@ class QuizzesService {
         HttpMethod.get,
       ),
     );
-    List<Quiz> quizzes =
+    List<Quiz> _quizzes =
         (response as List).map((e) => Quiz.fromJson(e)).toList();
-    return quizzes;
+    return _quizzes;
   }
 
-  Future createQuiz({@required Quiz quiz}) async {
+  Future getQuizById({int cod}) async {
     final response = await _service.doRequest(
       RequestConfig(
-        'quizzes/criar',
-        HttpMethod.post,
-        body: quizBody(quiz: quiz),
+        'mostrar/$cod',
+        HttpMethod.get,
       ),
     );
     var _results = Quiz.fromJson(response);
+    return _results;
+  }
+
+  Future createQuiz({@required Quiz quiz}) async {
+    var _results;
+    await CustomSharedPreferences.readId().then((id) async {
+      final response = await _service.doRequest(
+        RequestConfig(
+          'usuarios/criar_quiz/$id',
+          HttpMethod.post,
+          body: quizBody(quiz: quiz),
+        ),
+      );
+      _results = Quiz.fromJson(response);
+    });
+
     return _results;
   }
 
