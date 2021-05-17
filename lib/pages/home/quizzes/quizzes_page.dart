@@ -137,6 +137,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
                         return Expanded(
                           child: ListView.builder(
                             shrinkWrap: true,
+                            itemCount: _bloc.meusQuizzesList.length,
                             itemBuilder: (context, index) {
                               return _bloc.meusQuizzesList[index];
                             },

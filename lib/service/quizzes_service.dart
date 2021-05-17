@@ -7,6 +7,9 @@ import 'package:quizyz/model/User.dart';
 import 'package:quizyz/service/config/api_service.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 
+import '../model/Quiz.dart';
+import '../model/Quiz.dart';
+
 class QuizzesService {
   final APIService _service;
   final dbHelper = DatabaseHelper.instance;
@@ -32,6 +35,9 @@ class QuizzesService {
         HttpMethod.get,
       ),
     );
+    List<Quiz> quizzes =
+        (response as List).map((e) => Quiz.fromJson(e)).toList();
+    return quizzes;
   }
 
   Future createQuiz({@required Quiz quiz}) async {
