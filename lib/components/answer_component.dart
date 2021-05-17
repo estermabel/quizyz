@@ -29,7 +29,7 @@ class AnswerComponentState extends State<AnswerComponent> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: backgroundContainerColor,
-                gradient: widget.respostas[index].resposta == true &&
+                gradient: widget.respostas[index].isCerta == true &&
                         showAnswer == true
                     ? LinearGradient(
                         begin: Alignment.centerRight,
