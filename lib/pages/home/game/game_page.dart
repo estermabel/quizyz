@@ -4,6 +4,7 @@ import 'package:quizyz/components/quizyz_app_button.dart';
 import 'package:quizyz/model/Pergunta.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/Resposta.dart';
+import 'package:quizyz/utils/style/colors.dart';
 
 class GamePage extends StatefulWidget {
   final String title;
@@ -53,6 +54,17 @@ class _GamePageState extends State<GamePage> {
               .headline1
               .copyWith(color: Theme.of(context).accentColor, fontSize: 22),
         ),
+        leading: IconButton(
+          icon: IconTheme(
+            data: Theme.of(context).iconTheme.copyWith(
+                  color: accentColor,
+                ),
+            child: Icon(Icons.arrow_back_ios),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Container(
         padding: EdgeInsets.only(top: 32.0, right: 16.0, left: 16.0),
@@ -89,7 +101,7 @@ class _GamePageState extends State<GamePage> {
                       key.currentState.showAnswer = true;
 
                       Future.delayed(
-                        Duration(seconds: 5),
+                        Duration(seconds: 2),
                         () {
                           if (ponteiro < perguntaList.length - 1) {
                             setState(() {

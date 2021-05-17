@@ -34,7 +34,11 @@ class QuizzesBloc {
       userSink.add(BaseResponse.completed(data: response));
       getQuizzes();
     } catch (e) {
-      userSink.add(BaseResponse.error(e.response.data["error"]));
+      try {
+        userSink.add(BaseResponse.error(e.response.data["error"]));
+      } catch (e) {
+        userSink.add(BaseResponse.error("Sem conexão com a internet!"));
+      }
     }
   }
 
