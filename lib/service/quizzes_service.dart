@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:quizyz/db/data_base_helper.dart';
 import 'package:quizyz/model/Quiz.dart';
@@ -23,9 +25,41 @@ class QuizzesService {
     return _results;
   }
 
+  Future getQuizzes({int userId}) async {
+    final response = await _service.doRequest(
+      RequestConfig(
+        '/usuarios/exibir_todos_os_quizes_pelo_id_criador/$userId',
+        HttpMethod.get,
+      ),
+    );
+  }
+
+  Future createQuiz({@required Quiz quiz}) async {
+    final response = await _service.doRequest(
+      RequestConfig(
+        'quizzes/criar',
+        HttpMethod.post,
+        body: quizBody(quiz: quiz),
+      ),
+    );
+    var _results = Quiz.fromJson(response);
+    return _results;
+  }
+
+  Future deleteQuiz({@required Quiz quiz}) async {
+    int id = quiz.id;
+    final response = await _service.doRequest(
+      RequestConfig(
+        'quizzes/delete/$id',
+        HttpMethod.delete,
+      ),
+    );
+    return jsonDecode(response.toString());
+  }
+
   /// LOCAL DB
 
-  void insertQuizDB({Quiz quiz}) async {
+  void insertQuizDB({@required Quiz quiz}) async {
     var body = {
       DatabaseHelper.columnId: quiz.id,
       DatabaseHelper.columnTitulo: quiz.titulo,
@@ -41,7 +75,7 @@ class QuizzesService {
     return quizzes;
   }
 
-  void updateQuiz({Quiz quiz}) async {
+  void updateQuizDB({@required Quiz quiz}) async {
     var body = {
       DatabaseHelper.columnId: quiz.id,
       DatabaseHelper.columnTitulo: quiz.titulo,
@@ -51,7 +85,7 @@ class QuizzesService {
     debugPrint("updated $rowsAffected row(s).");
   }
 
-  void deleteQuizDB({int id}) async {
+  void deleteQuizDB({@required int id}) async {
     await dbHelper.delete(id);
     debugPrint('deleted quiz $id.');
   }
@@ -59,5 +93,14 @@ class QuizzesService {
   void deleteDB() async {
     await dbHelper.deleteDB();
     debugPrint('DB deleted.');
+  }
+
+  /// CREATE BODY
+  Map<String, dynamic> quizBody({@required Quiz quiz}) {
+    var body = {
+      "titulo": quiz.titulo,
+      "perguntas": jsonEncode(quiz.perguntas),
+    };
+    return body;
   }
 }

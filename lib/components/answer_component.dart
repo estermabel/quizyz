@@ -29,44 +29,30 @@ class AnswerComponentState extends State<AnswerComponent> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: backgroundContainerColor,
-                gradient: widget.respostas[index].resposta == true &&
+                gradient: widget.respostas[index].isCerta == true &&
                         showAnswer == true
                     ? LinearGradient(
                         begin: Alignment.centerRight,
                         end: Alignment.centerLeft,
                         colors: [purpleColor, accentColor],
                       )
-                    : LinearGradient(
-                        begin: Alignment.centerRight,
-                        end: Alignment.centerLeft,
-                        colors: [
-                          backgroundContainerColor,
-                          backgroundContainerColor
-                        ],
-                      ),
+                    : null,
               ),
-              child: Row(
-                children: [
-                  Radio(
-                    value: index,
-                    groupValue: radioIndex,
-                    activeColor: whiteColor,
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          radioIndex = value;
-                        },
-                      );
-                    },
-                  ),
-                  Text(
-                    widget.respostas[index].titulo,
-                    style: Theme.of(context).textTheme.bodyText2.copyWith(
-                        color: whiteColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ],
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  unselectedWidgetColor: whiteColor,
+                ),
+                child: RadioListTile(
+                  value: index,
+                  title: Text(widget.respostas[index].titulo),
+                  groupValue: radioIndex,
+                  activeColor: whiteColor,
+                  onChanged: (value) {
+                    setState(() {
+                      radioIndex = value;
+                    });
+                  },
+                ),
               ),
             ),
           );

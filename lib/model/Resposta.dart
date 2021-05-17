@@ -1,18 +1,21 @@
 class Resposta {
+  int id;
   String titulo;
-  bool resposta;
+  bool isCerta;
 
-  Resposta({this.titulo, this.resposta});
+  Resposta({this.id, this.titulo, this.isCerta});
 
   Resposta.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     titulo = json['titulo'];
-    resposta = json['resposta'];
+    isCerta = json['isCerta'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['titulo'] = this.titulo;
-    data['resposta'] = this.resposta;
+    data['isCerta'] = this.isCerta;
     return data;
   }
 }

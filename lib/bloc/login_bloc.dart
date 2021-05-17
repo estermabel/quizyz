@@ -34,6 +34,7 @@ class LoginBloc {
       loginSink.add(BaseResponse.completed(data: response));
       await CustomSharedPreferences.saveUsuario(true);
       await CustomSharedPreferences.saveId(response.id);
+      await CustomSharedPreferences.saveNomeUsuario(response.nomeCompleto);
     } catch (e) {
       loginSink.add(BaseResponse.error(e.response.data["message"]));
     }

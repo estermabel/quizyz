@@ -117,6 +117,7 @@ class APIService {
         try {
           return response.data;
         } catch (e) {
+          print(e.toString());
           return Map<String, dynamic>();
         }
       }

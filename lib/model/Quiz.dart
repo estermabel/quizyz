@@ -3,25 +3,27 @@ import 'Pergunta.dart';
 import 'User.dart';
 
 class Quiz {
-  String titulo;
-  User criador;
   int id;
+  User criador;
   List<Pergunta> perguntas;
   List<Jogador> jogadores;
+  String createdAt;
+  String updatedAt;
+  String titulo;
 
-  Quiz({
-    this.titulo,
-    this.criador,
-    this.id,
-    this.perguntas,
-    this.jogadores,
-  });
+  Quiz(
+      {this.id,
+      this.criador,
+      this.perguntas,
+      this.jogadores,
+      this.createdAt,
+      this.updatedAt,
+      this.titulo});
 
   Quiz.fromJson(Map<String, dynamic> json) {
-    titulo = json['titulo'];
+    id = json['id'];
     criador =
         json['criador'] != null ? new User.fromJson(json['criador']) : null;
-    id = json['id'];
     if (json['perguntas'] != null) {
       perguntas = [];
       json['perguntas'].forEach((v) {
@@ -34,21 +36,26 @@ class Quiz {
         jogadores.add(new Jogador.fromJson(v));
       });
     }
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    titulo = json['titulo'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['titulo'] = this.titulo;
+    data['id'] = this.id;
     if (this.criador != null) {
       data['criador'] = this.criador.toJson();
     }
-    data['id'] = this.id;
     if (this.perguntas != null) {
       data['perguntas'] = this.perguntas.map((v) => v.toJson()).toList();
     }
     if (this.jogadores != null) {
       data['jogadores'] = this.jogadores.map((v) => v.toJson()).toList();
     }
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['titulo'] = this.titulo;
     return data;
   }
 }

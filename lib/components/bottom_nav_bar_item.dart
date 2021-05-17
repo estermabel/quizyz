@@ -14,13 +14,19 @@ BubbleBottomBarItem bottomNavBarItem({
   return BubbleBottomBarItem(
     backgroundColor: color,
     icon: isSvg
-        ? SvgPicture.asset(svgPath)
+        ? SvgPicture.asset(
+            svgPath,
+            color: whiteColor,
+          )
         : IconTheme(
             data: Theme.of(context).iconTheme.copyWith(color: whiteColor),
             child: Icon(icon),
           ),
     activeIcon: isSvg
-        ? SvgPicture.asset(svgPath)
+        ? SvgPicture.asset(
+            svgPath,
+            color: whiteColor,
+          )
         : IconTheme(
             data: Theme.of(context).iconTheme.copyWith(color: whiteColor),
             child: Icon(icon),
