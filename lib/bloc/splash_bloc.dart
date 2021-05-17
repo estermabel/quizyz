@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 
 class SplashBloc {
