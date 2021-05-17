@@ -32,7 +32,7 @@ class APIService {
     dio.interceptors.add(CustomInterceptors(dio));
   }
 
-  Future<Map<String, dynamic>> doRequest(RequestConfig config) async {
+  Future doRequest(RequestConfig config) async {
     String url = Constants.kBaseUrl;
     Options options = Constants.kOptions;
     Map<String, dynamic> queryParameters = Constants.kqueryParameters;
@@ -108,7 +108,7 @@ class APIService {
     return responseJson;
   }
 
-  Map<String, dynamic> _returnResponse(Response response) {
+  _returnResponse(Response response) {
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       try {
         var result = json.decode(response.data.toString());
@@ -117,8 +117,12 @@ class APIService {
         try {
           return response.data;
         } catch (e) {
-          print(e.toString());
-          return Map<String, dynamic>();
+          try {
+            return (response.data as List);
+          } catch (e) {
+            print(e.toString());
+            return Map<String, dynamic>();
+          }
         }
       }
     } else {
