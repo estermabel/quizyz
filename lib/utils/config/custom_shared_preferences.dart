@@ -1,7 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String kUsuarioLogin = "userLogin";
-const kUsuarioId = "userId";
+const String kUsuarioId = "userId";
+const String kUsuarioNome = "userName";
 
 class CustomSharedPreferences {
   static saveUsuario(value) async {
@@ -25,6 +26,19 @@ class CustomSharedPreferences {
   static readId() async {
     final prefs = await SharedPreferences.getInstance();
     var result = prefs.getInt(kUsuarioId);
+    return result;
+  }
+
+  //Salva o nome do usuário
+  static saveNomeUsuario(value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(kUsuarioNome, value);
+  }
+
+  //Verifica se o usuário está logado
+  static readNomeUsuario() async {
+    final prefs = await SharedPreferences.getInstance();
+    var result = prefs.getString(kUsuarioNome);
     return result;
   }
 }

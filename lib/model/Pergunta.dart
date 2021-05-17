@@ -1,26 +1,29 @@
 import 'Resposta.dart';
 
 class Pergunta {
+  int id;
   String titulo;
-  List<Resposta> resposta;
+  List<Resposta> respostas;
 
-  Pergunta({this.titulo, this.resposta});
+  Pergunta({this.id, this.titulo, this.respostas});
 
   Pergunta.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     titulo = json['titulo'];
-    if (json['resposta'] != null) {
-      resposta = [];
-      json['resposta'].forEach((v) {
-        resposta.add(new Resposta.fromJson(v));
+    if (json['respostas'] != null) {
+      respostas = [];
+      json['respostas'].forEach((v) {
+        respostas.add(new Resposta.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['titulo'] = this.titulo;
-    if (this.resposta != null) {
-      data['resposta'] = this.resposta.map((v) => v.toJson()).toList();
+    if (this.respostas != null) {
+      data['respostas'] = this.respostas.map((v) => v.toJson()).toList();
     }
     return data;
   }
