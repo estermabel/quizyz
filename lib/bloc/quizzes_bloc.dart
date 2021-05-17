@@ -1,13 +1,16 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/User.dart';
 import 'package:quizyz/service/config/api_service.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/service/quizzes_service.dart';
+import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 
 class QuizzesBloc {
   QuizzesService _service;
+  List<Widget> meusQuizzesList = [];
 
   StreamController<BaseResponse<User>> _userController;
   Stream<BaseResponse<User>> get userStream => _userController.stream;
@@ -29,15 +32,18 @@ class QuizzesBloc {
       userSink.add(BaseResponse.loading());
       var response = await _service.getUser();
       userSink.add(BaseResponse.completed(data: response));
+      getQuizzes();
     } catch (e) {
       userSink.add(BaseResponse.error(e.response.data["error"]));
     }
   }
 
   getQuizzes() async {
+    int id = await CustomSharedPreferences.readId();
     try {
       quizzesSink.add(BaseResponse.loading());
-      //TODO fazer captura da API
+      var response = await _service.getQuizzes(userId: id);
+      quizzesSink.add(BaseResponse.completed(data: response));
     } catch (e) {
       try {
         quizzesSink.add(BaseResponse.loading());

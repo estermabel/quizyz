@@ -4,7 +4,7 @@ import 'package:quizyz/utils/style/colors.dart';
 class MyQuizCard extends StatelessWidget {
   final String titulo;
   final int qtdPerguntas;
-  final String codigo;
+  final int codigo;
   final Function onTap;
   const MyQuizCard({
     Key key,

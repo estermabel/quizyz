@@ -8,6 +8,7 @@ import 'package:quizyz/bloc/quizzes_bloc.dart';
 import 'package:quizyz/components/native_loading.dart';
 import 'package:quizyz/components/my_quiz_card.dart';
 import 'package:quizyz/components/score_quiz_card.dart';
+import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/User.dart';
 import 'package:quizyz/pages/home/quizzes/create_quizzes_page.dart';
 import 'package:quizyz/pages/home/game/game_page.dart';
@@ -74,70 +75,80 @@ class _QuizzesPageState extends State<QuizzesPage> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: StreamBuilder<BaseResponse<User>>(
-              stream: _bloc.userStream,
-              initialData: BaseResponse.completed(),
-              builder: (context, snapshot) {
-                if (snapshot.data.data != null) {
-                  switch (snapshot.data?.status) {
-                    case Status.LOADING:
-                      return _onLoading();
-                      break;
-                    case Status.ERROR:
-                      _onError(snapshot);
-                      return Container();
-                      break;
-                    default:
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Oie ${snapshot.data.data.nome},",
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 32),
-                            child: MyQuizCard(
-                              titulo: "O quanto você me conhece?",
-                              qtdPerguntas: 10,
-                              codigo: "123456",
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => GamePage(
-                                    title: "O quanto você me conhece?",
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 32),
-                            child: ScoreQuizCard(
-                              titulo: "O quanto você me conhece?",
-                              qtdPerguntas: 10,
-                              criador: "Ana Júlia",
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => GamePage(
-                                    title: "O quanto você me conhece?",
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              StreamBuilder<BaseResponse<User>>(
+                stream: _bloc.userStream,
+                initialData: BaseResponse.completed(),
+                builder: (context, snapshot) {
+                  if (snapshot.data.data != null) {
+                    switch (snapshot.data?.status) {
+                      case Status.LOADING:
+                        return _onLoading();
+                        break;
+                      case Status.ERROR:
+                        _onError(snapshot);
+                        return Container();
+                        break;
+                      default:
+                        return Text(
+                          "Oie ${snapshot.data.data.nome},",
+                          style: Theme.of(context).textTheme.headline6,
+                        );
+                    }
+                  } else {
+                    return _onLoading();
                   }
-                } else {
-                  return _onLoading();
-                }
-              },
-            ),
+                },
+              ),
+              StreamBuilder<BaseResponse<List<Quiz>>>(
+                stream: _bloc.quizzesStream,
+                initialData: BaseResponse.completed(),
+                builder: (context, snapshot) {
+                  if (snapshot.data.data != null) {
+                    switch (snapshot.data?.status) {
+                      case Status.LOADING:
+                        return _onLoading();
+                        break;
+                      case Status.ERROR:
+                        _onError(snapshot);
+                        return Container();
+                        break;
+                      default:
+                        _bloc.meusQuizzesList.clear();
+                        if (snapshot.data?.data != null) {
+                          snapshot.data.data.forEach((quiz) {
+                            _bloc.meusQuizzesList.add(
+                              Padding(
+                                padding: const EdgeInsets.only(top: 32),
+                                child: MyQuizCard(
+                                  codigo: quiz.id,
+                                  titulo: quiz.titulo,
+                                  qtdPerguntas: quiz.perguntas.length,
+                                ),
+                              ),
+                            );
+                          });
+                        }
+
+                        return Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return _bloc.meusQuizzesList[index];
+                            },
+                          ),
+                        );
+                    }
+                  } else {
+                    return _onLoading();
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -173,6 +184,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
           onTap: () {
             CustomSharedPreferences.saveUsuario(false);
             CustomSharedPreferences.saveId(0);
+            CustomSharedPreferences.saveNomeUsuario("");
             _bloc.deleteDB();
             Navigator.of(context).pushAndRemoveUntil(
               CupertinoPageRoute(
