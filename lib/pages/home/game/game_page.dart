@@ -116,49 +116,58 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 42.0, left: 16.0, right: 16.0),
-                  child: QuizyzAppButton(
-                    title: "Proximo",
-                    onTap: () => runFunction == true
-                        ? setState(() {
-                            if (key.currentState.radioIndex != null) {
-                              key.currentState.showAnswer = true;
+                padding: const EdgeInsets.only(
+                    bottom: 42.0, left: 16.0, right: 16.0),
+                child: QuizyzAppButton(
+                  title: "Proximo",
+                  onTap: () {
+                    if (runFunction == true) {
+                      if (key.currentState.radioIndex != null) {
+                        setState(() {
+                          key.currentState.showAnswer = true;
+                          runFunction = !runFunction;
+                        });
+                        Future.delayed(Duration(seconds: 2), () {
+                          if (ponteiro < perguntaList.length - 1) {
+                            setState(() {
                               runFunction = !runFunction;
-                              Future.delayed(Duration(seconds: 2), () {
-                                if (ponteiro < perguntaList.length - 1) {
-                                  setState(() {
-                                    runFunction = !runFunction;
-                                    key.currentState.showAnswer = false;
-                                    key.currentState.radioIndex = null;
-                                    ponteiro++;
-                                    appBarProgress = appBarProgress + 0.1;
-                                    _controller.animateTo(appBarProgress,
-                                        duration: Duration(seconds: 5));
-                                  });
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text("Fim da lista :3 "),
-                                    ),
-                                  );
-                                }
-                              });
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text("Por favor escolha uma alternativa"),
-                                ),
-                              );
-                            }
-                          })
-                        : null,
-                  )),
+                              key.currentState.showAnswer = false;
+                              key.currentState.radioIndex = null;
+
+                              ponteiro++;
+                              animateAppProgress();
+                            });
+                          } else {
+                            animateAppProgress();
+                            showSnackBarWithMessage(context, "Fim da lista :3");
+                          }
+                        });
+                      } else {
+                        showSnackBarWithMessage(
+                            context, "Escolha uma alternativa");
+                      }
+                    }
+                  },
+                ),
+              ),
             )
           ],
         ),
       ),
     );
+  }
+
+  void showSnackBarWithMessage(BuildContext context, String mensage) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(mensage),
+      ),
+    );
+  }
+
+  void animateAppProgress() {
+    appBarProgress = appBarProgress + 0.1;
+    _controller.animateTo(appBarProgress,
+        duration: Duration(milliseconds: 1000));
   }
 }
