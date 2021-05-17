@@ -65,10 +65,11 @@ class _QuizzesPageState extends State<QuizzesPage> {
       appBar: quizzesAppBar(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CreateQuizzesPage(),
-            )),
+          context,
+          MaterialPageRoute(
+            builder: (context) => CreateQuizzesPage(),
+          ),
+        ),
         child: IconTheme(
           data: Theme.of(context).iconTheme.copyWith(color: whiteColor),
           child: Icon(Icons.add),
