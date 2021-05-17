@@ -21,20 +21,20 @@ class _GamePageState extends State<GamePage> {
   List<Pergunta> perguntaList = [
     Pergunta(
       titulo: "Qual minha comida favorita?",
-      resposta: [
-        Resposta(titulo: "Hamburguer", resposta: false),
-        Resposta(titulo: "Pizza", resposta: false),
-        Resposta(titulo: "Curry", resposta: true),
-        Resposta(titulo: "Lasanha", resposta: false)
+      respostas: [
+        Resposta(titulo: "Hamburguer", isCerta: false),
+        Resposta(titulo: "Pizza", isCerta: false),
+        Resposta(titulo: "Curry", isCerta: true),
+        Resposta(titulo: "Lasanha", isCerta: false)
       ],
     ),
     Pergunta(
       titulo: "Qual minha bebida favorita?",
-      resposta: [
-        Resposta(titulo: "Cerveja", resposta: false),
-        Resposta(titulo: "Energetico", resposta: false),
-        Resposta(titulo: "Suco de abacaxi", resposta: true),
-        Resposta(titulo: "Lasanha", resposta: false)
+      respostas: [
+        Resposta(titulo: "Cerveja", isCerta: false),
+        Resposta(titulo: "Energetico", isCerta: false),
+        Resposta(titulo: "Suco de abacaxi", isCerta: true),
+        Resposta(titulo: "Lasanha", isCerta: false)
       ],
     ),
   ];
@@ -73,7 +73,7 @@ class _GamePageState extends State<GamePage> {
               padding: EdgeInsets.only(
                   top: 32.0, left: 16.0, right: 16.0, bottom: 16.0),
               child: AnswerComponent(
-                respostas: perguntaList[ponteiro].resposta,
+                respostas: perguntaList[ponteiro].respostas,
                 key: key,
               ),
             ),
