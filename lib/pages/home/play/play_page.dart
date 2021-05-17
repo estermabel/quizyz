@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/play_bloc.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
+import 'package:quizyz/pages/home/game/game_page.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 class PlayPage extends StatefulWidget {
@@ -73,7 +74,13 @@ class _PlayPageState extends State<PlayPage> {
                             title: "Jogar",
                             onTap: () async {
                               if (_bloc.formKey.currentState.validate()) {
-                                print("Button");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        GamePage(title: "Nome no quiz"),
+                                  ),
+                                );
                               }
                             },
                           ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizyz/utils/style/themes/base_theme.dart';
+import 'package:quizyz/utils/style/colors.dart';
 
 class CreateQuizCard extends StatefulWidget {
   final String pergunta;
@@ -24,124 +24,171 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0),
-            child: Text(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
               widget.pergunta,
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.subtitle1,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: TextField(
-              controller: _perguntaController,
-              decoration: InputDecoration(
-                labelText: "Nome",
-                labelStyle: Theme.of(context).textTheme.bodyText1,
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: TextField(
+                controller: _perguntaController,
+                decoration: InputDecoration(
+                  labelText: "Pergunta",
+                  labelStyle: Theme.of(context).textTheme.bodyText1,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              children: [
-                Radio(
-                  value: 1,
-                  groupValue: _value,
-                  onChanged: (value) {
-                    setState(() {
-                      _value = value;
-                    });
-                  },
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: _resposta1Controller,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Row(
+                children: [
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      unselectedWidgetColor: whiteColor,
+                    ),
+                    child: Radio(
+                      value: 1,
+                      groupValue: _value,
+                      activeColor: whiteColor,
+                      onChanged: (value) {
+                        setState(() {
+                          _value = value;
+                        });
+                      },
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              children: [
-                Radio(
-                  value: 2,
-                  groupValue: _value,
-                  onChanged: (value) {
-                    setState(() {
-                      _value = value;
-                    });
-                  },
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: _resposta2Controller,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
+                  Expanded(
+                    child: TextField(
+                      controller: _resposta1Controller,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: whiteColor,
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: accentColor,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              children: [
-                Radio(
-                  value: 3,
-                  groupValue: _value,
-                  onChanged: (value) {
-                    setState(() {
-                      _value = value;
-                    });
-                  },
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: _resposta3Controller,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Row(
+                children: [
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      unselectedWidgetColor: whiteColor,
+                    ),
+                    child: Radio(
+                      value: 2,
+                      activeColor: whiteColor,
+                      groupValue: _value,
+                      onChanged: (value) {
+                        setState(() {
+                          _value = value;
+                        });
+                      },
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              children: [
-                Radio(
-                  value: 4,
-                  groupValue: _value,
-                  onChanged: (value) {
-                    setState(() {
-                      _value = value;
-                    });
-                  },
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: _resposta4Controller,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
+                  Expanded(
+                    child: TextField(
+                      controller: _resposta2Controller,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: whiteColor),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: accentColor),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Row(
+                children: [
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      unselectedWidgetColor: whiteColor,
+                    ),
+                    child: Radio(
+                      value: 3,
+                      groupValue: _value,
+                      activeColor: whiteColor,
+                      onChanged: (value) {
+                        setState(() {
+                          _value = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _resposta3Controller,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: whiteColor),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: accentColor),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Row(
+                children: [
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      unselectedWidgetColor: whiteColor,
+                    ),
+                    child: Radio(
+                      value: 4,
+                      activeColor: whiteColor,
+                      groupValue: _value,
+                      onChanged: (value) {
+                        setState(() {
+                          _value = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _resposta4Controller,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: whiteColor),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: accentColor),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
