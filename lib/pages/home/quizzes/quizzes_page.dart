@@ -9,6 +9,8 @@ import 'package:quizyz/components/native_loading.dart';
 import 'package:quizyz/components/my_quiz_card.dart';
 import 'package:quizyz/components/score_quiz_card.dart';
 import 'package:quizyz/model/User.dart';
+import 'package:quizyz/pages/home/quizzes/create_quizzes_page.dart';
+import 'package:quizyz/pages/home/game/game_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 import 'package:quizyz/utils/helpers/manage_dialogs.dart';
@@ -61,7 +63,11 @@ class _QuizzesPageState extends State<QuizzesPage> {
     return Scaffold(
       appBar: quizzesAppBar(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateQuizzesPage(),
+            )),
         child: IconTheme(
           data: Theme.of(context).iconTheme.copyWith(color: whiteColor),
           child: Icon(Icons.add),
@@ -98,7 +104,14 @@ class _QuizzesPageState extends State<QuizzesPage> {
                               titulo: "O quanto você me conhece?",
                               qtdPerguntas: 10,
                               codigo: "123456",
-                              onTap: () {},
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GamePage(
+                                    title: "O quanto você me conhece?",
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           Padding(
@@ -107,7 +120,14 @@ class _QuizzesPageState extends State<QuizzesPage> {
                               titulo: "O quanto você me conhece?",
                               qtdPerguntas: 10,
                               criador: "Ana Júlia",
-                              onTap: () {},
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GamePage(
+                                    title: "O quanto você me conhece?",
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ],

@@ -26,7 +26,9 @@ class QuizyzAppButton extends StatelessWidget {
         child: Center(
           child: Text(
             title,
-            style: baseTheme.textTheme.headline1
+            style: Theme.of(context)
+                .textTheme
+                .headline1
                 .copyWith(color: whiteColor, fontSize: TextSize.large),
           ),
         ),

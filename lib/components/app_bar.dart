@@ -20,9 +20,10 @@ class _QuizyzAppBarState extends State<QuizyzAppBar> {
       centerTitle: true,
       title: Text(
         widget.title,
-        style: baseTheme.textTheme.headline1.copyWith(color: accentColor),
+        style:
+            Theme.of(context).textTheme.headline1.copyWith(color: accentColor),
       ),
-      leading: widget.leading != null ? widget.leading : Container(),
+      leading: widget.leading != null ? widget.leading : null,
     );
   }
 }
