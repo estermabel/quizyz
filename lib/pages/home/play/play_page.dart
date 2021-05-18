@@ -22,6 +22,7 @@ class _PlayPageState extends State<PlayPage> {
   void initState() {
     super.initState();
     _bloc.getUsuarioLogin();
+    _startGameStream();
     checkIfUserIsLogged();
   }
 
@@ -35,14 +36,21 @@ class _PlayPageState extends State<PlayPage> {
   }
 
   _startGame() async {
-    await _bloc.getQuiz(cod: _bloc.codeController.text as int);
+    await _bloc.getQuiz(cod: int.parse(_bloc.codeController.text));
+  }
+
+  _startGameStream() async {
     _bloc.playQuizStream.listen((event) async {
       switch (event.status) {
         case Status.COMPLETED:
+          Navigator.pop(context);
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => GamePage(jogadorNome: "Nome no quiz"),
+              builder: (context) => GamePage(
+                jogadorNome: _bloc.nomeJogadorController.text,
+                quiz: event.data,
+              ),
             ),
           );
           break;
@@ -78,7 +86,7 @@ class _PlayPageState extends State<PlayPage> {
             padding: const EdgeInsets.all(32),
             child: StreamBuilder<bool>(
                 stream: _bloc.isLoggedStream,
-                initialData: false,
+                initialData: true,
                 builder: (context, snapshot) {
                   return Column(
                     children: [

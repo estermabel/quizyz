@@ -26,9 +26,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   @override
   void initState() {
     _controller = AnimationController(
-        vsync: this,
-        duration: Duration(milliseconds: 5),
-        value: appBarProgress);
+      vsync: this,
+      duration: Duration(milliseconds: 5),
+      value: appBarProgress,
+    );
     _controller.addListener(() {
       setState(() {});
     });
