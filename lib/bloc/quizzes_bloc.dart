@@ -30,7 +30,8 @@ class QuizzesBloc {
   getUser() async {
     try {
       userSink.add(BaseResponse.loading());
-      var response = await _service.getUser();
+      User response = await _service.getUser();
+      await CustomSharedPreferences.saveNomeUsuario(response.nome);
       userSink.add(BaseResponse.completed(data: response));
       getQuizzes();
     } catch (e) {

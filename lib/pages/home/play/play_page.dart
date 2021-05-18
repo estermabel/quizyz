@@ -18,13 +18,26 @@ class _PlayPageState extends State<PlayPage> {
   @override
   void initState() {
     super.initState();
+    _bloc.getUsuarioLogin();
     checkIfUserIsLogged();
   }
 
   checkIfUserIsLogged() async {
-    setState(() async {
-      isLogged = await _bloc.getUsuarioLogin();
+    _bloc.isLoggedStream.listen((event) async {
+      if (event) {
+        _bloc.nomeJogadorController.text = await _bloc.getUsuarioNome();
+      }
+      setState(() {});
     });
+  }
+
+  _startGame() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GamePage(title: "Nome no quiz"),
+      ),
+    );
   }
 
   @override
@@ -44,83 +57,93 @@ class _PlayPageState extends State<PlayPage> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(32),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 32),
-                  child: Text(
-                    (isLogged)
-                        ? "Insira o código do quiz para poder jogar."
-                        : "Insira seu nome e o código do quiz para poder jogar.",
-                    style: Theme.of(context).textTheme.headline5.copyWith(
-                          color: whiteColor,
-                          fontWeight: FontWeight.bold,
+            child: StreamBuilder<bool>(
+                stream: _bloc.isLoggedStream,
+                initialData: false,
+                builder: (context, snapshot) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 32),
+                        child: Text(
+                          (snapshot.data)
+                              ? "Insira o código do quiz para poder jogar."
+                              : "Insira seu nome e o código do quiz para poder jogar.",
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                                color: whiteColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                          textAlign: TextAlign.center,
                         ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 120),
-                  child: Form(
-                    key: _bloc.formKey,
-                    child: Column(
-                      children: [
-                        Visibility(
-                          visible: !isLogged,
-                          child: TextFormField(
-                            controller: _bloc.nomeJogadorController,
-                            style: Theme.of(context).textTheme.bodyText1,
-                            cursorColor: whiteColor,
-                            decoration: InputDecoration(
-                              labelText: "Nome",
-                              labelStyle: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 32),
-                          child: TextFormField(
-                            controller: _bloc.codeController,
-                            style: Theme.of(context).textTheme.bodyText1,
-                            keyboardType: TextInputType.number,
-                            cursorColor: whiteColor,
-                            decoration: InputDecoration(
-                              labelText: "Código",
-                              labelStyle: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            validator: (value) {
-                              if (_bloc.codeController.text.isEmpty) {
-                                _isCodeErrorDisplayed = true;
-                                return "Campo de código vazio!";
-                              }
-                              _isCodeErrorDisplayed = false;
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 120),
-                          child: QuizyzAppButton(
-                            title: "Jogar",
-                            onTap: () async {
-                              if (_bloc.formKey.currentState.validate()) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        GamePage(title: "Nome no quiz"),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 120),
+                        child: Form(
+                          key: _bloc.formKey,
+                          child: Column(
+                            children: [
+                              Visibility(
+                                visible: !snapshot.data,
+                                child: TextFormField(
+                                  controller: _bloc.nomeJogadorController,
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                  cursorColor: whiteColor,
+                                  decoration: InputDecoration(
+                                    labelText: "Nome",
+                                    labelStyle:
+                                        Theme.of(context).textTheme.bodyText1,
                                   ),
-                                );
-                              }
-                            },
+                                  validator: (value) {
+                                    if (_bloc
+                                        .nomeJogadorController.text.isEmpty) {
+                                      _isNomeJogadorErrorDisplayed = true;
+                                      return "Campo de código vazio!";
+                                    }
+                                    _isNomeJogadorErrorDisplayed = false;
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 32),
+                                child: TextFormField(
+                                  controller: _bloc.codeController,
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                  keyboardType: TextInputType.number,
+                                  cursorColor: whiteColor,
+                                  decoration: InputDecoration(
+                                    labelText: "Código",
+                                    labelStyle:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  validator: (value) {
+                                    if (_bloc.codeController.text.isEmpty) {
+                                      _isCodeErrorDisplayed = true;
+                                      return "Campo de código vazio!";
+                                    }
+                                    _isCodeErrorDisplayed = false;
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 120),
+                                child: QuizyzAppButton(
+                                  title: "Jogar",
+                                  onTap: () async {
+                                    if (_bloc.formKey.currentState.validate()) {
+                                      _startGame();
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                      ),
+                    ],
+                  );
+                }),
           ),
         ),
       ),
