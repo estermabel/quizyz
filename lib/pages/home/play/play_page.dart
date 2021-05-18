@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/play_bloc.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
+import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/pages/home/game/game_page.dart';
+import 'package:quizyz/service/config/base_response.dart';
+import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 class PlayPage extends StatefulWidget {
@@ -31,13 +34,29 @@ class _PlayPageState extends State<PlayPage> {
     });
   }
 
-  _startGame() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => GamePage(title: "Nome no quiz"),
-      ),
-    );
+  _startGame() async {
+    await _bloc.getQuiz(cod: _bloc.codeController.text as int);
+    _bloc.playQuizStream.listen((event) async {
+      switch (event.status) {
+        case Status.COMPLETED:
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GamePage(jogadorNome: "Nome no quiz"),
+            ),
+          );
+          break;
+        case Status.LOADING:
+          ManagerDialogs.showLoadingDialog(context);
+          break;
+        case Status.ERROR:
+          Navigator.pop(context);
+          ManagerDialogs.showErrorDialog(context, event.message);
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   @override
