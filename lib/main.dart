@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Quizyz',
       debugShowCheckedModeBanner: false,
       theme: baseTheme,
-      home: RankingPage(),
+      home: SplashPage(),
     );
   }
 }
