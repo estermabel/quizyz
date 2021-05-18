@@ -12,11 +12,8 @@ import '../model/Quiz.dart';
 
 class QuizzesService {
   final APIService _service;
-  final dbHelper = DatabaseHelper.instance;
 
   QuizzesService(this._service);
-
-  /// API
 
   Future getUser() async {
     var _results;
@@ -43,7 +40,7 @@ class QuizzesService {
   Future getQuizById({int cod}) async {
     final response = await _service.doRequest(
       RequestConfig(
-        'mostrar/$cod',
+        'quizzes/mostrar/$cod',
         HttpMethod.get,
       ),
     );
@@ -76,44 +73,6 @@ class QuizzesService {
       ),
     );
     return jsonDecode(response.toString());
-  }
-
-  /// LOCAL DB
-
-  void insertQuizDB({@required Quiz quiz}) async {
-    var body = {
-      DatabaseHelper.columnId: quiz.id,
-      DatabaseHelper.columnTitulo: quiz.titulo,
-      DatabaseHelper.columnQPerguntas: quiz.perguntas.length
-    };
-    int id = await dbHelper.insert(body);
-    debugPrint("created quiz $id.");
-  }
-
-  Future<List<Quiz>> getQuizzesDB() async {
-    final response = await dbHelper.queryAllRows();
-    List<Quiz> quizzes = response.map((e) => Quiz.fromJson(e)).toList();
-    return quizzes;
-  }
-
-  void updateQuizDB({@required Quiz quiz}) async {
-    var body = {
-      DatabaseHelper.columnId: quiz.id,
-      DatabaseHelper.columnTitulo: quiz.titulo,
-      DatabaseHelper.columnQPerguntas: quiz.perguntas.length
-    };
-    final rowsAffected = await dbHelper.update(body);
-    debugPrint("updated $rowsAffected row(s).");
-  }
-
-  void deleteQuizDB({@required int id}) async {
-    await dbHelper.delete(id);
-    debugPrint('deleted quiz $id.');
-  }
-
-  void deleteDB() async {
-    await dbHelper.deleteDB();
-    debugPrint('DB deleted.');
   }
 
   /// CREATE BODY

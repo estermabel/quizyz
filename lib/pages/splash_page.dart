@@ -17,8 +17,9 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     _bloc.getUsuarioLogin();
-    _bloc.splashStream.listen((event) {
+    _bloc.splashStream.listen((event) async {
       if (event) {
+        await Future.delayed(new Duration(seconds: 4));
         Navigator.of(context).pushReplacement(
           CupertinoPageRoute(
             builder: (context) => ControllerPage(),
