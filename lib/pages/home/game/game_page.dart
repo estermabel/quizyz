@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/components/answer_component.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
-import 'package:quizyz/model/Pergunta.dart';
 import 'package:quizyz/model/Quiz.dart';
-import 'package:quizyz/model/Resposta.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 class GamePage extends StatefulWidget {
+
   final String jogadorNome;
   final Quiz quiz;
 
   GamePage({@required this.jogadorNome, this.quiz});
+
 
   @override
   _GamePageState createState() => _GamePageState();
@@ -35,28 +35,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     });
     super.initState();
   }
-
-  // Para teste apenas
-  List<Pergunta> perguntaList = [
-    Pergunta(
-      titulo: "Qual minha comida favorita?",
-      respostas: [
-        Resposta(titulo: "Hamburguer", isCerta: false),
-        Resposta(titulo: "Pizza", isCerta: false),
-        Resposta(titulo: "Curry", isCerta: true),
-        Resposta(titulo: "Lasanha", isCerta: false)
-      ],
-    ),
-    Pergunta(
-      titulo: "Qual minha bebida favorita?",
-      respostas: [
-        Resposta(titulo: "Cerveja", isCerta: false),
-        Resposta(titulo: "Energetico", isCerta: false),
-        Resposta(titulo: "Suco de abacaxi", isCerta: true),
-        Resposta(titulo: "Lasanha", isCerta: false)
-      ],
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +76,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                perguntaList[ponteiro].titulo,
+                widget.quiz.perguntas[ponteiro].titulo,
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1
@@ -110,7 +88,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               padding: EdgeInsets.only(
                   top: 32.0, left: 16.0, right: 16.0, bottom: 16.0),
               child: AnswerComponent(
-                respostas: perguntaList[ponteiro].respostas,
+                respostas: widget.quiz.perguntas[ponteiro].respostas,
                 key: key,
               ),
             ),
@@ -129,7 +107,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                           runFunction = !runFunction;
                         });
                         Future.delayed(Duration(seconds: 2), () {
-                          if (ponteiro < perguntaList.length - 1) {
+                          if (ponteiro < widget.quiz.perguntas.length - 1) {
                             setState(() {
                               runFunction = !runFunction;
                               key.currentState.showAnswer = false;

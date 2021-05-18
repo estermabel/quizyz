@@ -129,6 +129,13 @@ class _QuizzesPageState extends State<QuizzesPage> {
                                   codigo: quiz.id,
                                   titulo: quiz.titulo,
                                   qtdPerguntas: quiz.perguntas.length,
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => GamePage(
+                                          quiz: quiz,
+                                        ),
+                                      )),
                                 ),
                               ),
                             );
