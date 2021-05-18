@@ -4,12 +4,14 @@ import 'package:quizyz/utils/style/colors.dart';
 class ScoreQuizCard extends StatelessWidget {
   final String titulo;
   final int qtdPerguntas;
+  final int qtdPontos;
   final String criador;
   final Function onTap;
   const ScoreQuizCard({
     Key key,
     this.titulo,
     this.qtdPerguntas,
+    this.qtdPontos,
     this.criador,
     this.onTap,
   }) : super(key: key);
@@ -45,7 +47,7 @@ class ScoreQuizCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "$qtdPerguntas perguntas",
+                          "$qtdPontos/$qtdPerguntas perguntas",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                                 color: accentColor,
                               ),
