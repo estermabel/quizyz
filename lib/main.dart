@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/db/data_base_helper.dart';
+import 'package:quizyz/pages/home/game/ranking_page.dart';
 import 'package:quizyz/pages/splash_page.dart';
 import 'package:quizyz/utils/style/themes/base_theme.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Quizyz',
       debugShowCheckedModeBanner: false,
       theme: baseTheme,
-      home: SplashPage(),
+      home: RankingPage(),
     );
   }
 }
