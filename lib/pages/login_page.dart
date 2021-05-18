@@ -4,6 +4,7 @@ import 'package:quizyz/bloc/login_bloc.dart';
 import 'package:quizyz/components/purple_button.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
 import 'package:quizyz/pages/controller_page.dart';
+import 'package:quizyz/pages/home/play/play_page.dart';
 import 'package:quizyz/pages/home/quizzes/quizzes_page.dart';
 import 'package:quizyz/pages/signup_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
@@ -158,7 +159,14 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 128),
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PlayPage(),
+                                ),
+                              );
+                            },
                             child: Text(
                               "Eu vim jogar!",
                               style:
