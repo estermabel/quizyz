@@ -77,8 +77,7 @@ class _PlayPageState extends State<PlayPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        GamePage(title: "Nome no quiz"),
+                                    builder: (context) => GamePage(),
                                   ),
                                 );
                               }
