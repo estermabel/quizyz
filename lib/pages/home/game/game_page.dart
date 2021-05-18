@@ -7,10 +7,10 @@ import 'package:quizyz/model/Resposta.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 class GamePage extends StatefulWidget {
-  final String title;
+  final String jogadorNome;
   final Quiz quiz;
 
-  GamePage({@required this.title, this.quiz});
+  GamePage({@required this.jogadorNome, this.quiz});
 
   @override
   _GamePageState createState() => _GamePageState();
@@ -26,9 +26,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   @override
   void initState() {
     _controller = AnimationController(
-        vsync: this,
-        duration: Duration(milliseconds: 5),
-        value: appBarProgress);
+      vsync: this,
+      duration: Duration(milliseconds: 5),
+      value: appBarProgress,
+    );
     _controller.addListener(() {
       setState(() {});
     });
@@ -63,7 +64,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          widget.title,
+          widget.quiz.titulo,
           style: Theme.of(context)
               .textTheme
               .headline1
