@@ -10,6 +10,7 @@ import 'package:quizyz/components/my_quiz_card.dart';
 import 'package:quizyz/components/score_quiz_card.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/User.dart';
+import 'package:quizyz/pages/home/game/ranking_page.dart';
 import 'package:quizyz/pages/home/quizzes/create_quizzes_page.dart';
 import 'package:quizyz/pages/home/game/game_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
@@ -32,6 +33,8 @@ class _QuizzesPageState extends State<QuizzesPage> {
     super.initState();
     _userStream();
     _bloc.getUser();
+    _quizzesStream();
+    _bloc.getQuizzes();
   }
 
   @override
@@ -42,6 +45,25 @@ class _QuizzesPageState extends State<QuizzesPage> {
 
   _userStream() async {
     _bloc.userStream.listen((event) async {
+      switch (event.status) {
+        case Status.COMPLETED:
+          Navigator.pop(context);
+          break;
+        case Status.LOADING:
+          ManagerDialogs.showLoadingDialog(context);
+          break;
+        case Status.ERROR:
+          Navigator.pop(context);
+          ManagerDialogs.showErrorDialog(context, event.message);
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  _quizzesStream() async {
+    _bloc.quizzesStream.listen((event) async {
       switch (event.status) {
         case Status.COMPLETED:
           Navigator.pop(context);
@@ -101,7 +123,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
                         );
                     }
                   } else {
-                    return _onLoading();
+                    return Container();
                   }
                 },
               ),
@@ -121,31 +143,32 @@ class _QuizzesPageState extends State<QuizzesPage> {
                       default:
                         _bloc.meusQuizzesList.clear();
                         if (snapshot.data?.data != null) {
-                          snapshot.data.data.forEach((quiz) {
-                            _bloc.meusQuizzesList.add(
-                              Padding(
-                                padding: const EdgeInsets.only(top: 32),
-                                child: MyQuizCard(
-                                  codigo: quiz.id,
-                                  titulo: quiz.titulo,
-                                  qtdPerguntas: quiz.perguntas.length,
-                                  onTap: () => Navigator.push(
+                          snapshot.data.data.forEach(
+                            (quiz) {
+                              _bloc.meusQuizzesList.add(
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 32),
+                                  child: MyQuizCard(
+                                    codigo: quiz.id,
+                                    titulo: quiz.titulo,
+                                    qtdPerguntas: quiz.perguntas.length,
+                                    onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => GamePage(
-                                          quiz: quiz,
-                                        ),
-                                      )),
+                                        builder: (context) => RankingPage(),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            );
-                          });
+                              );
+                            },
+                          );
                         }
 
                         return Expanded(
                           child: ListView.builder(
                             shrinkWrap: true,
-                            itemCount: _bloc.meusQuizzesList.length,
+                            itemCount: _bloc.meusQuizzesList?.length,
                             itemBuilder: (context, index) {
                               return _bloc.meusQuizzesList[index];
                             },

@@ -5,11 +5,13 @@ import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/User.dart';
 import 'package:quizyz/service/config/api_service.dart';
 import 'package:quizyz/service/config/base_response.dart';
+import 'package:quizyz/service/login_service.dart';
 import 'package:quizyz/service/quizzes_service.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 
 class QuizzesBloc {
   QuizzesService _service;
+  LoginService _loginService;
   List<Widget> meusQuizzesList = [];
 
   StreamController<BaseResponse<User>> _userController;
@@ -23,6 +25,7 @@ class QuizzesBloc {
 
   QuizzesBloc() {
     _service = QuizzesService(APIService());
+    _loginService = LoginService(APIService());
     _userController = StreamController.broadcast();
     _quizzesController = StreamController.broadcast();
   }
@@ -31,9 +34,7 @@ class QuizzesBloc {
     try {
       userSink.add(BaseResponse.loading());
       User response = await _service.getUser();
-      await CustomSharedPreferences.saveNomeUsuario(response.nome);
       userSink.add(BaseResponse.completed(data: response));
-      getQuizzes();
     } catch (e) {
       try {
         userSink.add(BaseResponse.error(e.response.data["error"]));
@@ -45,24 +46,17 @@ class QuizzesBloc {
 
   getQuizzes() async {
     int id = await CustomSharedPreferences.readId();
+    quizzesSink.add(BaseResponse.loading());
     try {
-      quizzesSink.add(BaseResponse.loading());
       var response = await _service.getQuizzes(userId: id);
       quizzesSink.add(BaseResponse.completed(data: response));
     } catch (e) {
-      try {
-        quizzesSink.add(BaseResponse.loading());
-        var response = await _service.getQuizzesDB();
-        quizzesSink.add(BaseResponse.completed(data: response));
-      } catch (a) {
-        quizzesSink.add(BaseResponse.error(a.toString()));
-      }
       quizzesSink.add(BaseResponse.error(e.toString()));
     }
   }
 
   deleteDB() {
-    _service.deleteDB();
+    _loginService.deleteDB();
   }
 
   dispose() {

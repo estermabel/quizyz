@@ -1,15 +1,17 @@
 import 'dart:io';
 import 'package:path/path.dart';
+import 'package:quizyz/model/Quiz.dart';
+import 'package:quizyz/model/User.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   static final _databaseName = "QuizDB.db";
   static final _databaseVersion = 1;
-  static final table = 'quiz';
+  static final table = 'user';
   static final columnId = '_id';
-  static final columnTitulo = 'titulo';
-  static final columnQPerguntas = 'qPerguntas';
+  static final columnNome = 'nome';
+  static final columnEmail = 'email';
   // torna esta classe singleton
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -39,8 +41,8 @@ class DatabaseHelper {
     await db.execute('''
           CREATE TABLE $table (
             $columnId INTEGER PRIMARY KEY,
-            $columnTitulo TEXT NOT NULL,
-            $columnQPerguntas INTEGER NOT NULL
+            $columnNome TEXT NOT NULL,
+            $columnEmail TEXT NOT NULL
           )
           ''');
   }
@@ -50,9 +52,13 @@ class DatabaseHelper {
     return await db.insert(table, body);
   }
 
-  Future<List<Map<String, dynamic>>> queryAllRows() async {
+  Future getUser({int id}) async {
     Database db = await instance.database;
-    return await db.query(table);
+    var response = await db.query(
+      'user',
+    );
+    User user = User.fromJson(response.first);
+    return user;
   }
 
   Future<int> queryRowCount() async {
@@ -75,6 +81,5 @@ class DatabaseHelper {
   Future<dynamic> deleteDB() async {
     Database db = await instance.database;
     await db.delete(table);
-    //await db.query('DELETE * FROM $table');
   }
 }
