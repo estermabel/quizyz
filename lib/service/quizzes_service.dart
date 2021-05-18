@@ -43,7 +43,7 @@ class QuizzesService {
   Future getQuizById({int cod}) async {
     final response = await _service.doRequest(
       RequestConfig(
-        'mostrar/$cod',
+        'quizzes/mostrar/$cod',
         HttpMethod.get,
       ),
     );

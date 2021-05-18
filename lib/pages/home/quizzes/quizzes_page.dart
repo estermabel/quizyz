@@ -190,10 +190,10 @@ class _QuizzesPageState extends State<QuizzesPage> {
           ),
         ),
         GestureDetector(
-          onTap: () {
-            CustomSharedPreferences.saveUsuario(false);
-            CustomSharedPreferences.saveId(0);
-            CustomSharedPreferences.saveNomeUsuario("");
+          onTap: () async {
+            await CustomSharedPreferences.saveUsuario(false);
+            await CustomSharedPreferences.saveId(0);
+            await CustomSharedPreferences.saveNomeUsuario("nome");
             _bloc.deleteDB();
             Navigator.of(context).pushAndRemoveUntil(
               CupertinoPageRoute(
