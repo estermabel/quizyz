@@ -84,7 +84,59 @@ class _QuizzesPageState extends State<QuizzesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: quizzesAppBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Meus Quizyz",
+          style: Theme.of(context)
+              .textTheme
+              .headline5
+              .copyWith(color: accentColor),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              _bloc.getUser();
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: IconTheme(
+                data: Theme.of(context).iconTheme.copyWith(
+                      color: accentColor,
+                    ),
+                child: Icon(
+                  Icons.refresh,
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              await CustomSharedPreferences.saveUsuario(false);
+              await CustomSharedPreferences.saveId(0);
+              await CustomSharedPreferences.saveNomeUsuario("nome");
+              _bloc.deleteDB();
+              Navigator.of(context).pushAndRemoveUntil(
+                CupertinoPageRoute(
+                  builder: (context) => LoginPage(),
+                ),
+                (route) => false,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: IconTheme(
+                data: Theme.of(context).iconTheme.copyWith(
+                      color: accentColor,
+                    ),
+                child: Icon(
+                  Icons.exit_to_app_rounded,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
           context,
@@ -155,7 +207,13 @@ class _QuizzesPageState extends State<QuizzesPage> {
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => RankingPage(),
+                                        builder: (context) => RankingPage(
+                                          quiz: quiz,
+                                          hasAppBar: true,
+                                          textButtom: "",
+                                          onTap: () {},
+                                          hasButtom: false,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -184,60 +242,6 @@ class _QuizzesPageState extends State<QuizzesPage> {
           ),
         ),
       ),
-    );
-  }
-
-  AppBar quizzesAppBar() {
-    return AppBar(
-      centerTitle: true,
-      title: Text(
-        "Meus Quizyz",
-        style:
-            Theme.of(context).textTheme.headline5.copyWith(color: accentColor),
-      ),
-      actions: [
-        GestureDetector(
-          onTap: () {
-            _bloc.getUser();
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: IconTheme(
-              data: Theme.of(context).iconTheme.copyWith(
-                    color: accentColor,
-                  ),
-              child: Icon(
-                Icons.refresh,
-              ),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () async {
-            await CustomSharedPreferences.saveUsuario(false);
-            await CustomSharedPreferences.saveId(0);
-            await CustomSharedPreferences.saveNomeUsuario("nome");
-            _bloc.deleteDB();
-            Navigator.of(context).pushAndRemoveUntil(
-              CupertinoPageRoute(
-                builder: (context) => LoginPage(),
-              ),
-              (route) => false,
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: IconTheme(
-              data: Theme.of(context).iconTheme.copyWith(
-                    color: accentColor,
-                  ),
-              child: Icon(
-                Icons.exit_to_app_rounded,
-              ),
-            ),
-          ),
-        )
-      ],
     );
   }
 

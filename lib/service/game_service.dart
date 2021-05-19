@@ -3,10 +3,10 @@ import 'package:quizyz/model/User.dart';
 import 'package:quizyz/service/config/api_service.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 
-class PlayService {
+class GameService {
   final APIService _service;
 
-  PlayService(this._service);
+  GameService(this._service);
 
   Future createJogador({Jogador jogador}) async {
     var _results;

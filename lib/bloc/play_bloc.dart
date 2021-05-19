@@ -4,13 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/service/config/api_service.dart';
 import 'package:quizyz/service/config/base_response.dart';
-import 'package:quizyz/service/play_service.dart';
+import 'package:quizyz/service/game_service.dart';
 import 'package:quizyz/service/quizzes_service.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 
 class PlayBloc {
-  PlayService _service;
-  QuizzesService _quizzesService;
+  QuizzesService _service;
 
   GlobalKey<FormState> formKey;
   TextEditingController codeController;
@@ -23,8 +22,7 @@ class PlayBloc {
   Sink<BaseResponse<Quiz>> get playQuizSink => _playQuizController.sink;
 
   PlayBloc() {
-    _service = PlayService(APIService());
-    _quizzesService = QuizzesService(APIService());
+    _service = QuizzesService(APIService());
     formKey = GlobalKey<FormState>();
     _isLoggedController = StreamController.broadcast();
     codeController = TextEditingController();
@@ -49,17 +47,7 @@ class PlayBloc {
   Future getQuiz({int cod}) async {
     try {
       playQuizSink.add(BaseResponse.loading());
-      Quiz response = await _quizzesService.getQuizById(cod: cod);
-      playQuizSink.add(BaseResponse.completed(data: response));
-    } catch (e) {
-      playQuizSink.add(BaseResponse.error(e.toString()));
-    }
-  }
-
-  Future getJogadoresQuiz({int cod}) async {
-    try {
-      playQuizSink.add(BaseResponse.loading());
-      Quiz response = await _service.getJogadoresFromQuiz(cod: cod);
+      Quiz response = await _service.getQuizById(cod: cod);
       playQuizSink.add(BaseResponse.completed(data: response));
     } catch (e) {
       playQuizSink.add(BaseResponse.error(e.toString()));

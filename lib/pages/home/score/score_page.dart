@@ -31,7 +31,34 @@ class _ScorePageState extends State<ScorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: quizzesAppBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Score",
+          style: Theme.of(context)
+              .textTheme
+              .headline5
+              .copyWith(color: accentColor),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              _bloc.getScore();
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: IconTheme(
+                data: Theme.of(context).iconTheme.copyWith(
+                      color: accentColor,
+                    ),
+                child: Icon(
+                  Icons.refresh,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(32),
@@ -88,35 +115,6 @@ class _ScorePageState extends State<ScorePage> {
           ),
         ),
       ),
-    );
-  }
-
-  AppBar quizzesAppBar() {
-    return AppBar(
-      centerTitle: true,
-      title: Text(
-        "Score",
-        style:
-            Theme.of(context).textTheme.headline5.copyWith(color: accentColor),
-      ),
-      actions: [
-        GestureDetector(
-          onTap: () {
-            _bloc.getScore();
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: IconTheme(
-              data: Theme.of(context).iconTheme.copyWith(
-                    color: accentColor,
-                  ),
-              child: Icon(
-                Icons.refresh,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
