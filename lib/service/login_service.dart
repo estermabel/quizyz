@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizyz/db/data_base_helper.dart';
+import 'package:quizyz/db/config/data_base_helper.dart';
 import 'package:quizyz/model/LoginAuth.dart';
 import 'package:quizyz/model/User.dart';
 import 'package:quizyz/service/config/api_service.dart';
