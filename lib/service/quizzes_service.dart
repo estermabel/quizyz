@@ -64,8 +64,7 @@ class QuizzesService {
     return _results;
   }
 
-  Future deleteQuiz({@required Quiz quiz}) async {
-    int id = quiz.id;
+  Future deleteQuiz({@required int id}) async {
     final response = await _service.doRequest(
       RequestConfig(
         'quizzes/delete/$id',

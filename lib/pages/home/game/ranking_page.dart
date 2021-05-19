@@ -33,6 +33,7 @@ class _RankingPageState extends State<RankingPage> {
   void initState() {
     super.initState();
     _jogadoresStream();
+    _bloc.getJogadoresQuiz(cod: widget.quiz.id);
   }
 
   @override
@@ -42,7 +43,6 @@ class _RankingPageState extends State<RankingPage> {
   }
 
   _jogadoresStream() async {
-    await _bloc.getJogadoresQuiz(cod: widget.quiz.id);
     _bloc.jogadoresStream.listen((event) async {
       switch (event.status) {
         case Status.COMPLETED:
