@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quizyz/bloc/ranking_bloc.dart';
 import 'package:quizyz/model/Quiz.dart';
+import 'package:quizyz/service/config/base_response.dart';
+import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 class RankingPage extends StatefulWidget {
@@ -19,6 +21,38 @@ class RankingPage extends StatefulWidget {
 
 class _RankingPageState extends State<RankingPage> {
   RankingBloc _bloc = RankingBloc();
+
+  @override
+  void initState() {
+    super.initState();
+    _jogadoresStream();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
+  }
+
+  _jogadoresStream() async {
+    await _bloc.getJogadoresQuiz(cod: widget.quiz.id);
+    _bloc.jogadoresStream.listen((event) async {
+      switch (event.status) {
+        case Status.COMPLETED:
+          Navigator.pop(context);
+          break;
+        case Status.LOADING:
+          ManagerDialogs.showLoadingDialog(context);
+          break;
+        case Status.ERROR:
+          Navigator.pop(context);
+          ManagerDialogs.showErrorDialog(context, event.message);
+          break;
+        default:
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
