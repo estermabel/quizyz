@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:quizyz/db/data_base_helper.dart';
+import 'package:quizyz/db/config/data_base_helper.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/User.dart';
 import 'package:quizyz/service/config/api_service.dart';
