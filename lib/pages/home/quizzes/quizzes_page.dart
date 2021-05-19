@@ -155,7 +155,13 @@ class _QuizzesPageState extends State<QuizzesPage> {
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => RankingPage(),
+                                        builder: (context) => RankingPage(
+                                          quiz: quiz,
+                                          hasAppBar: true,
+                                          textButtom: "",
+                                          onTap: () {},
+                                          hasButtom: false,
+                                        ),
                                       ),
                                     ),
                                   ),
