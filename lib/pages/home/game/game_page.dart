@@ -1,16 +1,22 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quizyz/components/answer_component.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
 import 'package:quizyz/model/Pergunta.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/Resposta.dart';
+import 'package:quizyz/pages/home/game/ranking_page.dart';
+import 'package:quizyz/pages/login_page.dart';
 import 'package:quizyz/utils/style/colors.dart';
+
+import '../../controller_page.dart';
 
 class GamePage extends StatefulWidget {
   final String jogadorNome;
   final Quiz quiz;
+  final bool isLogged;
 
-  GamePage({@required this.jogadorNome, this.quiz});
+  GamePage({@required this.jogadorNome, this.quiz, this.isLogged});
 
   @override
   _GamePageState createState() => _GamePageState();
@@ -35,27 +41,29 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     super.initState();
   }
 
-  // Para teste apenas
-  List<Pergunta> perguntaList = [
-    Pergunta(
-      titulo: "Qual minha comida favorita?",
-      respostas: [
-        Resposta(titulo: "Hamburguer", isCerta: false),
-        Resposta(titulo: "Pizza", isCerta: false),
-        Resposta(titulo: "Curry", isCerta: true),
-        Resposta(titulo: "Lasanha", isCerta: false)
-      ],
-    ),
-    Pergunta(
-      titulo: "Qual minha bebida favorita?",
-      respostas: [
-        Resposta(titulo: "Cerveja", isCerta: false),
-        Resposta(titulo: "Energetico", isCerta: false),
-        Resposta(titulo: "Suco de abacaxi", isCerta: true),
-        Resposta(titulo: "Lasanha", isCerta: false)
-      ],
-    ),
-  ];
+  _finishGame() async {
+    _controller.dispose();
+    Navigator.of(context).pushReplacement(
+      CupertinoPageRoute(
+        builder: (context) => RankingPage(
+          hasAppBar: false,
+          hasButtom: true,
+          quiz: widget.quiz,
+          textButtom:
+              widget.isLogged ? "Voltar para Home" : "Voltar para o Login",
+          onTap: () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) =>
+                      widget.isLogged ? ControllerPage() : LoginPage(),
+                ),
+                (route) => false);
+          },
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +105,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                perguntaList[ponteiro].titulo,
+                widget.quiz.perguntas[ponteiro].titulo,
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1
@@ -109,7 +117,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               padding: EdgeInsets.only(
                   top: 32.0, left: 16.0, right: 16.0, bottom: 16.0),
               child: AnswerComponent(
-                respostas: perguntaList[ponteiro].respostas,
+                respostas: widget.quiz.perguntas[ponteiro].respostas,
                 key: key,
               ),
             ),
@@ -127,8 +135,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                           key.currentState.showAnswer = true;
                           runFunction = !runFunction;
                         });
-                        Future.delayed(Duration(seconds: 2), () {
-                          if (ponteiro < perguntaList.length - 1) {
+                        Future.delayed(Duration(seconds: 2), () async {
+                          if (ponteiro < widget.quiz.perguntas.length - 1) {
                             setState(() {
                               runFunction = !runFunction;
                               key.currentState.showAnswer = false;
@@ -139,12 +147,19 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             });
                           } else {
                             animateAppProgress();
-                            showSnackBarWithMessage(context, "Fim da lista :3");
+                            await _finishGame();
                           }
                         });
                       } else {
-                        showSnackBarWithMessage(
-                            context, "Escolha uma alternativa");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Escolha uma alternativa!",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            backgroundColor: bottomNavBarBackgroundColor,
+                          ),
+                        );
                       }
                     }
                   },
@@ -168,7 +183,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   void animateAppProgress() {
     appBarProgress = appBarProgress +
         MediaQuery.of(context).size.width / widget.quiz.perguntas.length;
-    _controller.animateTo(appBarProgress,
-        duration: Duration(milliseconds: 1000));
+    _controller.animateTo(
+      appBarProgress,
+      duration: Duration(milliseconds: 1000),
+    );
   }
 }
