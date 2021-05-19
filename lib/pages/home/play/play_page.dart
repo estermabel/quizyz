@@ -16,7 +16,7 @@ class _PlayPageState extends State<PlayPage> {
   PlayBloc _bloc = PlayBloc();
   bool _isCodeErrorDisplayed = false;
   bool _isNomeJogadorErrorDisplayed = false;
-  bool isLogged = false;
+  bool isLogged;
 
   @override
   void initState() {
@@ -28,6 +28,7 @@ class _PlayPageState extends State<PlayPage> {
 
   checkIfUserIsLogged() async {
     _bloc.isLoggedStream.listen((event) async {
+      isLogged = event;
       if (event) {
         _bloc.nomeJogadorController.text = await _bloc.getUsuarioNome();
       }
@@ -50,6 +51,7 @@ class _PlayPageState extends State<PlayPage> {
               builder: (context) => GamePage(
                 jogadorNome: _bloc.nomeJogadorController.text,
                 quiz: event.data,
+                isLogged: isLogged,
               ),
             ),
           );
