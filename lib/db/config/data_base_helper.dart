@@ -10,8 +10,10 @@ class DatabaseHelper {
   static final _databaseVersion = 1;
   static final table = 'user';
   static final columnId = '_id';
-  static final columnNome = 'nome';
-  static final columnEmail = 'email';
+  static final columnCod = 'codigo';
+  static final columnTitulo = 'titulo';
+  static final columnPontos = 'pontos';
+  static final columnTotalPerguntas = 'totalPerguntas';
   // torna esta classe singleton
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -41,8 +43,10 @@ class DatabaseHelper {
     await db.execute('''
           CREATE TABLE $table (
             $columnId INTEGER PRIMARY KEY,
-            $columnNome TEXT NOT NULL,
-            $columnEmail TEXT NOT NULL
+            $columnCod INTEGER NOT NULL,
+            $columnTitulo TEXT NOT NULL,
+            $columnPontos INTEGER NOT NULL,
+            $columnTotalPerguntas INTEGER NOT NULL
           )
           ''');
   }
@@ -52,16 +56,12 @@ class DatabaseHelper {
     return await db.insert(table, body);
   }
 
-  Future getUser({int id}) async {
+  Future<List<Map<String, dynamic>>> getAllRows() async {
     Database db = await instance.database;
-    var response = await db.query(
-      'user',
-    );
-    User user = User.fromJson(response.first);
-    return user;
+    return await db.query(table);
   }
 
-  Future<int> queryRowCount() async {
+  Future<int> getRowCount() async {
     Database db = await instance.database;
     return Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM $table'));
