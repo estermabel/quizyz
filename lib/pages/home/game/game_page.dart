@@ -98,75 +98,77 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           ),
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.only(top: 32.0, right: 16.0, left: 16.0),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                widget.quiz.perguntas[ponteiro].titulo,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    .copyWith(fontSize: 26, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: 32.0, left: 16.0, right: 16.0, bottom: 16.0),
-              child: AnswerComponent(
-                respostas: widget.quiz.perguntas[ponteiro].respostas,
-                key: key,
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    bottom: 42.0, left: 16.0, right: 16.0),
-                child: QuizyzAppButton(
-                  title: "Proximo",
-                  onTap: () {
-                    if (runFunction == true) {
-                      if (key.currentState.radioIndex != null) {
-                        setState(() {
-                          key.currentState.showAnswer = true;
-                          runFunction = !runFunction;
-                        });
-                        Future.delayed(Duration(seconds: 2), () async {
-                          if (ponteiro < widget.quiz.perguntas.length - 1) {
-                            setState(() {
-                              runFunction = !runFunction;
-                              key.currentState.showAnswer = false;
-                              key.currentState.radioIndex = null;
-
-                              ponteiro++;
-                              animateAppProgress();
-                            });
-                          } else {
-                            animateAppProgress();
-                            await _finishGame();
-                          }
-                        });
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              "Escolha uma alternativa!",
-                              style: Theme.of(context).textTheme.subtitle1,
-                            ),
-                            backgroundColor: bottomNavBarBackgroundColor,
-                          ),
-                        );
-                      }
-                    }
-                  },
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(top: 32.0, right: 16.0, left: 16.0),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  widget.quiz.perguntas[ponteiro].titulo,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      .copyWith(fontSize: 26, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Padding(
+                padding: EdgeInsets.only(
+                    top: 32.0, left: 16.0, right: 16.0, bottom: 16.0),
+                child: AnswerComponent(
+                  respostas: widget.quiz.perguntas[ponteiro].respostas,
+                  key: key,
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 42.0, left: 16.0, right: 16.0),
+                  child: QuizyzAppButton(
+                    title: "Proximo",
+                    onTap: () {
+                      if (runFunction == true) {
+                        if (key.currentState.radioIndex != null) {
+                          setState(() {
+                            key.currentState.showAnswer = true;
+                            runFunction = !runFunction;
+                          });
+                          Future.delayed(Duration(seconds: 2), () async {
+                            if (ponteiro < widget.quiz.perguntas.length - 1) {
+                              setState(() {
+                                runFunction = !runFunction;
+                                key.currentState.showAnswer = false;
+                                key.currentState.radioIndex = null;
+
+                                ponteiro++;
+                                animateAppProgress();
+                              });
+                            } else {
+                              animateAppProgress();
+                              await _finishGame();
+                            }
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Escolha uma alternativa!",
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                              backgroundColor: bottomNavBarBackgroundColor,
+                            ),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

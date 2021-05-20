@@ -11,6 +11,7 @@ import 'package:quizyz/service/quizzes_service.dart';
 class RankingBloc {
   GameService _service;
   QuizzesService _quizzesService;
+  List<Jogador> jogadoresList = [];
 
   StreamController<BaseResponse<List<Jogador>>> _rankingController;
   Stream<BaseResponse<List<Jogador>>> get jogadoresStream =>
