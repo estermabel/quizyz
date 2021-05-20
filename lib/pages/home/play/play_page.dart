@@ -8,6 +8,9 @@ import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 class PlayPage extends StatefulWidget {
+  final bool hasLeading;
+
+  const PlayPage({Key key, this.hasLeading = false}) : super(key: key);
   @override
   _PlayPageState createState() => _PlayPageState();
 }
@@ -81,6 +84,19 @@ class _PlayPageState extends State<PlayPage> {
               .headline5
               .copyWith(color: accentColor),
         ),
+        leading: widget.hasLeading
+            ? IconButton(
+                icon: IconTheme(
+                  data: Theme.of(context).iconTheme.copyWith(
+                        color: accentColor,
+                      ),
+                  child: Icon(Icons.arrow_back_ios),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            : null,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
