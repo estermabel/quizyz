@@ -19,8 +19,8 @@ class RankingBloc {
   Sink<BaseResponse<List<Jogador>>> get jogadoresSink =>
       _rankingController.sink;
   StreamController<BaseResponse<String>> _quizController;
-  Stream get quizStream => _quizController.stream;
-  Sink get quizSink => _quizController.sink;
+  Stream<BaseResponse<String>> get quizStream => _quizController.stream;
+  Sink<BaseResponse<String>> get quizSink => _quizController.sink;
 
   RankingBloc() {
     _service = GameService(APIService());
@@ -45,7 +45,7 @@ class RankingBloc {
       var response = await _quizzesService.deleteQuiz(id: cod);
       quizSink.add(BaseResponse.completed(data: response));
     } catch (e) {
-      quizSink.add(BaseResponse.error(e.toString()));
+      quizSink.add(BaseResponse.error(e.response.data["error"]));
     }
   }
 
