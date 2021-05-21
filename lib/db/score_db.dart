@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:quizyz/db/config/data_base_helper.dart';
 import 'package:quizyz/model/ScoreQuiz.dart';
 
@@ -9,5 +10,10 @@ class ScoreDb {
     List<ScoreQuiz> _quizzes =
         (response).map((e) => ScoreQuiz.fromJson(e)).toList();
     return _quizzes;
+  }
+
+  Future addQuizToDB({ScoreQuiz quiz}) async {
+    int response = await db.insert(quiz.toJson());
+    debugPrint('Quiz $response inserido.');
   }
 }

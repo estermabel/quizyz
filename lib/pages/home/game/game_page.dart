@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quizyz/bloc/score_bloc.dart';
 import 'package:quizyz/components/answer_component.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
+import 'package:quizyz/model/Jogador.dart';
 import 'package:quizyz/model/Pergunta.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/Resposta.dart';
+import 'package:quizyz/model/ScoreQuiz.dart';
 import 'package:quizyz/pages/home/game/ranking_page.dart';
 import 'package:quizyz/pages/login_page.dart';
 import 'package:quizyz/utils/style/colors.dart';
@@ -23,11 +26,14 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
+  ScoreBloc _scoreBloc = ScoreBloc();
   final key = new GlobalKey<AnswerComponentState>();
   AnimationController _controller;
   int ponteiro = 0;
   double appBarProgress = 0.0;
   bool runFunction = true;
+  ScoreQuiz scoreQuiz;
+  Jogador jogador;
 
   @override
   void initState() {
@@ -43,6 +49,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
   _finishGame() async {
     _controller.dispose();
+    _gerarObjetos();
+    _scoreBloc.insertQuiz(quiz: scoreQuiz);
     Navigator.of(context).pushReplacement(
       CupertinoPageRoute(
         builder: (context) => RankingPage(
@@ -62,6 +70,20 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           },
         ),
       ),
+    );
+  }
+
+  _gerarObjetos() {
+    jogador = Jogador(
+      nome: widget.jogadorNome,
+      pontuacao: 2,
+    );
+    scoreQuiz = ScoreQuiz(
+      codigo: widget.quiz.id,
+      criador: widget.quiz.criador.nome,
+      titulo: widget.quiz.titulo,
+      totalPerguntas: widget.quiz.perguntas.length,
+      pontos: jogador.pontuacao,
     );
   }
 
