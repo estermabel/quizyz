@@ -11,7 +11,7 @@ class CreateQuizzesPage extends StatefulWidget {
 
 class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
   CreateQuizBloc _bloc = CreateQuizBloc();
-  List<Widget> quizesList = [];
+  List<CreateQuizCard> quizesList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +45,23 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
             ),
             onPressed: () {
               if (quizesList.length > 0) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      "Quiz criado.",
-                      style: Theme.of(context).textTheme.subtitle1,
-                    ),
-                    backgroundColor: bottomNavBarBackgroundColor,
-                  ),
-                );
+                quizesList.forEach((element) {
+                  if (_bloc.tituloController.text.isNotEmpty &&
+                      element.perguntaController.text.isNotEmpty &&
+                      element.resposta1Controller.text.isNotEmpty &&
+                      element.resposta2Controller.text.isNotEmpty &&
+                      element.resposta3Controller.text.isNotEmpty &&
+                      element.resposta4Controller.text.isNotEmpty) {
+                    // TODO: Criar objeto aqui.
+
+                  } else {
+                    return ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Preencha o quiz!"),
+                      ),
+                    );
+                  }
+                });
               }
             },
           ),
@@ -79,33 +87,53 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                   itemCount: quizesList.length,
                 ),
               ),
-              Visibility(
-                visible: (quizesList.length < 10 ? true : false),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 32.0, right: 16, left: 16),
-                    child: PurpleButton(
-                      titulo: "Adicionar pergunta",
-                      onTap: () {
-                        if (quizesList.length < 10) {
-                          setState(
-                            () {
-                              int size = quizesList.length + 1;
-                              quizesList.add(
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 16),
-                                  child: CreateQuizCard(
-                                    pergunta: "Pergunta " + size.toString(),
-                                  ),
-                                ),
+                  child: Row(
+                    mainAxisAlignment: quizesList.length < 10
+                        ? MainAxisAlignment.spaceAround
+                        : MainAxisAlignment.center,
+                    children: [
+                      Visibility(
+                        visible: quizesList.length < 10 ? true : false,
+                        child: PurpleButton(
+                          titulo: "Adicionar pergunta",
+                          onTap: () {
+                            if (quizesList.length < 10) {
+                              setState(
+                                () {
+                                  int size = quizesList.length + 1;
+                                  quizesList.add(
+                                    CreateQuizCard(
+                                      pergunta: "Pergunta " + size.toString(),
+                                    ),
+                                  );
+                                },
                               );
-                            },
-                          );
-                        }
-                      },
-                    ),
+                            }
+                          },
+                        ),
+                      ),
+                      quizesList.length >= 10
+                          ? PurpleButton(
+                              titulo: "Remover Pergunta",
+                              onTap: () => setState(() => quizesList.length > 0
+                                  ? quizesList.removeLast()
+                                  : null),
+                            )
+                          : IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                size: 35,
+                              ),
+                              onPressed: () => setState(() =>
+                                  quizesList.length > 0
+                                      ? quizesList.removeLast()
+                                      : null),
+                            )
+                    ],
                   ),
                 ),
               )

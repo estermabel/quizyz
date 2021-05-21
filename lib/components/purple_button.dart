@@ -22,12 +22,15 @@ class PurpleButton extends StatelessWidget {
           border: Border.all(color: purpleColor),
         ),
         child: Center(
-          child: Text(
-            titulo,
-            style: Theme.of(context).textTheme.headline1.copyWith(
-                  color: purpleColor,
-                  fontSize: TextSize.large,
-                ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              titulo,
+              style: Theme.of(context).textTheme.headline1.copyWith(
+                    color: purpleColor,
+                    fontSize: TextSize.large,
+                  ),
+            ),
           ),
         ),
       ),
