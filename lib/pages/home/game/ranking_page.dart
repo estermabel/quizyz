@@ -36,6 +36,7 @@ class _RankingPageState extends State<RankingPage> {
   void initState() {
     super.initState();
     _jogadoresStream();
+    _deleteQuizStream();
     _bloc.getJogadoresQuiz(cod: widget.quiz.id);
   }
 
@@ -55,6 +56,26 @@ class _RankingPageState extends State<RankingPage> {
           ManagerDialogs.showLoadingDialog(context);
           break;
         case Status.ERROR:
+          Navigator.pop(context);
+          ManagerDialogs.showErrorDialog(context, event.message);
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  _deleteQuizStream() {
+    _bloc.quizStream.listen((event) async {
+      switch (event.status) {
+        case Status.COMPLETED:
+          Navigator.pop(context);
+          break;
+        case Status.LOADING:
+          ManagerDialogs.showLoadingDialog(context);
+          break;
+        case Status.ERROR:
+          Navigator.pop(context);
           Navigator.pop(context);
           ManagerDialogs.showErrorDialog(context, event.message);
           break;
@@ -89,7 +110,11 @@ class _RankingPageState extends State<RankingPage> {
               ),
               actions: [
                 GestureDetector(
-                  onTap: widget.onTap,
+                  onTap: widget.onTap == null
+                      ? () async {
+                          await _bloc.deleteQuiz(cod: widget.quiz.id);
+                        }
+                      : widget.onTap,
                   child: Padding(
                     padding: EdgeInsets.only(right: 16),
                     child: IconTheme(

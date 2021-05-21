@@ -97,6 +97,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
           GestureDetector(
             onTap: () {
               _bloc.getUser();
+              _bloc.getQuizzes();
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 16),
@@ -211,7 +212,6 @@ class _QuizzesPageState extends State<QuizzesPage> {
                                           quiz: quiz,
                                           hasAppBar: true,
                                           textButtom: "",
-                                          onTap: () {},
                                           hasButtom: false,
                                         ),
                                       ),
