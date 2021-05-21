@@ -4,6 +4,7 @@ import 'package:quizyz/components/my_quiz_card.dart';
 import 'package:quizyz/components/native_loading.dart';
 import 'package:quizyz/components/score_quiz_card.dart';
 import 'package:quizyz/model/Quiz.dart';
+import 'package:quizyz/model/ScoreQuiz.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
@@ -65,7 +66,7 @@ class _ScorePageState extends State<ScorePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              StreamBuilder<BaseResponse<List<Quiz>>>(
+              StreamBuilder<BaseResponse<List<ScoreQuiz>>>(
                 stream: _bloc.scoreStream,
                 initialData: BaseResponse.completed(),
                 builder: (context, snapshot) {
@@ -86,10 +87,10 @@ class _ScorePageState extends State<ScorePage> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 32),
                                 child: ScoreQuizCard(
-                                  criador: quiz.criador.nome,
+                                  criador: quiz.criador,
                                   titulo: quiz.titulo,
-                                  qtdPerguntas: quiz.perguntas.length,
-                                  //qtdPontos: quiz.jogadores.,
+                                  qtdPerguntas: quiz.totalPerguntas,
+                                  qtdPontos: quiz.pontos,
                                 ),
                               ),
                             );
