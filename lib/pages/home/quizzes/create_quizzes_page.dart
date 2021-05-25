@@ -79,74 +79,84 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
         ),
         actions: [
           IconButton(
-            icon: IconTheme(
-              data: Theme.of(context).iconTheme.copyWith(
-                    color: accentColor,
-                  ),
-              child: Icon(Icons.check),
-            ),
-            onPressed: () async {
-              if (quizesList.length > 0) {
-                List<Resposta> respostas = [];
-                List<Pergunta> perguntas = [];
-                quizesList.forEach(
-                  (elementQuestions) {
-                    if (_bloc.tituloController.text.isNotEmpty &&
-                        elementQuestions.perguntaController.text.isNotEmpty &&
-                        elementQuestions.resposta1Controller.text.isNotEmpty &&
-                        elementQuestions.resposta2Controller.text.isNotEmpty &&
-                        elementQuestions.resposta3Controller.text.isNotEmpty &&
-                        elementQuestions.resposta4Controller.text.isNotEmpty) {
-                      respostas.addAll([
-                        Resposta(
-                            id: 1,
-                            isCerta: false,
-                            titulo: elementQuestions.resposta1Controller.text),
-                        Resposta(
-                            id: 2,
-                            isCerta: false,
-                            titulo: elementQuestions.resposta2Controller.text),
-                        Resposta(
-                            id: 3,
-                            isCerta: false,
-                            titulo: elementQuestions.resposta3Controller.text),
-                        Resposta(
-                            id: 4,
-                            isCerta: false,
-                            titulo: elementQuestions.resposta4Controller.text)
-                      ]);
-                      respostas.forEach((element) {
-                        if (element.id == elementQuestions.value) {
-                          element.isCerta = true;
-                        }
-                      });
-                      perguntas.add(Pergunta(
-                          titulo: elementQuestions.perguntaController.text,
-                          respostas: respostas));
-                    } else {
-                      return ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "Preencha o quiz!",
-                            style: Theme.of(context).textTheme.subtitle1,
+              icon: IconTheme(
+                data: Theme.of(context).iconTheme.copyWith(
+                      color: accentColor,
+                    ),
+                child: Icon(Icons.check),
+              ),
+              onPressed: () async {
+                if (quizesList.length > 0) {
+                  List<Resposta> respostas = [];
+                  List<Pergunta> perguntas = [];
+                  bool runBloc = true;
+                  quizesList.forEach(
+                    (elementQuestions) {
+                      if (_bloc.tituloController.text.isNotEmpty &&
+                          elementQuestions.perguntaController.text.isNotEmpty &&
+                          elementQuestions
+                              .resposta1Controller.text.isNotEmpty &&
+                          elementQuestions
+                              .resposta2Controller.text.isNotEmpty &&
+                          elementQuestions
+                              .resposta3Controller.text.isNotEmpty &&
+                          elementQuestions
+                              .resposta4Controller.text.isNotEmpty) {
+                        respostas.addAll([
+                          Resposta(
+                              id: 1,
+                              isCerta: false,
+                              titulo:
+                                  elementQuestions.resposta1Controller.text),
+                          Resposta(
+                              id: 2,
+                              isCerta: false,
+                              titulo:
+                                  elementQuestions.resposta2Controller.text),
+                          Resposta(
+                              id: 3,
+                              isCerta: false,
+                              titulo:
+                                  elementQuestions.resposta3Controller.text),
+                          Resposta(
+                              id: 4,
+                              isCerta: false,
+                              titulo: elementQuestions.resposta4Controller.text)
+                        ]);
+                        respostas.forEach((element) {
+                          if (element.id == elementQuestions.value) {
+                            element.isCerta = true;
+                          }
+                        });
+                        perguntas.add(Pergunta(
+                            titulo: elementQuestions.perguntaController.text,
+                            respostas: respostas));
+                      } else {
+                        runBloc = false;
+                        return ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Preencha o quiz!",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            backgroundColor: bottomNavBarBackgroundColor,
                           ),
-                          backgroundColor: bottomNavBarBackgroundColor,
-                        ),
-                      );
-                    }
-                  },
-                );
+                        );
+                      }
+                    },
+                  );
 
-                Quiz quiz = Quiz(
-                  titulo: _bloc.tituloController.text,
-                  perguntas: perguntas,
-                  criador: widget.criador,
-                );
+                  if (runBloc == true) {
+                    Quiz quiz = Quiz(
+                      titulo: _bloc.tituloController.text,
+                      perguntas: perguntas,
+                      criador: widget.criador,
+                    );
 
-                await _bloc.createQuiz(quiz: quiz);
-              }
-            },
-          ),
+                    await _bloc.createQuiz(quiz: quiz);
+                  }
+                }
+              }),
         ],
       ),
       body: Container(
