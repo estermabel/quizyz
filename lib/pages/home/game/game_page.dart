@@ -92,7 +92,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                   }
                 : null,
           );
-
   }
 
   _gerarObjetos() {

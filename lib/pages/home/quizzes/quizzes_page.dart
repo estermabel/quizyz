@@ -175,9 +175,12 @@ class _QuizzesPageState extends State<QuizzesPage> {
                         return Container();
                         break;
                       default:
-                        return Text(
-                          "Oie ${snapshot.data.data.nome},",
-                          style: Theme.of(context).textTheme.headline6,
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 32),
+                          child: Text(
+                            "Oie ${snapshot.data.data.nome},",
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                         );
                     }
                   } else {
@@ -204,21 +207,18 @@ class _QuizzesPageState extends State<QuizzesPage> {
                           snapshot.data.data.forEach(
                             (quiz) {
                               _bloc.meusQuizzesList.add(
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 32),
-                                  child: MyQuizCard(
-                                    codigo: quiz.id,
-                                    titulo: quiz.titulo,
-                                    qtdPerguntas: quiz.perguntas.length,
-                                    onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => RankingPage(
-                                          quiz: quiz,
-                                          hasAppBar: true,
-                                          textButtom: "",
-                                          hasButtom: false,
-                                        ),
+                                MyQuizCard(
+                                  codigo: quiz.id,
+                                  titulo: quiz.titulo,
+                                  qtdPerguntas: quiz.perguntas.length,
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RankingPage(
+                                        quiz: quiz,
+                                        hasAppBar: true,
+                                        textButtom: "",
+                                        hasButtom: false,
                                       ),
                                     ),
                                   ),
