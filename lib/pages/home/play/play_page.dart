@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/play_bloc.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
+import 'package:quizyz/db/quiz_tutorial.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/pages/home/game/game_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
@@ -97,6 +98,32 @@ class _PlayPageState extends State<PlayPage> {
                 },
               )
             : null,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: purpleColor,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return GamePage(
+                  jogadorNome: _bloc.nomeJogadorController.text,
+                  quiz: QuizTutorial.quiz,
+                  isLogged: !widget.hasLeading,
+                  isTutorial: true,
+                );
+              },
+            ),
+          );
+        },
+        child: Text(
+          "?",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.button.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
