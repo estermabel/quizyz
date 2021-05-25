@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:quizyz/bloc/game_flow_bloc.dart';
+
 import 'package:quizyz/bloc/score_bloc.dart';
 import 'package:quizyz/components/answer_component.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
-import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/Jogador.dart';
-import 'package:quizyz/model/Pergunta.dart';
 import 'package:quizyz/model/Quiz.dart';
-import 'package:quizyz/model/Resposta.dart';
 import 'package:quizyz/model/ScoreQuiz.dart';
 import 'package:quizyz/pages/home/game/ranking_page.dart';
 import 'package:quizyz/pages/login_page.dart';
+import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
@@ -34,51 +35,36 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   ScoreBloc _scoreBloc = ScoreBloc();
+  GameFlowBloc _bloc = GameFlowBloc();
+
   final key = new GlobalKey<AnswerComponentState>();
-  AnimationController _controller;
   int ponteiro = 0;
   double appBarProgress = 0.0;
   bool runFunction = true;
-  ScoreQuiz scoreQuiz;
-  Jogador jogador;
+  int quantidadeDePerguntas;
+  int pontuacao = 0;
 
   @override
   void initState() {
-    _controller = AnimationController(
-        vsync: this,
-        duration: Duration(milliseconds: 5),
-        value: appBarProgress);
-    _controller.addListener(() {
-      setState(() {});
-    });
+    quantidadeDePerguntas = widget.quiz.perguntas.length + 1;
     super.initState();
   }
 
   _finishGame() async {
-    _controller.dispose();
-    !widget.isTutorial
-        ? Navigator.of(context).pushReplacement(
-            CupertinoPageRoute(
-              builder: (context) => RankingPage(
-                hasAppBar: false,
-                hasButtom: true,
-                quiz: widget.quiz,
-                textButtom: widget.isLogged
-                    ? "Voltar para Home"
-                    : "Voltar para o Login",
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) =>
-                            widget.isLogged ? ControllerPage() : LoginPage(),
-                      ),
-                      (route) => false);
-                },
-              ),
-            ),
-          )
-        : ManagerDialogs.showMessageDialog(
+    Jogador jogador = Jogador(
+      nome: widget.jogadorNome,
+      pontuacao: pontuacao,
+    );
+    ScoreQuiz scoreQuiz = ScoreQuiz(
+      codigo: widget.quiz.id,
+      criador: widget.quiz.criador.nome,
+      titulo: widget.quiz.titulo,
+      totalPerguntas: widget.quiz.perguntas.length,
+      pontos: jogador.pontuacao,
+    );
+    _gameStream();
+    widget.isTutorial
+        ? ManagerDialogs.showMessageDialog(
             context,
             "Você concluiu o tutorial!",
             widget.isLogged
@@ -91,22 +77,60 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         (route) => false);
                   }
                 : null,
+            false,
+          )
+        : await _bloc
+            .addJogador(
+            jogador: jogador,
+            quizId: widget.quiz.id,
+          )
+            .then(
+            (value) async {
+              await _scoreBloc.insertQuiz(quiz: scoreQuiz);
+            },
           );
-
   }
 
-  _gerarObjetos() {
-    jogador = Jogador(
-      nome: widget.jogadorNome,
-      pontuacao: 2,
-    );
-    scoreQuiz = ScoreQuiz(
-      codigo: widget.quiz.id,
-      criador: widget.quiz.criador.nome,
-      titulo: widget.quiz.titulo,
-      totalPerguntas: widget.quiz.perguntas.length,
-      pontos: jogador.pontuacao,
-    );
+  _gameStream() async {
+    _bloc.gameStream.listen((event) async {
+      switch (event.status) {
+        case Status.COMPLETED:
+          Navigator.pop(context);
+          Navigator.of(context).pushReplacement(
+            CupertinoPageRoute(
+              builder: (context) => RankingPage(
+                hasAppBar: false,
+                hasButtom: true,
+                quiz: widget.quiz,
+                textButtom: widget.isLogged
+                    ? "Voltar para Home"
+                    : "Voltar para o Login",
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) =>
+                          widget.isLogged ? ControllerPage() : LoginPage(),
+                    ),
+                    (route) => false,
+                  );
+                },
+              ),
+            ),
+          );
+
+          break;
+        case Status.LOADING:
+          ManagerDialogs.showLoadingDialog(context);
+          break;
+        case Status.ERROR:
+          Navigator.pop(context);
+          ManagerDialogs.showErrorDialog(context, event.message);
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   @override
@@ -134,11 +158,15 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
         ),
         flexibleSpace: Align(
           alignment: Alignment.bottomCenter,
-          child: LinearProgressIndicator(
-            backgroundColor: Colors.white,
-            value: _controller.value,
-            valueColor: AlwaysStoppedAnimation<Color>(blueColor),
-            minHeight: 2,
+          child: LinearPercentIndicator(
+            width: MediaQuery.of(context).size.width,
+            lineHeight: 4.0,
+            percent: animateAppProgress(),
+            backgroundColor: whiteColor,
+            progressColor: blueColor,
+            animation: true,
+            animationDuration: 30,
+            padding: EdgeInsets.zero,
           ),
         ),
       ),
@@ -184,14 +212,14 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             if (ponteiro < widget.quiz.perguntas.length - 1) {
                               setState(() {
                                 runFunction = !runFunction;
+                                calculateScore();
                                 key.currentState.showAnswer = false;
                                 key.currentState.radioIndex = null;
 
                                 ponteiro++;
-                                animateAppProgress();
                               });
                             } else {
-                              animateAppProgress();
+                              calculateScore();
                               await _finishGame();
                             }
                           });
@@ -226,12 +254,34 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     );
   }
 
-  void animateAppProgress() {
-    appBarProgress = appBarProgress +
-        MediaQuery.of(context).size.width / widget.quiz.perguntas.length;
-    _controller.animateTo(
-      appBarProgress,
-      duration: Duration(milliseconds: 1000),
-    );
+  double animateAppProgress() {
+    if (quantidadeDePerguntas <= 1) {
+      return 1.0;
+    }
+
+    if (quantidadeDePerguntas == widget.quiz.perguntas.length + 1) {
+      --quantidadeDePerguntas;
+      return 0.0;
+    }
+
+    double quantidade = 100 / --quantidadeDePerguntas;
+
+    print("Quantidade de perguntas $quantidadeDePerguntas");
+
+    print("Quantidade divido por 100 ${quantidade / 100}");
+
+    return quantidade / 100;
+  }
+
+  void calculateScore() {
+    for (int i = 0; i < widget.quiz.perguntas[ponteiro].respostas.length; i++) {
+      if (widget.quiz.perguntas[ponteiro].respostas[i].isCerta) {
+        if (i == key.currentState.radioIndex) {
+          pontuacao++;
+          break;
+        }
+      }
+    }
+    print("Pontuação -> $pontuacao");
   }
 }

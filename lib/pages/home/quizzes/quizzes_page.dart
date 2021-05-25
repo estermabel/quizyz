@@ -32,7 +32,6 @@ class _QuizzesPageState extends State<QuizzesPage> {
   @override
   void initState() {
     super.initState();
-    _userStream();
     getUser();
     _quizzesStream();
     _bloc.getQuizzes();
@@ -46,25 +45,6 @@ class _QuizzesPageState extends State<QuizzesPage> {
 
   void getUser() async {
     user = await _bloc.getUser();
-  }
-
-  _userStream() async {
-    _bloc.userStream.listen((event) async {
-      switch (event.status) {
-        case Status.COMPLETED:
-          Navigator.pop(context);
-          break;
-        case Status.LOADING:
-          ManagerDialogs.showLoadingDialog(context);
-          break;
-        case Status.ERROR:
-          Navigator.pop(context);
-          ManagerDialogs.showErrorDialog(context, event.message);
-          break;
-        default:
-          break;
-      }
-    });
   }
 
   _quizzesStream() async {
@@ -161,25 +141,14 @@ class _QuizzesPageState extends State<QuizzesPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              StreamBuilder<BaseResponse<User>>(
+              StreamBuilder<String>(
                 stream: _bloc.userStream,
-                initialData: BaseResponse.completed(),
                 builder: (context, snapshot) {
-                  if (snapshot.data.data != null) {
-                    switch (snapshot.data?.status) {
-                      case Status.LOADING:
-                        return _onLoading();
-                        break;
-                      case Status.ERROR:
-                        _onError(snapshot);
-                        return Container();
-                        break;
-                      default:
-                        return Text(
-                          "Oie ${snapshot.data.data.nome},",
-                          style: Theme.of(context).textTheme.headline6,
-                        );
-                    }
+                  if (snapshot.data != null) {
+                    return Text(
+                      "Oie ${snapshot.data},",
+                      style: Theme.of(context).textTheme.headline6,
+                    );
                   } else {
                     return Container();
                   }

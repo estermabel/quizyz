@@ -14,9 +14,9 @@ class QuizzesBloc {
   LoginService _loginService;
   List<Widget> meusQuizzesList = [];
 
-  StreamController<BaseResponse<User>> _userController;
-  Stream<BaseResponse<User>> get userStream => _userController.stream;
-  Sink<BaseResponse<User>> get userSink => _userController.sink;
+  StreamController<String> _userController;
+  Stream<String> get userStream => _userController.stream;
+  Sink<String> get userSink => _userController.sink;
 
   StreamController<BaseResponse<List<Quiz>>> _quizzesController;
   Stream<BaseResponse<List<Quiz>>> get quizzesStream =>
@@ -30,19 +30,10 @@ class QuizzesBloc {
     _quizzesController = StreamController.broadcast();
   }
 
-  Future<User> getUser() async {
-    try {
-      userSink.add(BaseResponse.loading());
-      User response = await _service.getUser();
-      userSink.add(BaseResponse.completed(data: response));
-      return response;
-    } catch (e) {
-      try {
-        userSink.add(BaseResponse.error(e.response.data["error"]));
-      } catch (e) {
-        userSink.add(BaseResponse.error("Sem conexão com a internet!"));
-      }
-    }
+  Future getUser() async {
+    await CustomSharedPreferences.readNomeUsuario().then((response) async {
+      userSink.add(response);
+    });
   }
 
   getQuizzes() async {
