@@ -39,6 +39,8 @@ dependencies:
   share: ^2.0.1
   # User to render svg files
   flutter_svg: 
+  # progress indicator for game flow page
+  percent_indicator: ^3.0.1
 
 dev_dependencies:
   flutter_test:

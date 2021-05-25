@@ -34,7 +34,7 @@ class AnswerComponentState extends State<AnswerComponent> {
                     ? LinearGradient(
                         begin: Alignment.centerRight,
                         end: Alignment.centerLeft,
-                        colors: [purpleColor, accentColor],
+                        colors: [accentColor, purpleColor],
                       )
                     : null,
               ),

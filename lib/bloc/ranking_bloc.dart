@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:quizyz/model/Jogador.dart';
@@ -45,7 +46,8 @@ class RankingBloc {
       var response = await _quizzesService.deleteQuiz(id: cod);
       quizSink.add(BaseResponse.completed(data: response));
     } catch (e) {
-      quizSink.add(BaseResponse.error(e.source));
+      quizSink.add(BaseResponse.error(e.toString()));
+
     }
   }
 

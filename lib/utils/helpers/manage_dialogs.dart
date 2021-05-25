@@ -71,8 +71,8 @@ class ManagerDialogs {
     );
   }
 
-  static void showMessageDialog(
-      BuildContext context, String message, Function onPressed) {
+  static void showMessageDialog(BuildContext context, String message,
+      Function onPressed, bool hasCancel) {
     if (Platform.isAndroid) {
       showDialog(
         barrierDismissible: false,
@@ -81,17 +81,35 @@ class ManagerDialogs {
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text("Atenção!"),
           content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Ok"),
-              onPressed: onPressed == null
-                  ? () {
+          actions: hasCancel
+              ? <Widget>[
+                  TextButton(
+                    child: Text("Cancelar"),
+                    onPressed: () {
                       Navigator.pop(context);
-                      Navigator.pop(context);
-                    }
-                  : onPressed,
-            ),
-          ],
+                    },
+                  ),
+                  TextButton(
+                    child: Text("Ok"),
+                    onPressed: onPressed == null
+                        ? () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
+                        : onPressed,
+                  )
+                ]
+              : <Widget>[
+                  TextButton(
+                    child: Text("Ok"),
+                    onPressed: onPressed == null
+                        ? () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
+                        : onPressed,
+                  )
+                ],
         ),
       );
     } else {
@@ -100,17 +118,35 @@ class ManagerDialogs {
         builder: (context) => CupertinoAlertDialog(
           title: Text("Atenção!"),
           content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Ok"),
-              onPressed: onPressed == null
-                  ? () {
+          actions: hasCancel
+              ? <Widget>[
+                  TextButton(
+                    child: Text("Cancelar"),
+                    onPressed: () {
                       Navigator.pop(context);
-                      Navigator.pop(context);
-                    }
-                  : onPressed,
-            )
-          ],
+                    },
+                  ),
+                  TextButton(
+                    child: Text("Ok"),
+                    onPressed: onPressed == null
+                        ? () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
+                        : onPressed,
+                  )
+                ]
+              : <Widget>[
+                  TextButton(
+                    child: Text("Ok"),
+                    onPressed: onPressed == null
+                        ? () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
+                        : onPressed,
+                  )
+                ],
         ),
       );
     }
