@@ -102,18 +102,26 @@ class _PlayPageState extends State<PlayPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: purpleColor,
         onPressed: () {
-          Navigator.push(
+          ManagerDialogs.showMessageDialog(
             context,
-            MaterialPageRoute(
-              builder: (context) {
-                return GamePage(
-                  jogadorNome: _bloc.nomeJogadorController.text,
-                  quiz: QuizTutorial.quiz,
-                  isLogged: !widget.hasLeading,
-                  isTutorial: true,
-                );
-              },
-            ),
+            "Para entender o jogo, deseja jogar o quiz tutorial?",
+            () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return GamePage(
+                      jogadorNome: _bloc.nomeJogadorController.text,
+                      quiz: QuizTutorial.quiz,
+                      isLogged: !widget.hasLeading,
+                      isTutorial: true,
+                    );
+                  },
+                ),
+              );
+            },
+            true,
           );
         },
         child: Text(

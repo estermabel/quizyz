@@ -8,9 +8,6 @@ import 'package:quizyz/components/answer_component.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
 import 'package:quizyz/model/Jogador.dart';
 import 'package:quizyz/model/Quiz.dart';
-import 'package:quizyz/model/Pergunta.dart';
-import 'package:quizyz/model/Quiz.dart';
-import 'package:quizyz/model/Resposta.dart';
 import 'package:quizyz/model/ScoreQuiz.dart';
 import 'package:quizyz/pages/home/game/ranking_page.dart';
 import 'package:quizyz/pages/login_page.dart';
@@ -38,21 +35,60 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   ScoreBloc _scoreBloc = ScoreBloc();
-  final key = new GlobalKey<AnswerComponentState>();
   GameFlowBloc _bloc = GameFlowBloc();
+
+  final key = new GlobalKey<AnswerComponentState>();
   int ponteiro = 0;
   double appBarProgress = 0.0;
   bool runFunction = true;
   int quantidadeDePerguntas;
   int pontuacao = 0;
-  ScoreQuiz scoreQuiz;
-  Jogador jogador;
 
   @override
   void initState() {
-    _gameStream();
     quantidadeDePerguntas = widget.quiz.perguntas.length + 1;
     super.initState();
+  }
+
+  _finishGame() async {
+    Jogador jogador = Jogador(
+      nome: widget.jogadorNome,
+      pontuacao: pontuacao,
+    );
+    ScoreQuiz scoreQuiz = ScoreQuiz(
+      codigo: widget.quiz.id,
+      criador: widget.quiz.criador.nome,
+      titulo: widget.quiz.titulo,
+      totalPerguntas: widget.quiz.perguntas.length,
+      pontos: jogador.pontuacao,
+    );
+    _gameStream();
+    widget.isTutorial
+        ? ManagerDialogs.showMessageDialog(
+            context,
+            "Você concluiu o tutorial!",
+            widget.isLogged
+                ? () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => ControllerPage(),
+                        ),
+                        (route) => false);
+                  }
+                : null,
+            false,
+          )
+        : await _bloc
+            .addJogador(
+            jogador: jogador,
+            quizId: widget.quiz.id,
+          )
+            .then(
+            (value) async {
+              await _scoreBloc.insertQuiz(quiz: scoreQuiz);
+            },
+          );
   }
 
   _gameStream() async {
@@ -60,43 +96,29 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       switch (event.status) {
         case Status.COMPLETED:
           Navigator.pop(context);
-          !widget.isTutorial
-              ? Navigator.of(context).pushReplacement(
-                  CupertinoPageRoute(
-                    builder: (context) => RankingPage(
-                      hasAppBar: false,
-                      hasButtom: true,
-                      quiz: widget.quiz,
-                      textButtom: widget.isLogged
-                          ? "Voltar para Home"
-                          : "Voltar para o Login",
-                      onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => widget.isLogged
-                                  ? ControllerPage()
-                                  : LoginPage(),
-                            ),
-                            (route) => false);
-                      },
+          Navigator.of(context).pushReplacement(
+            CupertinoPageRoute(
+              builder: (context) => RankingPage(
+                hasAppBar: false,
+                hasButtom: true,
+                quiz: widget.quiz,
+                textButtom: widget.isLogged
+                    ? "Voltar para Home"
+                    : "Voltar para o Login",
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) =>
+                          widget.isLogged ? ControllerPage() : LoginPage(),
                     ),
-                  ),
-                )
-              : ManagerDialogs.showMessageDialog(
-                  context,
-                  "Você concluiu o tutorial!",
-                  widget.isLogged
-                      ? () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => ControllerPage(),
-                              ),
-                              (route) => false);
-                        }
-                      : null,
-                );
+                    (route) => false,
+                  );
+                },
+              ),
+            ),
+          );
+
           break;
         case Status.LOADING:
           ManagerDialogs.showLoadingDialog(context);
@@ -109,64 +131,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           break;
       }
     });
-  }
-
-  _finishGame() async {
-    Jogador jogador = Jogador(
-      nome: widget.jogadorNome,
-      pontuacao: pontuacao,
-    );
-    await _bloc.addJogador(jogador: jogador);
-    // !widget.isTutorial
-    //     ? Navigator.of(context).pushReplacement(
-    //         CupertinoPageRoute(
-    //           builder: (context) => RankingPage(
-    //             hasAppBar: false,
-    //             hasButtom: true,
-    //             quiz: widget.quiz,
-    //             textButtom: widget.isLogged
-    //                 ? "Voltar para Home"
-    //                 : "Voltar para o Login",
-    //             onTap: () {
-    //               Navigator.pushAndRemoveUntil(
-    //                   context,
-    //                   CupertinoPageRoute(
-    //                     builder: (context) =>
-    //                         widget.isLogged ? ControllerPage() : LoginPage(),
-    //                   ),
-    //                   (route) => false);
-    //             },
-    //           ),
-    //         ),
-    //       )
-    //     : ManagerDialogs.showMessageDialog(
-    //         context,
-    //         "Você concluiu o tutorial!",
-    //         widget.isLogged
-    //             ? () {
-    //                 Navigator.pushAndRemoveUntil(
-    //                     context,
-    //                     CupertinoPageRoute(
-    //                       builder: (context) => ControllerPage(),
-    //                     ),
-    //                     (route) => false);
-    //               }
-    //             : null,
-    //       );
-  }
-
-  _gerarObjetos() {
-    jogador = Jogador(
-      nome: widget.jogadorNome,
-      pontuacao: 2,
-    );
-    scoreQuiz = ScoreQuiz(
-      codigo: widget.quiz.id,
-      criador: widget.quiz.criador.nome,
-      titulo: widget.quiz.titulo,
-      totalPerguntas: widget.quiz.perguntas.length,
-      pontos: jogador.pontuacao,
-    );
   }
 
   @override
