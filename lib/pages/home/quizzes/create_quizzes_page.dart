@@ -47,7 +47,11 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
               if (quizesList.length > 0) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text("Quiz criado."),
+                    content: Text(
+                      "Quiz criado.",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    backgroundColor: bottomNavBarBackgroundColor,
                   ),
                 );
               }

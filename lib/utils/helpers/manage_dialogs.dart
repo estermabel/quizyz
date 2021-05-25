@@ -15,11 +15,10 @@ class ManagerDialogs {
           content: Text(message),
           actions: <Widget>[
             TextButton(
-              child: Text("Ok"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
+                child: Text("Ok"),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
           ],
         ),
       );
@@ -70,5 +69,50 @@ class ManagerDialogs {
         backgroundColor: Theme.of(context).accentColor,
       ),
     );
+  }
+
+  static void showMessageDialog(
+      BuildContext context, String message, Function onPressed) {
+    if (Platform.isAndroid) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Theme.of(context).backgroundColor,
+          title: Text("Atenção!"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Ok"),
+              onPressed: onPressed == null
+                  ? () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
+                  : onPressed,
+            ),
+          ],
+        ),
+      );
+    } else {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: Text("Atenção!"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Ok"),
+              onPressed: onPressed == null
+                  ? () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
+                  : onPressed,
+            )
+          ],
+        ),
+      );
+    }
   }
 }

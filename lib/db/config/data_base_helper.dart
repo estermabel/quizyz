@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 class DatabaseHelper {
   static final _databaseName = "QuizDB.db";
   static final _databaseVersion = 1;
-  static final table = 'user';
+  static final table = 'score';
   static final columnId = '_id';
   static final columnCod = 'codigo';
   static final columnTitulo = 'titulo';

@@ -67,7 +67,7 @@ class QuizzesService {
   Future deleteQuiz({@required int id}) async {
     final response = await _service.doRequest(
       RequestConfig(
-        'quizzes/delete/$id',
+        'quizzes/deletar/$id',
         HttpMethod.delete,
       ),
     );

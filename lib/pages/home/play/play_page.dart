@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/play_bloc.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
+import 'package:quizyz/db/quiz_tutorial.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/pages/home/game/game_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
@@ -8,6 +9,9 @@ import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 class PlayPage extends StatefulWidget {
+  final bool hasLeading;
+
+  const PlayPage({Key key, this.hasLeading = false}) : super(key: key);
   @override
   _PlayPageState createState() => _PlayPageState();
 }
@@ -80,6 +84,45 @@ class _PlayPageState extends State<PlayPage> {
               .textTheme
               .headline5
               .copyWith(color: accentColor),
+        ),
+        leading: widget.hasLeading
+            ? IconButton(
+                icon: IconTheme(
+                  data: Theme.of(context).iconTheme.copyWith(
+                        color: accentColor,
+                      ),
+                  child: Icon(Icons.arrow_back_ios),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            : null,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: purpleColor,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return GamePage(
+                  jogadorNome: _bloc.nomeJogadorController.text,
+                  quiz: QuizTutorial.quiz,
+                  isLogged: !widget.hasLeading,
+                  isTutorial: true,
+                );
+              },
+            ),
+          );
+        },
+        child: Text(
+          "?",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.button.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
         ),
       ),
       body: SafeArea(
