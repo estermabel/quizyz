@@ -55,7 +55,7 @@ class QuizzesService {
         RequestConfig(
           'usuarios/criar_quiz/$id',
           HttpMethod.post,
-          body: quizBody(quiz: quiz),
+          body: quiz.toJson(),
         ),
       );
       _results = Quiz.fromJson(response);

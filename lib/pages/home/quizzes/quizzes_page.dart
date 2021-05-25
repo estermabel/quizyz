@@ -27,12 +27,13 @@ class QuizzesPage extends StatefulWidget {
 
 class _QuizzesPageState extends State<QuizzesPage> {
   QuizzesBloc _bloc = QuizzesBloc();
+  User user;
 
   @override
   void initState() {
     super.initState();
     _userStream();
-    _bloc.getUser();
+    getUser();
     _quizzesStream();
     _bloc.getQuizzes();
   }
@@ -41,6 +42,10 @@ class _QuizzesPageState extends State<QuizzesPage> {
   void dispose() {
     super.dispose();
     _bloc.dispose();
+  }
+
+  void getUser() async {
+    user = await _bloc.getUser();
   }
 
   _userStream() async {
@@ -141,7 +146,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CreateQuizzesPage(),
+            builder: (context) => CreateQuizzesPage(criador: user),
           ),
         ),
         child: IconTheme(

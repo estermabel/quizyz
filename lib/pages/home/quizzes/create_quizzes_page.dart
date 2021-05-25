@@ -2,9 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/create_quiz_bloc.dart';
 import 'package:quizyz/components/create_quiz_card.dart';
 import 'package:quizyz/components/purple_button.dart';
+import 'package:quizyz/model/Pergunta.dart';
+import 'package:quizyz/model/Quiz.dart';
+import 'package:quizyz/model/Resposta.dart';
+import 'package:quizyz/model/User.dart';
+import 'package:quizyz/service/config/base_response.dart';
+import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 class CreateQuizzesPage extends StatefulWidget {
+  final User criador;
+
+  const CreateQuizzesPage({Key key, this.criador}) : super(key: key);
+
   @override
   _CreateQuizzesPageState createState() => _CreateQuizzesPageState();
 }
@@ -12,6 +22,38 @@ class CreateQuizzesPage extends StatefulWidget {
 class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
   CreateQuizBloc _bloc = CreateQuizBloc();
   List<CreateQuizCard> quizesList = [];
+
+  @override
+  void initState() {
+    _createQuizStream();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
+
+  _createQuizStream() async {
+    _bloc.createQuizStream.listen((event) async {
+      switch (event.status) {
+        case Status.COMPLETED:
+          Navigator.pop(context);
+          Navigator.pop(context);
+          break;
+        case Status.LOADING:
+          ManagerDialogs.showLoadingDialog(context);
+          break;
+        case Status.ERROR:
+          Navigator.pop(context);
+          ManagerDialogs.showErrorDialog(context, event.message);
+          break;
+        default:
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,25 +85,61 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                   ),
               child: Icon(Icons.check),
             ),
-            onPressed: () {
+            onPressed: () async {
               if (quizesList.length > 0) {
-                quizesList.forEach((element) {
-                  if (_bloc.tituloController.text.isNotEmpty &&
-                      element.perguntaController.text.isNotEmpty &&
-                      element.resposta1Controller.text.isNotEmpty &&
-                      element.resposta2Controller.text.isNotEmpty &&
-                      element.resposta3Controller.text.isNotEmpty &&
-                      element.resposta4Controller.text.isNotEmpty) {
-                    // TODO: Criar objeto aqui.
+                List<Resposta> respostas = [];
+                List<Pergunta> perguntas = [];
+                quizesList.forEach(
+                  (elementQuestions) {
+                    if (_bloc.tituloController.text.isNotEmpty &&
+                        elementQuestions.perguntaController.text.isNotEmpty &&
+                        elementQuestions.resposta1Controller.text.isNotEmpty &&
+                        elementQuestions.resposta2Controller.text.isNotEmpty &&
+                        elementQuestions.resposta3Controller.text.isNotEmpty &&
+                        elementQuestions.resposta4Controller.text.isNotEmpty) {
+                      respostas.addAll([
+                        Resposta(
+                            id: 1,
+                            isCerta: false,
+                            titulo: elementQuestions.resposta1Controller.text),
+                        Resposta(
+                            id: 2,
+                            isCerta: false,
+                            titulo: elementQuestions.resposta2Controller.text),
+                        Resposta(
+                            id: 3,
+                            isCerta: false,
+                            titulo: elementQuestions.resposta3Controller.text),
+                        Resposta(
+                            id: 4,
+                            isCerta: false,
+                            titulo: elementQuestions.resposta4Controller.text)
+                      ]);
+                      respostas.forEach((element) {
+                        if (element.id == elementQuestions.value) {
+                          element.isCerta = true;
+                        }
+                      });
+                      perguntas.add(Pergunta(
+                          titulo: elementQuestions.perguntaController.text,
+                          respostas: respostas));
+                    } else {
+                      return ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Preencha o quiz!"),
+                        ),
+                      );
+                    }
+                  },
+                );
 
-                  } else {
-                    return ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Preencha o quiz!"),
-                      ),
-                    );
-                  }
-                });
+                Quiz quiz = Quiz(
+                  titulo: _bloc.tituloController.text,
+                  perguntas: perguntas,
+                  criador: widget.criador,
+                );
+
+                await _bloc.createQuiz(quiz: quiz);
               }
             },
           ),
