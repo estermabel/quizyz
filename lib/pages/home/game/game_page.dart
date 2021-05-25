@@ -7,6 +7,7 @@ import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/Resposta.dart';
 import 'package:quizyz/pages/home/game/ranking_page.dart';
 import 'package:quizyz/pages/login_page.dart';
+import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 import '../../controller_page.dart';
@@ -15,8 +16,13 @@ class GamePage extends StatefulWidget {
   final String jogadorNome;
   final Quiz quiz;
   final bool isLogged;
+  final bool isTutorial;
 
-  GamePage({@required this.jogadorNome, this.quiz, this.isLogged});
+  GamePage(
+      {@required this.jogadorNome,
+      this.quiz,
+      this.isLogged,
+      this.isTutorial = false});
 
   @override
   _GamePageState createState() => _GamePageState();
@@ -43,26 +49,42 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
   _finishGame() async {
     _controller.dispose();
-    Navigator.of(context).pushReplacement(
-      CupertinoPageRoute(
-        builder: (context) => RankingPage(
-          hasAppBar: false,
-          hasButtom: true,
-          quiz: widget.quiz,
-          textButtom:
-              widget.isLogged ? "Voltar para Home" : "Voltar para o Login",
-          onTap: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) =>
-                      widget.isLogged ? ControllerPage() : LoginPage(),
-                ),
-                (route) => false);
-          },
-        ),
-      ),
-    );
+    !widget.isTutorial
+        ? Navigator.of(context).pushReplacement(
+            CupertinoPageRoute(
+              builder: (context) => RankingPage(
+                hasAppBar: false,
+                hasButtom: true,
+                quiz: widget.quiz,
+                textButtom: widget.isLogged
+                    ? "Voltar para Home"
+                    : "Voltar para o Login",
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) =>
+                            widget.isLogged ? ControllerPage() : LoginPage(),
+                      ),
+                      (route) => false);
+                },
+              ),
+            ),
+          )
+        : ManagerDialogs.showMessageDialog(
+            context,
+            "Você concluiu o tutorial!",
+            widget.isLogged
+                ? () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => ControllerPage(),
+                        ),
+                        (route) => false);
+                  }
+                : null,
+          );
   }
 
   @override
