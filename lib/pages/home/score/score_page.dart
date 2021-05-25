@@ -84,14 +84,11 @@ class _ScorePageState extends State<ScorePage> {
                         if (snapshot.data?.data != null) {
                           snapshot.data.data.forEach((quiz) {
                             _bloc.scoreQuizzesList.add(
-                              Padding(
-                                padding: const EdgeInsets.only(top: 32),
-                                child: ScoreQuizCard(
-                                  criador: quiz.criador,
-                                  titulo: quiz.titulo,
-                                  qtdPerguntas: quiz.totalPerguntas,
-                                  qtdPontos: quiz.pontos,
-                                ),
+                              ScoreQuizCard(
+                                criador: quiz.criador,
+                                titulo: quiz.titulo,
+                                qtdPerguntas: quiz.totalPerguntas,
+                                qtdPontos: quiz.pontos,
                               ),
                             );
                           });
