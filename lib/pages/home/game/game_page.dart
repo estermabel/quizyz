@@ -200,6 +200,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
             percent: animateAppProgress(),
             backgroundColor: whiteColor,
             progressColor: blueColor,
+            animation: true,
+            animationDuration: 30,
+            padding: EdgeInsets.zero,
           ),
         ),
       ),
@@ -245,14 +248,14 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             if (ponteiro < widget.quiz.perguntas.length - 1) {
                               setState(() {
                                 runFunction = !runFunction;
+                                calculateScore();
                                 key.currentState.showAnswer = false;
                                 key.currentState.radioIndex = null;
 
                                 ponteiro++;
-                                animateAppProgress();
                               });
                             } else {
-                              animateAppProgress();
+                              calculateScore();
                               await _finishGame();
                             }
                           });
@@ -304,5 +307,17 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     print("Quantidade divido por 100 ${quantidade / 100}");
 
     return quantidade / 100;
+  }
+
+  void calculateScore() {
+    for (int i = 0; i < widget.quiz.perguntas[ponteiro].respostas.length; i++) {
+      if (widget.quiz.perguntas[ponteiro].respostas[i].isCerta) {
+        if (i == key.currentState.radioIndex) {
+          pontuacao++;
+          break;
+        }
+      }
+    }
+    print("Pontuação -> $pontuacao");
   }
 }
