@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -50,12 +51,13 @@ class QuizzesService {
 
   Future createQuiz({@required Quiz quiz}) async {
     var _results;
+    developer.log(quiz.toJsonPost().toString(), name: "Quizyz");
     await CustomSharedPreferences.readId().then((id) async {
       final response = await _service.doRequest(
         RequestConfig(
           'usuarios/criar_quiz/$id',
           HttpMethod.post,
-          body: quiz.toJson(),
+          body: quiz.toJsonPost(),
         ),
       );
       _results = Quiz.fromJson(response);
@@ -78,7 +80,7 @@ class QuizzesService {
   Map<String, dynamic> quizBody({@required Quiz quiz}) {
     var body = {
       "titulo": quiz.titulo,
-      "perguntas": jsonEncode(quiz.perguntas),
+      "perguntas": null,
     };
     return body;
   }
