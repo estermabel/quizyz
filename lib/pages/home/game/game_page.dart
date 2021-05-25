@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:quizyz/bloc/game_flow_bloc.dart';
 
+import 'package:quizyz/bloc/score_bloc.dart';
 import 'package:quizyz/components/answer_component.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
 import 'package:quizyz/model/Jogador.dart';
+import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/Pergunta.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/Resposta.dart';
+import 'package:quizyz/model/ScoreQuiz.dart';
 import 'package:quizyz/pages/home/game/ranking_page.dart';
 import 'package:quizyz/pages/login_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
@@ -34,6 +37,7 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
+  ScoreBloc _scoreBloc = ScoreBloc();
   final key = new GlobalKey<AnswerComponentState>();
   GameFlowBloc _bloc = GameFlowBloc();
   int ponteiro = 0;
@@ -41,6 +45,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   bool runFunction = true;
   int quantidadeDePerguntas;
   int pontuacao = 0;
+  ScoreQuiz scoreQuiz;
+  Jogador jogador;
 
   @override
   void initState() {
@@ -149,6 +155,20 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     //       );
   }
 
+  _gerarObjetos() {
+    jogador = Jogador(
+      nome: widget.jogadorNome,
+      pontuacao: 2,
+    );
+    scoreQuiz = ScoreQuiz(
+      codigo: widget.quiz.id,
+      criador: widget.quiz.criador.nome,
+      titulo: widget.quiz.titulo,
+      totalPerguntas: widget.quiz.perguntas.length,
+      pontos: jogador.pontuacao,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -229,8 +249,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                 key.currentState.radioIndex = null;
 
                                 ponteiro++;
+                                animateAppProgress();
                               });
                             } else {
+                              animateAppProgress();
                               await _finishGame();
                             }
                           });

@@ -58,4 +58,13 @@ class Quiz {
     data['titulo'] = this.titulo;
     return data;
   }
+
+  Map<String, dynamic> toJsonPost() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.perguntas != null) {
+      data['perguntas'] = this.perguntas.map((v) => v.toJsonPost()).toList();
+    }
+    data['titulo'] = this.titulo;
+    return data;
+  }
 }

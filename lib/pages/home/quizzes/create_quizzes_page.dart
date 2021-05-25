@@ -2,16 +2,58 @@ import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/create_quiz_bloc.dart';
 import 'package:quizyz/components/create_quiz_card.dart';
 import 'package:quizyz/components/purple_button.dart';
+import 'package:quizyz/model/Pergunta.dart';
+import 'package:quizyz/model/Quiz.dart';
+import 'package:quizyz/model/Resposta.dart';
+import 'package:quizyz/model/User.dart';
+import 'package:quizyz/service/config/base_response.dart';
+import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
 class CreateQuizzesPage extends StatefulWidget {
+  final User criador;
+
+  const CreateQuizzesPage({Key key, this.criador}) : super(key: key);
+
   @override
   _CreateQuizzesPageState createState() => _CreateQuizzesPageState();
 }
 
 class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
   CreateQuizBloc _bloc = CreateQuizBloc();
-  List<Widget> quizesList = [];
+  List<CreateQuizCard> quizesList = [];
+
+  @override
+  void initState() {
+    _createQuizStream();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
+
+  _createQuizStream() async {
+    _bloc.createQuizStream.listen((event) async {
+      switch (event.status) {
+        case Status.COMPLETED:
+          Navigator.pop(context);
+          Navigator.pop(context);
+          break;
+        case Status.LOADING:
+          ManagerDialogs.showLoadingDialog(context);
+          break;
+        case Status.ERROR:
+          Navigator.pop(context);
+          ManagerDialogs.showErrorDialog(context, event.message);
+          break;
+        default:
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +85,61 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                   ),
               child: Icon(Icons.check),
             ),
-            onPressed: () {
+            onPressed: () async {
               if (quizesList.length > 0) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      "Quiz criado.",
-                      style: Theme.of(context).textTheme.subtitle1,
-                    ),
-                    backgroundColor: bottomNavBarBackgroundColor,
-                  ),
+                List<Resposta> respostas = [];
+                List<Pergunta> perguntas = [];
+                quizesList.forEach(
+                  (elementQuestions) {
+                    if (_bloc.tituloController.text.isNotEmpty &&
+                        elementQuestions.perguntaController.text.isNotEmpty &&
+                        elementQuestions.resposta1Controller.text.isNotEmpty &&
+                        elementQuestions.resposta2Controller.text.isNotEmpty &&
+                        elementQuestions.resposta3Controller.text.isNotEmpty &&
+                        elementQuestions.resposta4Controller.text.isNotEmpty) {
+                      respostas.addAll([
+                        Resposta(
+                            id: 1,
+                            isCerta: false,
+                            titulo: elementQuestions.resposta1Controller.text),
+                        Resposta(
+                            id: 2,
+                            isCerta: false,
+                            titulo: elementQuestions.resposta2Controller.text),
+                        Resposta(
+                            id: 3,
+                            isCerta: false,
+                            titulo: elementQuestions.resposta3Controller.text),
+                        Resposta(
+                            id: 4,
+                            isCerta: false,
+                            titulo: elementQuestions.resposta4Controller.text)
+                      ]);
+                      respostas.forEach((element) {
+                        if (element.id == elementQuestions.value) {
+                          element.isCerta = true;
+                        }
+                      });
+                      perguntas.add(Pergunta(
+                          titulo: elementQuestions.perguntaController.text,
+                          respostas: respostas));
+                    } else {
+                      return ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Preencha o quiz!"),
+                        ),
+                      );
+                    }
+                  },
                 );
+
+                Quiz quiz = Quiz(
+                  titulo: _bloc.tituloController.text,
+                  perguntas: perguntas,
+                  criador: widget.criador,
+                );
+
+                await _bloc.createQuiz(quiz: quiz);
               }
             },
           ),
@@ -79,33 +165,53 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                   itemCount: quizesList.length,
                 ),
               ),
-              Visibility(
-                visible: (quizesList.length < 10 ? true : false),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 32.0, right: 16, left: 16),
-                    child: PurpleButton(
-                      titulo: "Adicionar pergunta",
-                      onTap: () {
-                        if (quizesList.length < 10) {
-                          setState(
-                            () {
-                              int size = quizesList.length + 1;
-                              quizesList.add(
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 16),
-                                  child: CreateQuizCard(
-                                    pergunta: "Pergunta " + size.toString(),
-                                  ),
-                                ),
+                  child: Row(
+                    mainAxisAlignment: quizesList.length < 10
+                        ? MainAxisAlignment.spaceAround
+                        : MainAxisAlignment.center,
+                    children: [
+                      Visibility(
+                        visible: quizesList.length < 10 ? true : false,
+                        child: PurpleButton(
+                          titulo: "Adicionar pergunta",
+                          onTap: () {
+                            if (quizesList.length < 10) {
+                              setState(
+                                () {
+                                  int size = quizesList.length + 1;
+                                  quizesList.add(
+                                    CreateQuizCard(
+                                      pergunta: "Pergunta " + size.toString(),
+                                    ),
+                                  );
+                                },
                               );
-                            },
-                          );
-                        }
-                      },
-                    ),
+                            }
+                          },
+                        ),
+                      ),
+                      quizesList.length >= 10
+                          ? PurpleButton(
+                              titulo: "Remover Pergunta",
+                              onTap: () => setState(() => quizesList.length > 0
+                                  ? quizesList.removeLast()
+                                  : null),
+                            )
+                          : IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                size: 35,
+                              ),
+                              onPressed: () => setState(() =>
+                                  quizesList.length > 0
+                                      ? quizesList.removeLast()
+                                      : null),
+                            )
+                    ],
                   ),
                 ),
               )
