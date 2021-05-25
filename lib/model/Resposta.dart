@@ -18,4 +18,11 @@ class Resposta {
     data['isCerta'] = this.isCerta;
     return data;
   }
+
+  Map<String, dynamic> toJsonPost() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['titulo'] = this.titulo;
+    data['isCerta'] = this.isCerta;
+    return data;
+  }
 }

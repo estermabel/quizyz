@@ -27,4 +27,13 @@ class Pergunta {
     }
     return data;
   }
+
+  Map<String, dynamic> toJsonPost() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['titulo'] = this.titulo;
+    if (this.respostas != null) {
+      data['respostas'] = this.respostas.map((v) => v.toJsonPost()).toList();
+    }
+    return data;
+  }
 }

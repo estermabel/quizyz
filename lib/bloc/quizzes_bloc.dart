@@ -30,11 +30,12 @@ class QuizzesBloc {
     _quizzesController = StreamController.broadcast();
   }
 
-  getUser() async {
+  Future<User> getUser() async {
     try {
       userSink.add(BaseResponse.loading());
       User response = await _service.getUser();
       userSink.add(BaseResponse.completed(data: response));
+      return response;
     } catch (e) {
       try {
         userSink.add(BaseResponse.error(e.response.data["error"]));
