@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:quizyz/model/Quiz.dart';
+import 'package:quizyz/model/ScoreQuiz.dart';
 import 'package:quizyz/model/User.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -51,14 +52,28 @@ class DatabaseHelper {
           ''');
   }
 
-  Future<int> insert(Map<String, dynamic> body) async {
+  Future<ScoreQuiz> insert(ScoreQuiz quiz) async {
     Database db = await instance.database;
-    return await db.insert(table, body);
+    quiz.id = await db.insert(table, quiz.toJson());
+    return quiz;
   }
 
-  Future<List<Map<String, dynamic>>> getAllRows() async {
+  Future<List<ScoreQuiz>> getQuizzes() async {
     Database db = await instance.database;
-    return await db.query(table);
+    List<Map> maps = await db.query(table, columns: [
+      columnId,
+      columnCod,
+      columnTitulo,
+      columnTotalPerguntas,
+      columnPontos
+    ]);
+    List<ScoreQuiz> quizzes = [];
+    if (maps.length > 0) {
+      for (int i = 0; i < maps.length; i++) {
+        quizzes.add(ScoreQuiz.fromJson(maps[i]));
+      }
+    }
+    return quizzes;
   }
 
   Future<int> getRowCount() async {
