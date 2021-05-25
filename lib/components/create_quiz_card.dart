@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/utils/style/colors.dart';
 
+// ignore: must_be_immutable
 class CreateQuizCard extends StatefulWidget {
   final String pergunta;
 
-  CreateQuizCard({@required this.pergunta});
+  CreateQuizCard({Key key, @required this.pergunta}) : super(key: key);
+
+  // TextEdittingController
+  final TextEditingController perguntaController = new TextEditingController();
+  final TextEditingController resposta1Controller = new TextEditingController();
+  final TextEditingController resposta2Controller = new TextEditingController();
+  final TextEditingController resposta3Controller = new TextEditingController();
+  final TextEditingController resposta4Controller = new TextEditingController();
+
+  // Radio button value
+  int value = 1;
 
   @override
-  _CreateQuizCardState createState() => _CreateQuizCardState();
+  CreateQuizCardState createState() => CreateQuizCardState();
 }
 
-class _CreateQuizCardState extends State<CreateQuizCard> {
-  // Radio button value
-  int _value = 1;
-
-  //TextEdittingController
-  TextEditingController _perguntaController = new TextEditingController();
-  TextEditingController _resposta1Controller = new TextEditingController();
-  TextEditingController _resposta2Controller = new TextEditingController();
-  TextEditingController _resposta3Controller = new TextEditingController();
-  TextEditingController _resposta4Controller = new TextEditingController();
-
+class CreateQuizCardState extends State<CreateQuizCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,7 +37,7 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: TextField(
-                controller: _perguntaController,
+                controller: widget.perguntaController,
                 decoration: InputDecoration(
                   labelText: "Pergunta",
                   labelStyle: Theme.of(context).textTheme.bodyText1,
@@ -53,18 +54,18 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
                     ),
                     child: Radio(
                       value: 1,
-                      groupValue: _value,
+                      groupValue: widget.value,
                       activeColor: whiteColor,
                       onChanged: (value) {
                         setState(() {
-                          _value = value;
+                          widget.value = value;
                         });
                       },
                     ),
                   ),
                   Expanded(
                     child: TextField(
-                      controller: _resposta1Controller,
+                      controller: widget.resposta1Controller,
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -93,17 +94,17 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
                     child: Radio(
                       value: 2,
                       activeColor: whiteColor,
-                      groupValue: _value,
+                      groupValue: widget.value,
                       onChanged: (value) {
                         setState(() {
-                          _value = value;
+                          widget.value = value;
                         });
                       },
                     ),
                   ),
                   Expanded(
                     child: TextField(
-                      controller: _resposta2Controller,
+                      controller: widget.resposta2Controller,
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: whiteColor),
@@ -127,18 +128,18 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
                     ),
                     child: Radio(
                       value: 3,
-                      groupValue: _value,
+                      groupValue: widget.value,
                       activeColor: whiteColor,
                       onChanged: (value) {
                         setState(() {
-                          _value = value;
+                          widget.value = value;
                         });
                       },
                     ),
                   ),
                   Expanded(
                     child: TextField(
-                      controller: _resposta3Controller,
+                      controller: widget.resposta3Controller,
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: whiteColor),
@@ -163,17 +164,17 @@ class _CreateQuizCardState extends State<CreateQuizCard> {
                     child: Radio(
                       value: 4,
                       activeColor: whiteColor,
-                      groupValue: _value,
+                      groupValue: widget.value,
                       onChanged: (value) {
                         setState(() {
-                          _value = value;
+                          widget.value = value;
                         });
                       },
                     ),
                   ),
                   Expanded(
                     child: TextField(
-                      controller: _resposta4Controller,
+                      controller: widget.resposta4Controller,
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: whiteColor),
