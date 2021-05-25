@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:quizyz/model/Jogador.dart';
 import 'package:quizyz/model/User.dart';
 import 'package:quizyz/service/config/api_service.dart';
@@ -22,7 +24,7 @@ class GameService {
             },
           ),
         );
-        _results = User.fromJson(response);
+        _results = json.decode(response);
       },
     );
     return _results;
