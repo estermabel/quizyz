@@ -6,14 +6,12 @@ class ScoreDb {
   final db = DatabaseHelper.instance;
 
   Future<List<ScoreQuiz>> getScoreQuizzes() async {
-    final List<Map<String, dynamic>> response = await db.getAllRows();
-    List<ScoreQuiz> _quizzes =
-        (response).map((e) => ScoreQuiz.fromJson(e)).toList();
+    final List<ScoreQuiz> _quizzes = await db.getQuizzes();
     return _quizzes;
   }
 
   Future addQuizToDB({ScoreQuiz quiz}) async {
-    int response = await db.insert(quiz.toJson());
+    ScoreQuiz response = await db.insert(quiz);
     debugPrint('Quiz $response inserido.');
   }
 }
