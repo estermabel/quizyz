@@ -144,13 +144,11 @@ class _QuizzesPageState extends State<QuizzesPage> {
               StreamBuilder<String>(
                 stream: _bloc.userStream,
                 builder: (context, snapshot) {
-
                   if (snapshot.data != null) {
                     return Text(
                       "Oie ${snapshot.data},",
                       style: Theme.of(context).textTheme.headline6,
                     );
-
                   } else {
                     return Container();
                   }
@@ -175,18 +173,21 @@ class _QuizzesPageState extends State<QuizzesPage> {
                           snapshot.data.data.forEach(
                             (quiz) {
                               _bloc.meusQuizzesList.add(
-                                MyQuizCard(
-                                  codigo: quiz.id,
-                                  titulo: quiz.titulo,
-                                  qtdPerguntas: quiz.perguntas.length,
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RankingPage(
-                                        quiz: quiz,
-                                        hasAppBar: true,
-                                        textButtom: "",
-                                        hasButtom: false,
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 16),
+                                  child: MyQuizCard(
+                                    codigo: quiz.id,
+                                    titulo: quiz.titulo,
+                                    qtdPerguntas: quiz.perguntas.length,
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => RankingPage(
+                                          quiz: quiz,
+                                          hasAppBar: true,
+                                          textButtom: "",
+                                          hasButtom: false,
+                                        ),
                                       ),
                                     ),
                                   ),
