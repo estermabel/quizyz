@@ -49,8 +49,12 @@ class PlayBloc {
       playQuizSink.add(BaseResponse.loading());
       Quiz response = await _service.getQuizById(cod: cod);
       playQuizSink.add(BaseResponse.completed(data: response));
-    } catch (e) {
-      playQuizSink.add(BaseResponse.error(e.toString()));
+    } catch (e, stackTrace) {
+      if (stackTrace != null) {
+        playQuizSink.add(BaseResponse.error("Esse quiz não existe!"));
+      } else {
+        playQuizSink.add(BaseResponse.error(e.toString()));
+      }
     }
   }
 

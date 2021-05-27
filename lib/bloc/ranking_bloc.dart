@@ -47,6 +47,7 @@ class RankingBloc {
       quizSink.add(BaseResponse.completed(data: response));
     } catch (e) {
       quizSink.add(BaseResponse.error(e.toString()));
+
     }
   }
 
