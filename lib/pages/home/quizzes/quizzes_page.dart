@@ -193,7 +193,11 @@ class _QuizzesPageState extends State<QuizzesPage> {
                             shrinkWrap: true,
                             itemCount: _bloc.meusQuizzesList?.length,
                             itemBuilder: (context, index) {
-                              return _bloc.meusQuizzesList[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, bottom: 8.0),
+                                child: _bloc.meusQuizzesList[index],
+                              );
                             },
                           ),
                         );

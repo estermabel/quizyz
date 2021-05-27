@@ -89,7 +89,7 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                 if (quizesList.length > 0) {
                   List<Pergunta> perguntas = [];
                   bool runBloc = true;
-                  // TODO: Fix para bug estranho na criação de quiz
+                  // Fix para bug estranho na criação de quiz
                   for (int i = 0; i < quizesList.length; i++) {
                     if (_bloc.tituloController.text.isNotEmpty &&
                         quizesList[i].perguntaController.text.isNotEmpty &&

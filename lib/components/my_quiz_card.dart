@@ -35,6 +35,7 @@ class MyQuizCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.subtitle1.copyWith(
                         color: blueColor,
                       ),
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
