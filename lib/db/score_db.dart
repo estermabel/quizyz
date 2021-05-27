@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:quizyz/db/config/data_base_helper.dart';
 import 'package:quizyz/model/ScoreQuiz.dart';
 
@@ -11,7 +10,6 @@ class ScoreDb {
   }
 
   Future addQuizToDB({ScoreQuiz quiz}) async {
-    ScoreQuiz response = await db.insert(quiz);
-    debugPrint('Quiz $response inserido.');
+    await db.insert(quiz);
   }
 }

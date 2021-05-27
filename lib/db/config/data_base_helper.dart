@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/ScoreQuiz.dart';
@@ -12,23 +13,20 @@ class DatabaseHelper {
   static final table = 'score';
   static final columnId = '_id';
   static final columnCod = 'codigo';
+  static final columnCriador = 'criador';
   static final columnTitulo = 'titulo';
   static final columnPontos = 'pontos';
   static final columnTotalPerguntas = 'totalPerguntas';
-  // torna esta classe singleton
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
-  // tem somente uma referência ao banco de dados
   static Database _database;
 
   Future<Database> get database async {
     if (_database != null) return _database;
-    // instancia o db na primeira vez que for acessado
     _database = await _initDatabase();
     return _database;
   }
 
-  // abre o banco de dados e o cria se ele não existir
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
@@ -39,12 +37,12 @@ class DatabaseHelper {
     );
   }
 
-  // Código SQL para criar o banco de dados e a tabela
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE $table (
-            $columnId INTEGER PRIMARY KEY,
+            $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
             $columnCod INTEGER NOT NULL,
+            $columnCriador TEXT NOT NULL,
             $columnTitulo TEXT NOT NULL,
             $columnPontos INTEGER NOT NULL,
             $columnTotalPerguntas INTEGER NOT NULL
@@ -52,49 +50,42 @@ class DatabaseHelper {
           ''');
   }
 
-  Future<ScoreQuiz> insert(ScoreQuiz quiz) async {
-    Database db = await instance.database;
-    quiz.id = await db.insert(table, quiz.toJson());
-    return quiz;
+  Future insert(ScoreQuiz quiz) async {
+    final db = await database;
+    quiz.id = await db.insert(
+      table,
+      quiz.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    print(quiz.id);
   }
 
   Future<List<ScoreQuiz>> getQuizzes() async {
-    Database db = await instance.database;
-    List<Map> maps = await db.query(table, columns: [
-      columnId,
-      columnCod,
-      columnTitulo,
-      columnTotalPerguntas,
-      columnPontos
-    ]);
-    List<ScoreQuiz> quizzes = [];
-    if (maps.length > 0) {
-      for (int i = 0; i < maps.length; i++) {
-        quizzes.add(ScoreQuiz.fromJson(maps[i]));
-      }
-    }
+    final db = await database;
+    var response = await db.query(table);
+
+    List<ScoreQuiz> quizzes = response
+        .map(
+          (e) => ScoreQuiz.fromJson(e),
+        )
+        .toList();
+
     return quizzes;
   }
 
-  Future<int> getRowCount() async {
-    Database db = await instance.database;
-    return Sqflite.firstIntValue(
-        await db.rawQuery('SELECT COUNT(*) FROM $table'));
-  }
-
   Future<int> update(Map<String, dynamic> row) async {
-    Database db = await instance.database;
+    final db = await database;
     int id = row[columnId];
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
   }
 
   Future<int> delete(int id) async {
-    Database db = await instance.database;
+    final db = await database;
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
 
   Future<dynamic> deleteDB() async {
-    Database db = await instance.database;
+    final db = await database;
     await db.delete(table);
   }
 }

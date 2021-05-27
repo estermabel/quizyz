@@ -34,7 +34,6 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
-  ScoreBloc _scoreBloc = ScoreBloc();
   GameFlowBloc _bloc = GameFlowBloc();
 
   final key = new GlobalKey<AnswerComponentState>();
@@ -55,13 +54,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       nome: widget.jogadorNome,
       pontuacao: pontuacao,
     );
-    ScoreQuiz scoreQuiz = ScoreQuiz(
-      codigo: widget.quiz.id,
-      criador: widget.quiz.criador.nome,
-      titulo: widget.quiz.titulo,
-      totalPerguntas: widget.quiz.perguntas.length,
-      pontos: jogador.pontuacao,
-    );
+
     _gameStream();
     widget.isTutorial
         ? ManagerDialogs.showMessageDialog(
@@ -79,15 +72,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                 : null,
             false,
           )
-        : await _bloc
-            .addJogador(
+        : await _bloc.addJogador(
             jogador: jogador,
-            quizId: widget.quiz.id,
-          )
-            .then(
-            (value) async {
-              await _scoreBloc.insertQuiz(quiz: scoreQuiz);
-            },
+            quiz: widget.quiz,
           );
   }
 
