@@ -197,7 +197,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           child: LinearPercentIndicator(
             width: MediaQuery.of(context).size.width,
             lineHeight: 4.0,
-            percent: animateAppProgress(),
+            percent: appBarProgress,
             backgroundColor: whiteColor,
             progressColor: blueColor,
             animation: true,
@@ -249,12 +249,14 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                               setState(() {
                                 runFunction = !runFunction;
                                 calculateScore();
+                                animateAppProgress();
                                 key.currentState.showAnswer = false;
                                 key.currentState.radioIndex = null;
 
                                 ponteiro++;
                               });
                             } else {
+                              animateAppProgress();
                               calculateScore();
                               await _finishGame();
                             }
@@ -290,14 +292,14 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     );
   }
 
-  double animateAppProgress() {
+  void animateAppProgress() {
     if (quantidadeDePerguntas <= 1) {
-      return 1.0;
+      appBarProgress = 1.0;
     }
 
     if (quantidadeDePerguntas == widget.quiz.perguntas.length + 1) {
       --quantidadeDePerguntas;
-      return 0.0;
+      appBarProgress = 0.0;
     }
 
     double quantidade = 100 / --quantidadeDePerguntas;
@@ -306,7 +308,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
     print("Quantidade divido por 100 ${quantidade / 100}");
 
-    return quantidade / 100;
+    appBarProgress = quantidade / 100;
+
+    print(appBarProgress);
   }
 
   void calculateScore() {
