@@ -14,26 +14,23 @@ class RankingListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            nomeJogador,
-            style: Theme.of(context).textTheme.headline6.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          Text(
-            "$pontosJogador/$qtdPerguntas",
-            style: Theme.of(context).textTheme.headline6.copyWith(
-                  color: accentColor,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          nomeJogador,
+          style: Theme.of(context).textTheme.headline6.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+        Text(
+          "$pontosJogador/$qtdPerguntas",
+          style: Theme.of(context).textTheme.headline6.copyWith(
+                color: accentColor,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      ],
     );
   }
 }

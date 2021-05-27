@@ -135,7 +135,11 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                         runBloc = false;
                         return ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text("Preencha o quiz!"),
+                            content: Text(
+                              "Preencha o quiz!",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            backgroundColor: bottomNavBarBackgroundColor,
                           ),
                         );
                       }

@@ -164,7 +164,7 @@ class _RankingPageState extends State<RankingPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(64, 72, 64, 16),
+              padding: const EdgeInsets.fromLTRB(64, 32, 64, 16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -191,19 +191,24 @@ class _RankingPageState extends State<RankingPage> {
                               );
                             }
 
-                            return Flexible(
-                              fit: FlexFit.loose,
+                            return Container(
+                              height: 390,
                               child: ListView.builder(
                                 shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
                                 itemCount: _bloc.jogadoresList?.length,
                                 itemBuilder: (context, index) {
-                                  return RankingListItem(
-                                    nomeJogador:
-                                        _bloc.jogadoresList[index].nome,
-                                    pontosJogador:
-                                        _bloc.jogadoresList[index].pontuacao,
-                                    qtdPerguntas: widget.quiz.perguntas.length,
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                      top: index >= 1 ? 16 : 0,
+                                    ),
+                                    child: RankingListItem(
+                                      nomeJogador:
+                                          _bloc.jogadoresList[index].nome,
+                                      pontosJogador:
+                                          _bloc.jogadoresList[index].pontuacao,
+                                      qtdPerguntas:
+                                          widget.quiz.perguntas.length,
+                                    ),
                                   );
                                 },
                               ),

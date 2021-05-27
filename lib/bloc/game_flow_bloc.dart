@@ -17,14 +17,20 @@ class GameFlowBloc {
     _gameController = StreamController();
   }
 
-  Future<void> addJogador({Jogador jogador}) async {
+  Future<void> addJogador({Jogador jogador, int quizId}) async {
     try {
       gameSink.add(BaseResponse.loading());
-      var response = await _service.createJogador(jogador: jogador);
+      var response = await _service.createJogador(
+        jogador: jogador,
+        quizId: quizId,
+      );
       gameSink.add(BaseResponse.completed(data: response));
-    } catch (e, stackTrace) {
-      developer.log(stackTrace.toString(), name: "Quizyz");
-      gameSink.add(BaseResponse.error(e.toString()));
+    } catch (e) {
+      if (e.source == "Jogador Adicionado ao Quiz com Sucesso!") {
+        gameSink.add(BaseResponse.completed());
+      } else {
+        gameSink.add(BaseResponse.error(e.source));
+      }
     }
   }
 
