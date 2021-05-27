@@ -1,10 +1,9 @@
 import 'dart:io';
 import 'package:path/path.dart';
-import 'package:quizyz/model/Quiz.dart';
-import 'package:quizyz/model/ScoreQuiz.dart';
-import 'package:quizyz/model/User.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+
+import 'package:quizyz/model/ScoreQuiz.dart';
 
 class DatabaseHelper {
   static final _databaseName = "QuizDB.db";

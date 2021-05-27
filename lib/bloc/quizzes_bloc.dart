@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:quizyz/model/Quiz.dart';
-import 'package:quizyz/model/User.dart';
 import 'package:quizyz/service/config/api_service.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/service/login_service.dart';

@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'dart:async';
 
 import 'package:quizyz/model/Jogador.dart';

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/score_bloc.dart';
-import 'package:quizyz/components/my_quiz_card.dart';
 import 'package:quizyz/components/native_loading.dart';
 import 'package:quizyz/components/score_quiz_card.dart';
-import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/ScoreQuiz.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/helpers/manage_dialogs.dart';
