@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:quizyz/bloc/game_flow_bloc.dart';
 
 import 'package:quizyz/bloc/score_bloc.dart';
