@@ -143,34 +143,38 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
             Navigator.pop(context);
           },
         ),
-        flexibleSpace: Align(
-          alignment: Alignment.bottomCenter,
-          child: LinearPercentIndicator(
-            width: MediaQuery.of(context).size.width,
-            lineHeight: 4.0,
-            percent: appBarProgress,
-            backgroundColor: whiteColor,
-            progressColor: blueColor,
-            animation: true,
-            animationDuration: 30,
-            padding: EdgeInsets.zero,
-          ),
-        ),
       ),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.only(top: 32.0, right: 16.0, left: 16.0),
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                  widget.quiz.perguntas[ponteiro].titulo,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      .copyWith(fontSize: 26, fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.center,
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Text(
+                    "${appBarProgress.round()}/${widget.quiz.perguntas.length}",
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: accentColor,
+                        ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 22.0),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Text(
+                    widget.quiz.perguntas[ponteiro].titulo,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        .copyWith(fontSize: 26, fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               Padding(
@@ -244,24 +248,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   }
 
   void animateAppProgress() {
-    if (quantidadeDePerguntas <= 1) {
-      appBarProgress = 1.0;
-    }
-
-    if (quantidadeDePerguntas == widget.quiz.perguntas.length + 1) {
-      --quantidadeDePerguntas;
-      appBarProgress = 0.0;
-    }
-
-    double quantidade = 100 / --quantidadeDePerguntas;
-
-    print("Quantidade de perguntas $quantidadeDePerguntas");
-
-    print("Quantidade divido por 100 ${quantidade / 100}");
-
-    appBarProgress = quantidade / 100;
-
-    print(appBarProgress);
+    appBarProgress++;
   }
 
   void calculateScore() {

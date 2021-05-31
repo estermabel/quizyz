@@ -41,24 +41,6 @@ class _ScorePageState extends State<ScorePage> {
               .headline5
               .copyWith(color: accentColor),
         ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              _bloc.getScore();
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: IconTheme(
-                data: Theme.of(context).iconTheme.copyWith(
-                      color: accentColor,
-                    ),
-                child: Icon(
-                  Icons.refresh,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
         child: Padding(
