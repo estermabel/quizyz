@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/service/config/api_service.dart';
 import 'package:quizyz/service/config/base_response.dart';
-import 'package:quizyz/service/game_service.dart';
 import 'package:quizyz/service/quizzes_service.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 

@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:quizyz/model/Jogador.dart';
-import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/service/config/api_service.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/service/game_service.dart';
@@ -47,7 +44,6 @@ class RankingBloc {
       quizSink.add(BaseResponse.completed(data: response));
     } catch (e) {
       quizSink.add(BaseResponse.error(e.toString()));
-
     }
   }
 
