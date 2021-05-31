@@ -32,11 +32,14 @@ class ScoreQuizCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  titulo,
-                  style: Theme.of(context).textTheme.subtitle1.copyWith(
-                        color: blueColor,
-                      ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Text(
+                    titulo,
+                    style: Theme.of(context).textTheme.subtitle1.copyWith(
+                          color: blueColor,
+                        ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
