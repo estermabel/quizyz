@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/play_bloc.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
 import 'package:quizyz/db/quiz_tutorial.dart';
-import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/pages/home/game/game_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/helpers/manage_dialogs.dart';

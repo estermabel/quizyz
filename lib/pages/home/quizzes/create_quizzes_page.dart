@@ -87,64 +87,56 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
               ),
               onPressed: () async {
                 if (quizesList.length > 0) {
-                  List<Resposta> respostas = [];
                   List<Pergunta> perguntas = [];
                   bool runBloc = true;
-                  quizesList.forEach(
-                    (elementQuestions) {
-                      if (_bloc.tituloController.text.isNotEmpty &&
-                          elementQuestions.perguntaController.text.isNotEmpty &&
-                          elementQuestions
-                              .resposta1Controller.text.isNotEmpty &&
-                          elementQuestions
-                              .resposta2Controller.text.isNotEmpty &&
-                          elementQuestions
-                              .resposta3Controller.text.isNotEmpty &&
-                          elementQuestions
-                              .resposta4Controller.text.isNotEmpty) {
-                        respostas.addAll([
+                  // Fix para bug estranho na criação de quiz
+                  for (int i = 0; i < quizesList.length; i++) {
+                    if (_bloc.tituloController.text.isNotEmpty &&
+                        quizesList[i].perguntaController.text.isNotEmpty &&
+                        quizesList[i].resposta1Controller.text.isNotEmpty &&
+                        quizesList[i].resposta2Controller.text.isNotEmpty &&
+                        quizesList[i].resposta3Controller.text.isNotEmpty &&
+                        quizesList[i].resposta4Controller.text.isNotEmpty) {
+                      perguntas.add(Pergunta(
+                        titulo: quizesList[i].perguntaController.text,
+                        respostas: [
                           Resposta(
                               id: 1,
                               isCerta: false,
-                              titulo:
-                                  elementQuestions.resposta1Controller.text),
+                              titulo: quizesList[i].resposta1Controller.text),
                           Resposta(
                               id: 2,
                               isCerta: false,
-                              titulo:
-                                  elementQuestions.resposta2Controller.text),
+                              titulo: quizesList[i].resposta2Controller.text),
                           Resposta(
                               id: 3,
                               isCerta: false,
-                              titulo:
-                                  elementQuestions.resposta3Controller.text),
+                              titulo: quizesList[i].resposta3Controller.text),
                           Resposta(
                               id: 4,
                               isCerta: false,
-                              titulo: elementQuestions.resposta4Controller.text)
-                        ]);
-                        respostas.forEach((element) {
-                          if (element.id == elementQuestions.value) {
-                            element.isCerta = true;
-                          }
-                        });
-                        perguntas.add(Pergunta(
-                            titulo: elementQuestions.perguntaController.text,
-                            respostas: respostas));
-                      } else {
-                        runBloc = false;
-                        return ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              "Preencha o quiz!",
-                              style: Theme.of(context).textTheme.subtitle1,
-                            ),
-                            backgroundColor: bottomNavBarBackgroundColor,
-                          ),
-                        );
+                              titulo: quizesList[i].resposta4Controller.text)
+                        ],
+                      ));
+                      for (var respostas in perguntas[i].respostas) {
+                        if (respostas.id == quizesList[i].value) {
+                          respostas.isCerta = true;
+                          break;
+                        }
                       }
-                    },
-                  );
+                    } else {
+                      runBloc = false;
+                      return ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Preencha o quiz!",
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                          backgroundColor: bottomNavBarBackgroundColor,
+                        ),
+                      );
+                    }
+                  }
 
                   if (runBloc == true) {
                     Quiz quiz = Quiz(

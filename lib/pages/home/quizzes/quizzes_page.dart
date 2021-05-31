@@ -1,18 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:quizyz/bloc/quizzes_bloc.dart';
 import 'package:quizyz/components/native_loading.dart';
 import 'package:quizyz/components/my_quiz_card.dart';
-import 'package:quizyz/components/score_quiz_card.dart';
 import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/User.dart';
 import 'package:quizyz/pages/home/game/ranking_page.dart';
 import 'package:quizyz/pages/home/quizzes/create_quizzes_page.dart';
-import 'package:quizyz/pages/home/game/game_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/config/custom_shared_preferences.dart';
 import 'package:quizyz/utils/helpers/manage_dialogs.dart';
@@ -98,15 +92,22 @@ class _QuizzesPageState extends State<QuizzesPage> {
           ),
           GestureDetector(
             onTap: () async {
-              await CustomSharedPreferences.saveUsuario(false);
-              await CustomSharedPreferences.saveId(0);
-              await CustomSharedPreferences.saveNomeUsuario("nome");
-              _bloc.deleteDB();
-              Navigator.of(context).pushAndRemoveUntil(
-                CupertinoPageRoute(
-                  builder: (context) => LoginPage(),
-                ),
-                (route) => false,
+              ManagerDialogs.showMessageDialog(
+                context,
+                "Você deseja sair do app?",
+                () async {
+                  await CustomSharedPreferences.saveUsuario(false);
+                  await CustomSharedPreferences.saveId(0);
+                  await CustomSharedPreferences.saveNomeUsuario("nome");
+                  _bloc.deleteDB();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    CupertinoPageRoute(
+                      builder: (context) => LoginPage(),
+                    ),
+                    (route) => false,
+                  );
+                },
+                true,
               );
             },
             child: Padding(
@@ -144,13 +145,14 @@ class _QuizzesPageState extends State<QuizzesPage> {
               StreamBuilder<String>(
                 stream: _bloc.userStream,
                 builder: (context, snapshot) {
-
                   if (snapshot.data != null) {
-                    return Text(
-                      "Oie ${snapshot.data},",
-                      style: Theme.of(context).textTheme.headline6,
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Text(
+                        "Oie ${snapshot.data},",
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     );
-
                   } else {
                     return Container();
                   }
@@ -201,7 +203,13 @@ class _QuizzesPageState extends State<QuizzesPage> {
                             shrinkWrap: true,
                             itemCount: _bloc.meusQuizzesList?.length,
                             itemBuilder: (context, index) {
-                              return _bloc.meusQuizzesList[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 8.0,
+                                  bottom: 8.0,
+                                ),
+                                child: _bloc.meusQuizzesList[index],
+                              );
                             },
                           ),
                         );
