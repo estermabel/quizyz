@@ -154,11 +154,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                 child: Align(
                   alignment: Alignment.topRight,
                   child: Text(
-                      "${appBarProgress.round()}/${widget.quiz.perguntas.length}",
-                      style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    "${appBarProgress.round()}/${widget.quiz.perguntas.length}",
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
                           fontSize: 22,
-                          fontWeight: FontWeight.w400,
-                          color: accentColor)),
+                          fontWeight: FontWeight.bold,
+                          color: accentColor,
+                        ),
+                  ),
                 ),
               ),
               Padding(

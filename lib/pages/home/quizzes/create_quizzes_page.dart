@@ -139,17 +139,13 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                   }
 
                   if (runBloc == true) {
-                    perguntas.forEach((element) {
-                      print(
-                          "Tamanho das respostas -> ${element.respostas.length}");
-                    });
-                    // Quiz quiz = Quiz(
-                    //   titulo: _bloc.tituloController.text,
-                    //   perguntas: perguntas,
-                    //   criador: widget.criador,
-                    // );
+                    Quiz quiz = Quiz(
+                      titulo: _bloc.tituloController.text,
+                      perguntas: perguntas,
+                      criador: widget.criador,
+                    );
 
-                    // await _bloc.createQuiz(quiz: quiz);
+                    await _bloc.createQuiz(quiz: quiz);
                   }
                 }
               }),
