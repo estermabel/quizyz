@@ -92,15 +92,22 @@ class _QuizzesPageState extends State<QuizzesPage> {
           ),
           GestureDetector(
             onTap: () async {
-              await CustomSharedPreferences.saveUsuario(false);
-              await CustomSharedPreferences.saveId(0);
-              await CustomSharedPreferences.saveNomeUsuario("nome");
-              _bloc.deleteDB();
-              Navigator.of(context).pushAndRemoveUntil(
-                CupertinoPageRoute(
-                  builder: (context) => LoginPage(),
-                ),
-                (route) => false,
+              ManagerDialogs.showMessageDialog(
+                context,
+                "Você deseja sair do app?",
+                () async {
+                  await CustomSharedPreferences.saveUsuario(false);
+                  await CustomSharedPreferences.saveId(0);
+                  await CustomSharedPreferences.saveNomeUsuario("nome");
+                  _bloc.deleteDB();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    CupertinoPageRoute(
+                      builder: (context) => LoginPage(),
+                    ),
+                    (route) => false,
+                  );
+                },
+                true,
               );
             },
             child: Padding(
@@ -139,9 +146,12 @@ class _QuizzesPageState extends State<QuizzesPage> {
                 stream: _bloc.userStream,
                 builder: (context, snapshot) {
                   if (snapshot.data != null) {
-                    return Text(
-                      "Oie ${snapshot.data},",
-                      style: Theme.of(context).textTheme.headline6,
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Text(
+                        "Oie ${snapshot.data},",
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     );
                   } else {
                     return Container();
@@ -167,21 +177,18 @@ class _QuizzesPageState extends State<QuizzesPage> {
                           snapshot.data.data.forEach(
                             (quiz) {
                               _bloc.meusQuizzesList.add(
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 16),
-                                  child: MyQuizCard(
-                                    codigo: quiz.id,
-                                    titulo: quiz.titulo,
-                                    qtdPerguntas: quiz.perguntas.length,
-                                    onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => RankingPage(
-                                          quiz: quiz,
-                                          hasAppBar: true,
-                                          textButtom: "",
-                                          hasButtom: false,
-                                        ),
+                                MyQuizCard(
+                                  codigo: quiz.id,
+                                  titulo: quiz.titulo,
+                                  qtdPerguntas: quiz.perguntas.length,
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RankingPage(
+                                        quiz: quiz,
+                                        hasAppBar: true,
+                                        textButtom: "",
+                                        hasButtom: false,
                                       ),
                                     ),
                                   ),
@@ -198,7 +205,9 @@ class _QuizzesPageState extends State<QuizzesPage> {
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0),
+                                  top: 8.0,
+                                  bottom: 8.0,
+                                ),
                                 child: _bloc.meusQuizzesList[index],
                               );
                             },

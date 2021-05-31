@@ -51,17 +51,15 @@ class DatabaseHelper {
 
   Future insert(ScoreQuiz quiz) async {
     final db = await database;
-    quiz.id = await db.insert(
-      table,
-      quiz.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    print(quiz.id);
+    quiz.id = await db.rawInsert(
+        'INSERT INTO $table (codigo, criador, titulo, pontos, totalPerguntas) VALUES ("${quiz.codigo}", "${quiz.criador}", "${quiz.titulo}", "${quiz.pontos}", "${quiz.totalPerguntas}")');
+
+    print("QUIZ ID: " + quiz.id.toString());
   }
 
   Future<List<ScoreQuiz>> getQuizzes() async {
     final db = await database;
-    var response = await db.query(table);
+    var response = await db.rawQuery('SELECT * FROM $table');
 
     List<ScoreQuiz> quizzes = response
         .map(

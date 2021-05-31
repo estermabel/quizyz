@@ -61,12 +61,6 @@ class ScoreQuizCard extends StatelessWidget {
                 ),
               ],
             ),
-            IconTheme(
-              data: Theme.of(context).iconTheme,
-              child: Icon(
-                Icons.arrow_forward_ios,
-              ),
-            )
           ],
         ),
       ),

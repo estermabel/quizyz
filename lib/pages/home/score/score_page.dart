@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/score_bloc.dart';
 import 'package:quizyz/components/native_loading.dart';
 import 'package:quizyz/components/score_quiz_card.dart';
+import 'package:quizyz/model/Quiz.dart';
 import 'package:quizyz/model/ScoreQuiz.dart';
+import 'package:quizyz/pages/home/game/ranking_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
 import 'package:quizyz/utils/helpers/manage_dialogs.dart';
 import 'package:quizyz/utils/style/colors.dart';
@@ -97,7 +99,13 @@ class _ScorePageState extends State<ScorePage> {
                             shrinkWrap: true,
                             itemCount: _bloc.scoreQuizzesList.length,
                             itemBuilder: (context, index) {
-                              return _bloc.scoreQuizzesList[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 8.0,
+                                  bottom: 8.0,
+                                ),
+                                child: _bloc.scoreQuizzesList[index],
+                              );
                             },
                           ),
                         );
