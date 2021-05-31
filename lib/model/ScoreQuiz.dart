@@ -24,14 +24,12 @@ class ScoreQuiz {
     totalPerguntas = json['totalPerguntas'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['codigo'] = this.codigo;
-    data['criador'] = this.criador;
-    data['titulo'] = this.titulo;
-    data['pontos'] = this.pontos;
-    data['totalPerguntas'] = this.totalPerguntas;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        'id': this.id,
+        'codigo': this.codigo,
+        'criador': this.criador,
+        'titulo': this.titulo,
+        'pontos': this.pontos,
+        'totalPerguntas': this.totalPerguntas,
+      };
 }

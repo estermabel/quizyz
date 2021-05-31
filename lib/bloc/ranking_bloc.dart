@@ -43,7 +43,7 @@ class RankingBloc {
       var response = await _quizzesService.deleteQuiz(id: cod);
       quizSink.add(BaseResponse.completed(data: response));
     } catch (e) {
-      quizSink.add(BaseResponse.error(e.toString()));
+      quizSink.add(BaseResponse.error(e.source.toString()));
     }
   }
 
