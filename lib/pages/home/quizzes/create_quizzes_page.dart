@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/create_quiz_bloc.dart';
+import 'package:quizyz/bloc/quizzes_bloc.dart';
 import 'package:quizyz/components/create_quiz_card.dart';
 import 'package:quizyz/components/purple_button.dart';
 import 'package:quizyz/model/Pergunta.dart';
@@ -74,7 +75,15 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
             child: Icon(Icons.arrow_back_ios),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            ManagerDialogs.showMessageDialog(
+              context,
+              "Deseja sair dessa tela?",
+              () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              true,
+            );
           },
         ),
         actions: [

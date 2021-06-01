@@ -2,12 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/game_flow_bloc.dart';
 
-import 'package:quizyz/bloc/score_bloc.dart';
 import 'package:quizyz/components/answer_component.dart';
 import 'package:quizyz/components/quizyz_app_button.dart';
 import 'package:quizyz/model/Jogador.dart';
 import 'package:quizyz/model/Quiz.dart';
-import 'package:quizyz/model/ScoreQuiz.dart';
 import 'package:quizyz/pages/home/game/ranking_page.dart';
 import 'package:quizyz/pages/login_page.dart';
 import 'package:quizyz/service/config/base_response.dart';
@@ -195,6 +193,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                       if (runFunction == true) {
                         if (key.currentState.radioIndex != null) {
                           setState(() {
+                            calculateScore();
                             key.currentState.showAnswer = true;
                             runFunction = !runFunction;
                           });
@@ -202,16 +201,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             if (ponteiro < widget.quiz.perguntas.length - 1) {
                               setState(() {
                                 runFunction = !runFunction;
-                                calculateScore();
-                                animateAppProgress();
                                 key.currentState.showAnswer = false;
                                 key.currentState.radioIndex = null;
-
                                 ponteiro++;
                               });
                             } else {
-                              animateAppProgress();
-                              calculateScore();
                               await _finishGame();
                             }
                           });
@@ -246,10 +240,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     );
   }
 
-  void animateAppProgress() {
-    appBarProgress++;
-  }
-
   void calculateScore() {
     for (int i = 0; i < widget.quiz.perguntas[ponteiro].respostas.length; i++) {
       if (widget.quiz.perguntas[ponteiro].respostas[i].isCerta) {
@@ -259,6 +249,5 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
         }
       }
     }
-    print("Pontuação -> $pontuacao");
   }
 }
