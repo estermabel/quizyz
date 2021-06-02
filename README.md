@@ -1,6 +1,6 @@
 # Quizys
 
-It's a quiz app. Where, anyone with an account can create a quiz and share it with their friends so they can play it.
+It's a quiz app where anyone with an account can create a quiz and share it with their friends so they can play it.
 
 ## Getting Started
 
