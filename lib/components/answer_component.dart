@@ -25,7 +25,6 @@ class AnswerComponentState extends State<AnswerComponent> {
           return Padding(
             padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: Container(
-              height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: backgroundContainerColor,
