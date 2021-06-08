@@ -44,7 +44,7 @@ class _ScorePageState extends State<ScorePage> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(32),
+          padding: const EdgeInsets.fromLTRB(32, 32, 32, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

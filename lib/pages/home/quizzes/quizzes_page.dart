@@ -158,7 +158,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
         backgroundColor: whiteColor,
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(32.0),
+            padding: const EdgeInsets.fromLTRB(32, 32, 32, 0),
             child: ListView(
               children: [
                 StreamBuilder<String>(

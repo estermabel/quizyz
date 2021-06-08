@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:quizyz/bloc/create_quiz_bloc.dart';
 import 'package:quizyz/bloc/quizzes_bloc.dart';
@@ -89,29 +87,7 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
           },
         ),
         actions: [
-          Tooltip(
-            message: 'Apagar pergunta',
-            decoration: BoxDecoration(
-              color: bottomNavBarBackgroundColor,
-            ),
-            child: IconButton(
-              icon: IconTheme(
-                data: Theme.of(context).iconTheme.copyWith(
-                      color: accentColor,
-                    ),
-                child: Icon(Icons.delete),
-              ),
-              onPressed: () => setState(
-                () => quizesList.length > 0 ? quizesList.removeLast() : null,
-              ),
-            ),
-          ),
-          Tooltip(
-            message: 'Criar quiz',
-            decoration: BoxDecoration(
-              color: bottomNavBarBackgroundColor,
-            ),
-            child: IconButton(
+          IconButton(
               icon: IconTheme(
                 data: Theme.of(context).iconTheme.copyWith(
                       color: accentColor,
@@ -121,11 +97,12 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
               onPressed: () async {
                 ManagerDialogs.showMessageDialog(
                   context,
-                  "Deseja criar o quiz?",
+                  'Deseja criar quiz?',
                   () async {
                     if (quizesList.length > 0) {
                       List<Pergunta> perguntas = [];
                       bool runBloc = true;
+                      // Fix para bug estranho na criação de quiz
                       for (int i = 0; i < quizesList.length; i++) {
                         if (_bloc.tituloController.text.isNotEmpty &&
                             quizesList[i].perguntaController.text.isNotEmpty &&
@@ -133,44 +110,37 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                             quizesList[i].resposta2Controller.text.isNotEmpty &&
                             quizesList[i].resposta3Controller.text.isNotEmpty &&
                             quizesList[i].resposta4Controller.text.isNotEmpty) {
-                          perguntas.add(
-                            Pergunta(
-                              titulo: quizesList[i].perguntaController.text,
-                              respostas: [
-                                Resposta(
+                          perguntas.add(Pergunta(
+                            titulo: quizesList[i].perguntaController.text,
+                            respostas: [
+                              Resposta(
                                   id: 1,
                                   isCerta: false,
                                   titulo:
-                                      quizesList[i].resposta1Controller.text,
-                                ),
-                                Resposta(
+                                      quizesList[i].resposta1Controller.text),
+                              Resposta(
                                   id: 2,
                                   isCerta: false,
                                   titulo:
-                                      quizesList[i].resposta2Controller.text,
-                                ),
-                                Resposta(
+                                      quizesList[i].resposta2Controller.text),
+                              Resposta(
                                   id: 3,
                                   isCerta: false,
                                   titulo:
-                                      quizesList[i].resposta3Controller.text,
-                                ),
-                                Resposta(
+                                      quizesList[i].resposta3Controller.text),
+                              Resposta(
                                   id: 4,
                                   isCerta: false,
                                   titulo:
-                                      quizesList[i].resposta4Controller.text,
-                                )
-                              ],
-                            ),
-                          );
+                                      quizesList[i].resposta4Controller.text)
+                            ],
+                          ));
                           for (var respostas in perguntas[i].respostas) {
                             if (respostas.id == quizesList[i].value) {
                               respostas.isCerta = true;
                               break;
                             }
                           }
-                          print(perguntas.length);
                         } else {
                           runBloc = false;
                           return ScaffoldMessenger.of(context).showSnackBar(
@@ -192,68 +162,87 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                           criador: widget.criador,
                         );
 
-                        await _bloc.createQuiz(quiz: quiz).then(
-                              (value) => Navigator.pop(context),
-                            );
+                        await _bloc
+                            .createQuiz(quiz: quiz)
+                            .then((value) => Navigator.pop(context));
                       }
                     }
                   },
                   true,
                 );
-              },
-            ),
-          ),
+              }),
         ],
-      ),
-      floatingActionButton: Tooltip(
-        message: 'Adicionar pergunta',
-        decoration: BoxDecoration(
-          color: bottomNavBarBackgroundColor,
-        ),
-        child: FloatingActionButton(
-          child: IconTheme(
-            data: Theme.of(context).iconTheme.copyWith(
-                  color: whiteColor,
-                ),
-            child: Icon(Icons.add),
-          ),
-          onPressed: quizesList.length < 10
-              ? () {
-                  if (quizesList.length < 10) {
-                    setState(
-                      () {
-                        int size = quizesList.length + 1;
-                        quizesList.add(
-                          CreateQuizCard(
-                            pergunta: "Pergunta " + size.toString(),
-                          ),
-                        );
-                      },
-                    );
-                  }
-                }
-              : null,
-        ),
       ),
       body: Container(
         child: Padding(
           padding: const EdgeInsets.all(32.0),
-          child: ListView(
+          child: Column(
             children: [
               TextField(
+                controller: _bloc.tituloController,
                 decoration: InputDecoration(
                   labelText: "Titulo",
                   labelStyle: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return quizesList[index];
-                },
-                itemCount: quizesList.length,
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return quizesList[index];
+                  },
+                  itemCount: quizesList.length,
+                ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisAlignment: quizesList.length < 10
+                        ? MainAxisAlignment.spaceAround
+                        : MainAxisAlignment.center,
+                    children: [
+                      Visibility(
+                        visible: quizesList.length < 10 ? true : false,
+                        child: PurpleButton(
+                          titulo: "Adicionar pergunta",
+                          onTap: () {
+                            if (quizesList.length < 10) {
+                              setState(
+                                () {
+                                  int size = quizesList.length + 1;
+                                  quizesList.add(
+                                    CreateQuizCard(
+                                      pergunta: "Pergunta " + size.toString(),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      quizesList.length >= 10
+                          ? PurpleButton(
+                              titulo: "Remover Pergunta",
+                              onTap: () => setState(() => quizesList.length > 0
+                                  ? quizesList.removeLast()
+                                  : null),
+                            )
+                          : IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                size: 35,
+                              ),
+                              onPressed: () => setState(() =>
+                                  quizesList.length > 0
+                                      ? quizesList.removeLast()
+                                      : null),
+                            )
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),
