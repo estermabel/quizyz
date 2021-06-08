@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quizyz/utils/style/colors.dart';
 
 class ManagerDialogs {
   static void showErrorDialog(BuildContext context, String message) {
@@ -15,7 +16,10 @@ class ManagerDialogs {
           content: Text(message),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: Text(
+                  "Ok",
+                  style: TextStyle(color: accentColor),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 })
@@ -84,13 +88,18 @@ class ManagerDialogs {
           actions: hasCancel
               ? <Widget>[
                   TextButton(
-                    child: Text("Cancelar"),
+                    child: Text(
+                      "Cancelar",
+                      style: TextStyle(color: accentColor),
+                    ),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
                   TextButton(
-                    child: Text("Ok"),
+                    child: Text(
+                      "Ok",
+                    ),
                     onPressed: onPressed == null
                         ? () {
                             Navigator.pop(context);
