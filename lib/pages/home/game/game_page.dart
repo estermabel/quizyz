@@ -137,7 +137,12 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
             child: Icon(Icons.arrow_back_ios),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            ManagerDialogs.showMessageDialog(
+              context,
+              'Deseja sair do quiz?',
+              null,
+              true,
+            );
           },
         ),
       ),

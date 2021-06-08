@@ -25,7 +25,6 @@ class CreateQuizzesPage extends StatefulWidget {
 class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
   CreateQuizBloc _bloc = CreateQuizBloc();
   List<CreateQuizCard> quizesList = [];
-  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -127,7 +126,6 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                     if (quizesList.length > 0) {
                       List<Pergunta> perguntas = [];
                       bool runBloc = true;
-                      // Fix para bug estranho na criação de quiz
                       for (int i = 0; i < quizesList.length; i++) {
                         if (_bloc.tituloController.text.isNotEmpty &&
                             quizesList[i].perguntaController.text.isNotEmpty &&
@@ -140,25 +138,29 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                               titulo: quizesList[i].perguntaController.text,
                               respostas: [
                                 Resposta(
-                                    id: 1,
-                                    isCerta: false,
-                                    titulo:
-                                        quizesList[i].resposta1Controller.text),
+                                  id: 1,
+                                  isCerta: false,
+                                  titulo:
+                                      quizesList[i].resposta1Controller.text,
+                                ),
                                 Resposta(
-                                    id: 2,
-                                    isCerta: false,
-                                    titulo:
-                                        quizesList[i].resposta2Controller.text),
+                                  id: 2,
+                                  isCerta: false,
+                                  titulo:
+                                      quizesList[i].resposta2Controller.text,
+                                ),
                                 Resposta(
-                                    id: 3,
-                                    isCerta: false,
-                                    titulo:
-                                        quizesList[i].resposta3Controller.text),
+                                  id: 3,
+                                  isCerta: false,
+                                  titulo:
+                                      quizesList[i].resposta3Controller.text,
+                                ),
                                 Resposta(
-                                    id: 4,
-                                    isCerta: false,
-                                    titulo:
-                                        quizesList[i].resposta4Controller.text)
+                                  id: 4,
+                                  isCerta: false,
+                                  titulo:
+                                      quizesList[i].resposta4Controller.text,
+                                )
                               ],
                             ),
                           );
@@ -168,6 +170,7 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
                               break;
                             }
                           }
+                          print(perguntas.length);
                         } else {
                           runBloc = false;
                           return ScaffoldMessenger.of(context).showSnackBar(
@@ -246,7 +249,6 @@ class _CreateQuizzesPageState extends State<CreateQuizzesPage> {
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                controller: _scrollController,
                 itemBuilder: (context, index) {
                   return quizesList[index];
                 },
