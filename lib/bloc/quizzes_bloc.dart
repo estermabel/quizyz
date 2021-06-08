@@ -42,7 +42,12 @@ class QuizzesBloc {
       var response = await _service.getQuizzes(userId: id);
       quizzesSink.add(BaseResponse.completed(data: response));
     } catch (e) {
-      quizzesSink.add(BaseResponse.error(e.toString()));
+      if (e.message == 'Future not completed') {
+        quizzesSink.add(BaseResponse.error(
+            'Você está sem internet! Cheque sua conexão e tente novamente.'));
+      } else {
+        quizzesSink.add(BaseResponse.error(e.toString()));
+      }
     }
   }
 

@@ -70,6 +70,7 @@ class _RankingPageState extends State<RankingPage> {
       switch (event.status) {
         case Status.COMPLETED:
           Navigator.pop(context);
+
           break;
         case Status.LOADING:
           ManagerDialogs.showLoadingDialog(context);
@@ -112,7 +113,16 @@ class _RankingPageState extends State<RankingPage> {
                 GestureDetector(
                   onTap: widget.onTap == null
                       ? () async {
-                          await _bloc.deleteQuiz(cod: widget.quiz.id);
+                          ManagerDialogs.showMessageDialog(
+                            context,
+                            'Deseja apagar esse quiz?',
+                            () async {
+                              await _bloc.deleteQuiz(cod: widget.quiz.id).then(
+                                    (value) => Navigator.pop(context),
+                                  );
+                            },
+                            true,
+                          );
                         }
                       : widget.onTap,
                   child: Padding(
