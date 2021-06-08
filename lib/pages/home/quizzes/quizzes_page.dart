@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:quizyz/bloc/quizzes_bloc.dart';
 import 'package:quizyz/components/native_loading.dart';
 import 'package:quizyz/components/my_quiz_card.dart';
@@ -22,6 +25,9 @@ class QuizzesPage extends StatefulWidget {
 class _QuizzesPageState extends State<QuizzesPage> {
   QuizzesBloc _bloc = QuizzesBloc();
   User user;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
+      GlobalKey<LiquidPullToRefreshState>();
 
   @override
   void initState() {
@@ -60,6 +66,29 @@ class _QuizzesPageState extends State<QuizzesPage> {
     });
   }
 
+  Future<void> _handleRefresh() {
+    final Completer<void> completer = Completer<void>();
+    Timer(const Duration(seconds: 1), () {
+      completer.complete();
+    });
+    setState(() {
+      _bloc.getUser();
+      _bloc.getQuizzes();
+    });
+    return completer.future.then<void>((_) {
+      _scaffoldKey.currentState?.showSnackBar(
+        SnackBar(
+          content: const Text('Refresh complete'),
+          action: SnackBarAction(
+              label: 'RETRY',
+              onPressed: () {
+                _refreshIndicatorKey.currentState.show();
+              }),
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,23 +102,6 @@ class _QuizzesPageState extends State<QuizzesPage> {
               .copyWith(color: accentColor),
         ),
         actions: [
-          GestureDetector(
-            onTap: () {
-              _bloc.getUser();
-              _bloc.getQuizzes();
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: IconTheme(
-                data: Theme.of(context).iconTheme.copyWith(
-                      color: accentColor,
-                    ),
-                child: Icon(
-                  Icons.refresh,
-                ),
-              ),
-            ),
-          ),
           GestureDetector(
             onTap: () async {
               ManagerDialogs.showMessageDialog(
@@ -136,71 +148,78 @@ class _QuizzesPageState extends State<QuizzesPage> {
           child: Icon(Icons.add),
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              StreamBuilder<String>(
-                stream: _bloc.userStream,
-                builder: (context, snapshot) {
-                  if (snapshot.data != null) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Text(
-                        "Oie ${snapshot.data},",
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-              StreamBuilder<BaseResponse<List<Quiz>>>(
-                stream: _bloc.quizzesStream,
-                initialData: BaseResponse.completed(),
-                builder: (context, snapshot) {
-                  if (snapshot.data.data != null) {
-                    switch (snapshot.data?.status) {
-                      case Status.LOADING:
-                        return _onLoading();
-                        break;
-                      case Status.ERROR:
-                        _onError(snapshot);
-                        return Container();
-                        break;
-                      default:
-                        _bloc.meusQuizzesList.clear();
-                        if (snapshot.data?.data != null) {
-                          snapshot.data.data.forEach(
-                            (quiz) {
-                              _bloc.meusQuizzesList.add(
-                                MyQuizCard(
-                                  codigo: quiz.id,
-                                  titulo: quiz.titulo,
-                                  qtdPerguntas: quiz.perguntas.length,
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RankingPage(
-                                        quiz: quiz,
-                                        hasAppBar: true,
-                                        textButtom: "",
-                                        hasButtom: false,
+      body: LiquidPullToRefresh(
+        key: _refreshIndicatorKey,
+        onRefresh: _handleRefresh,
+        showChildOpacityTransition: false,
+        animSpeedFactor: 1.2,
+        springAnimationDurationInMilliseconds: 700,
+        color: accentColor,
+        backgroundColor: whiteColor,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: ListView(
+              children: [
+                StreamBuilder<String>(
+                  stream: _bloc.userStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.data != null) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Text(
+                          "Oie ${snapshot.data},",
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+                StreamBuilder<BaseResponse<List<Quiz>>>(
+                  stream: _bloc.quizzesStream,
+                  initialData: BaseResponse.completed(),
+                  builder: (context, snapshot) {
+                    if (snapshot.data.data != null) {
+                      switch (snapshot.data?.status) {
+                        case Status.LOADING:
+                          return _onLoading();
+                          break;
+                        case Status.ERROR:
+                          _onError(snapshot);
+                          return Container();
+                          break;
+                        default:
+                          _bloc.meusQuizzesList.clear();
+                          if (snapshot.data?.data != null) {
+                            snapshot.data.data.forEach(
+                              (quiz) {
+                                _bloc.meusQuizzesList.add(
+                                  MyQuizCard(
+                                    codigo: quiz.id,
+                                    titulo: quiz.titulo,
+                                    qtdPerguntas: quiz.perguntas.length,
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => RankingPage(
+                                          quiz: quiz,
+                                          hasAppBar: true,
+                                          textButtom: "",
+                                          hasButtom: false,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
-                        }
+                                );
+                              },
+                            );
+                          }
 
-                        return Expanded(
-                          child: ListView.builder(
+                          return ListView.builder(
                             shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
                             itemCount: _bloc.meusQuizzesList?.length,
                             itemBuilder: (context, index) {
                               return Padding(
@@ -211,15 +230,15 @@ class _QuizzesPageState extends State<QuizzesPage> {
                                 child: _bloc.meusQuizzesList[index],
                               );
                             },
-                          ),
-                        );
+                          );
+                      }
+                    } else {
+                      return _onLoading();
                     }
-                  } else {
-                    return _onLoading();
-                  }
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
