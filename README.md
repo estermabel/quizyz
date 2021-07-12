@@ -54,7 +54,7 @@ $ flutter run
 
 ## Acknowledgments
 
-* This app was built for an university project.
+* This app was built as an university project.
 
 
 ## Built With
