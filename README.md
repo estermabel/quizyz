@@ -52,10 +52,6 @@ $ flutter run
 ![ranking](https://user-images.githubusercontent.com/51540772/125344782-16799680-e32e-11eb-9f3a-01749158d237.png)
 
 
-## Authors
-
-* **Ester Mabel** - *GitHub* - [GitHub](https://github.com/estermabel)
-
 ## Acknowledgments
 
 * This app was built for an university project.
